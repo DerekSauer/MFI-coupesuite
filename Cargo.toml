@@ -1,0 +1,11 @@
+[package]
+name = "coupesuite"
+version = "0.1.0"
+edition = "2021"
+authors = ["Derek Sauer <dsauer@megalak.ca>"]
+description = "Suite d'outils pour générer des listes de coupe et de la documentation de production pour Megalak Finition Inc."
+license = "MPL-2.0"
+keywords = ["cli", "utility", "generator", "tool", "printing"]
+categories = ["command-line-utilities", "text-processing", "value-formatting", "parsing"]
+
+[dependencies]
