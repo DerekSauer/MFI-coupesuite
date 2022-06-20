@@ -7,5 +7,6 @@ description = "Fonctions communes à travers Coupésuite."
 license = "MPL-2.0"
 
 [dependencies]
-toml = "0.5"
+anyhow = "1.0.58"
 serde = { version = "1.0.137", features = ["derive"] }
+toml = "0.5"
