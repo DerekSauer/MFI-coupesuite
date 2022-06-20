@@ -1,11 +1,15 @@
 use serde::Deserialize;
 use std::{fs::File, io::Read, path::Path};
 
+use crate::database::Database;
+
 /// Container for program settings.
 #[derive(Deserialize, Debug)]
 pub struct Settings {
     /// Settings file version.
     pub version: String,
+
+    pub database: Database,
 }
 
 impl Settings {

@@ -7,6 +7,5 @@ v12_import_dir = "C:/V12/_WORK/IMPORT"
 [database]
 hostname = "192.168.0.20"
 port = "5493"
-database_name = "MFI"
+name = "MFI"
 username = "SIGM"
-password = ""
