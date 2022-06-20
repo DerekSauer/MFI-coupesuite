@@ -2,7 +2,7 @@ use serde::Deserialize;
 use std::{fs::File, io::Read, path::Path};
 
 /// Container for program settings.
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct Settings {
     /// Settings file version.
     pub version: String,
