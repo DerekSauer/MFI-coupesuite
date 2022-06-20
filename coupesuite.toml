@@ -1,0 +1,12 @@
+version = "0.1.0"
+
+[liste]
+v12_import_dir = "C:/V12/_WORK/IMPORT"
+
+# SIGM database
+[database]
+hostname = "192.168.0.20"
+port = "5493"
+database_name = "MFI"
+username = "SIGM"
+password = ""
