@@ -17,10 +17,13 @@ impl Settings {
     ///
     /// # Example
     /// ```
+    /// # fn main() -> anyhow::Result<()> {
     /// # use coupesuite_shared::settings::Settings;
     /// # let setting_file = String::from(std::env!("CARGO_MANIFEST_DIR")) + "/../coupesuite.toml";
-    /// let settings = Settings::load(&setting_file).unwrap();
-    /// assert_eq!(settings.version, "0.1.0")
+    /// let settings = Settings::load(&setting_file)?;
+    /// assert_eq!(settings.version, "0.1.0");
+    /// # Ok(())
+    /// # }
     /// ```
     pub fn load(file_path: &impl AsRef<Path>) -> anyhow::Result<Self> {
         let mut toml_file = String::new();
