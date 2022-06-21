@@ -87,7 +87,7 @@ pub async fn get_database_pool(connection_settings: &Database) -> anyhow::Result
 pub async fn verify_lot(lot_number: i32, db_pool: &sqlx::PgPool) -> anyhow::Result<bool> {
     let query = include_str!("../sql/verify_lot.sql");
 
-    let result: Option<(String,)> = sqlx::query_as(&query)
+    let result: Option<(String,)> = sqlx::query_as(query)
         .bind(lot_number)
         .fetch_optional(db_pool)
         .await?;
