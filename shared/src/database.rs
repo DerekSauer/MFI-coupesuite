@@ -19,7 +19,7 @@ pub struct Database {
 
 /// Retrieve a database connection pool.
 ///
-/// # Examples
+/// # Example
 /// ```
 /// # fn main() -> anyhow::Result<()> {
 /// #     tokio_test::block_on(async {
@@ -49,4 +49,48 @@ pub async fn get_database_pool(connection_settings: &Database) -> anyhow::Result
     );
 
     Ok(PgPool::connect(&connection_string).await?)
+}
+
+/// Verify if a lot number is a valid furniture production lot.
+///
+/// Our database assigns a unique project number to each run of furniture
+/// produced in the factory. We use that project number as a lot number
+/// for tracking purposes. This function assures a lot number is a unit
+/// of furniture and not an individual part or a typo.
+///
+/// # Returns
+/// Returns a `Result` since the underlying database operation can fail. A return
+/// of `Err` indicates a failure at the database. `Ok` contains a boolean where
+/// `true` indicates a valid lot number and `false` indicates an invalid lot number.
+///
+/// # Example
+///
+/// ```
+/// # fn main() -> anyhow::Result<()> {
+/// # tokio_test::block_on(async {
+/// # use coupesuite_shared::database::verify_lot;
+/// # use coupesuite_shared::database::get_database_pool;
+/// # use coupesuite_shared::settings::Settings;
+/// #
+/// # let setting_file = String::from(std::env!("CARGO_MANIFEST_DIR")) + "/../coupesuite.toml";
+/// # let settings = Settings::load(&setting_file)?;
+/// #
+/// let db_pool = get_database_pool(&settings.database).await?;
+/// let valid_lot = verify_lot(722722, &db_pool).await?;
+///
+/// assert_eq!(valid_lot, true);
+/// #
+/// # Ok(())
+/// # })
+/// # }
+/// ```
+pub async fn verify_lot(lot_number: i32, db_pool: &sqlx::PgPool) -> anyhow::Result<bool> {
+    let query = include_str!("../sql/verify_lot.sql");
+
+    let result: Option<(String,)> = sqlx::query_as(&query)
+        .bind(lot_number)
+        .fetch_optional(db_pool)
+        .await?;
+
+    Ok(result.is_some())
 }
