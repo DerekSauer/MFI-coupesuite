@@ -7,6 +7,7 @@ description = "Générez des listes de coupe pour le logiciel d'optimisation de 
 license = "MPL-2.0"
 
 [dependencies]
+anyhow = "1.0.58"
 coupesuite-shared = { path = "../shared" }
 clap = { version = "3.2.6", features = ["derive"] }
 csv = "1.1.6"
