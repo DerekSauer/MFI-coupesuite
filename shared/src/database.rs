@@ -94,3 +94,42 @@ pub async fn verify_lot(lot_number: i32, db_pool: &sqlx::PgPool) -> anyhow::Resu
 
     Ok(result.is_some())
 }
+
+/// Verify if a model number is a valid furniture sku.
+///
+/// # Returns
+/// Returns a `Result` since the underlying database operation can fail. A return
+/// of `Err` indicates a failure at the database. `Ok` contains a boolean where
+/// `true` indicates a valid model number and `false` indicates an invalid model number.
+///
+/// # Example
+///
+/// ```
+/// # fn main() -> anyhow::Result<()> {
+/// # tokio_test::block_on(async {
+/// # use coupesuite_shared::database::verify_model;
+/// # use coupesuite_shared::database::get_database_pool;
+/// # use coupesuite_shared::settings::Settings;
+/// #
+/// # let setting_file = String::from(std::env!("CARGO_MANIFEST_DIR")) + "/../coupesuite.toml";
+/// # let settings = Settings::load(&setting_file)?;
+/// #
+/// let db_pool = get_database_pool(&settings.database).await?;
+/// let valid_model = verify_model("90-5092", &db_pool).await?;
+///
+/// assert_eq!(valid_model, true);
+/// #
+/// # Ok(())
+/// # })
+/// # }
+/// ```
+pub async fn verify_model(model_number: &str, db_pool: &sqlx::PgPool) -> anyhow::Result<bool> {
+    let query = include_str!("../sql/verify_model.sql");
+
+    let result: Option<(String,)> = sqlx::query_as(query)
+        .bind(model_number)
+        .fetch_optional(db_pool)
+        .await?;
+
+    Ok(result.is_some())
+}
