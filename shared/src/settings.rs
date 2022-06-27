@@ -23,7 +23,7 @@ impl Settings {
     /// #
     ///       let settings = Settings::load(&setting_file)?;
     ///
-    ///       assert_eq!(settings.version, "0.1.0");
+    ///       assert_eq!(settings.version, std::env!("CARGO_PKG_VERSION"));
     /// #
     /// #     Ok(())
     /// # }
