@@ -6,6 +6,8 @@ use coupesuite_shared::{
 };
 
 mod cmd_line;
+mod cut_list;
+mod proc_lot;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
