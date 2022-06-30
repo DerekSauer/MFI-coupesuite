@@ -65,4 +65,10 @@ pub struct CutListRow {
 
     /// Style of palette this part should be stacked on.
     pub type_palette: String,
+
+    /// Is this part a Kanban production?
+    pub kanban: bool,
+
+    /// Is this part painted?
+    pub painted: bool,
 }

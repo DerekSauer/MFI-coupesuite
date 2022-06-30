@@ -22,7 +22,9 @@ SELECT
     CASE
         WHEN part.prt_stt_ax1 > 1410.0 OR part.prt_stt_ax2 > 1410.0 THEN 'PALETTE-LONG'
         ELSE 'PALETTE-STANDARD'
-    END AS type_palette
+    END AS type_palette,
+    UPPER(TRIM(part.prt_idx3_1)) = 'KANBAN' AS kanban,
+    UPPER(TRIM(part.prt_idx3_4)) = 'P' AS painted
     
 FROM
     project
@@ -51,7 +53,6 @@ WHERE
     AND UPPER(TRIM(part.prt_no)) NOT LIKE '040-ANTI%'   -- NO LABELS IN WRONG PART GROUP
     AND part.prt_no <> '040-0057'                       -- NO CARDBOARD IN WRONG PART GROUP
     AND part.prt_no <> '040-0073'                       -- DITTO
-    AND UPPER(TRIM(part.prt_idx3_1)) <> 'KANBAN'        -- NO KANBAN COMPONENTS
     
 ORDER BY
     part_code
