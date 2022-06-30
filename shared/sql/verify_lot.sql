@@ -13,6 +13,6 @@ FROM
 WHERE
         project.prj_no = $1                 -- MODEL LOT NUMBER
     AND project.prj_source_no = -1          -- MASTER LOTS HAVE NO PARENT
-    AND part_group.pgr_no IN ('860', '890') -- FINISHED FURNITURE GROUPS
+    AND part_group.pgr_no IN ('765', '860', '890') -- FINISHED FURNITURE GROUPS
 
 LIMIT 1
