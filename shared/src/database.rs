@@ -17,6 +17,25 @@ pub struct Database {
     pub username: String,
 }
 
+/// Stores basic information about the Sku being verified.
+#[derive(sqlx::FromRow, Debug)]
+pub struct SkuInfo {
+    /// SKU part number.
+    pub sku: String,
+
+    /// Description of the SKU.
+    pub description: String,
+
+    /// Quantity to produce.
+    pub quantity: i32,
+
+    /// Is this SKU a kanban production (effects reports printed)?
+    pub kanban: bool,
+
+    /// Does this SKU contain painted parts (effects reports printed)?
+    pub painted_parts: bool,
+}
+
 /// Retrieve a database connection pool.
 ///
 /// # Example
@@ -76,23 +95,25 @@ pub async fn get_database_pool(connection_settings: &Database) -> anyhow::Result
 /// # let settings = Settings::load(&setting_file)?;
 /// #
 /// let db_pool = get_database_pool(&settings.database).await?;
-/// let valid_lot = verify_lot(722722, &db_pool).await?;
+/// let valid_lot = verify_lot(730887, &db_pool).await?;
 ///
-/// assert_eq!(valid_lot, true);
+/// assert_eq!(valid_lot.sku, "90-101706");
 /// #
 /// # Ok(())
 /// # })
 /// # }
 /// ```
-pub async fn verify_lot(lot_number: i32, db_pool: &sqlx::PgPool) -> anyhow::Result<bool> {
+pub async fn verify_lot(lot_number: i32, db_pool: &sqlx::PgPool) -> anyhow::Result<SkuInfo> {
     let query = include_str!("../sql/verify_lot.sql");
 
-    let result: Option<(String,)> = sqlx::query_as(query)
+    match sqlx::query_as::<_, SkuInfo>(query)
         .bind(lot_number)
         .fetch_optional(db_pool)
-        .await?;
-
-    Ok(result.is_some())
+        .await?
+    {
+        Some(result) => Ok(result),
+        None => anyhow::bail!("Numéro de lot invalide : {}", lot_number),
+    }
 }
 
 /// Verify if a model number is a valid furniture sku.
@@ -117,19 +138,21 @@ pub async fn verify_lot(lot_number: i32, db_pool: &sqlx::PgPool) -> anyhow::Resu
 /// let db_pool = get_database_pool(&settings.database).await?;
 /// let valid_model = verify_model("90-5092", &db_pool).await?;
 ///
-/// assert_eq!(valid_model, true);
+/// assert_eq!(valid_model.sku, "90-5092");
 /// #
 /// # Ok(())
 /// # })
 /// # }
 /// ```
-pub async fn verify_model(model_number: &str, db_pool: &sqlx::PgPool) -> anyhow::Result<bool> {
+pub async fn verify_model(model_number: &str, db_pool: &sqlx::PgPool) -> anyhow::Result<SkuInfo> {
     let query = include_str!("../sql/verify_model.sql");
 
-    let result: Option<(String,)> = sqlx::query_as(query)
+    match sqlx::query_as::<_, SkuInfo>(query)
         .bind(model_number)
         .fetch_optional(db_pool)
-        .await?;
-
-    Ok(result.is_some())
+        .await?
+    {
+        Some(result) => Ok(result),
+        None => anyhow::bail!("Numéro de modèle invalide: {}", model_number),
+    }
 }

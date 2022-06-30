@@ -23,12 +23,12 @@ async fn main() -> anyhow::Result<()> {
     } else if !cmd_line_args.lots.is_empty() {
         // Process lots
         for lot in cmd_line_args.lots.split(',') {
-            println!("{}: {}", &lot, verify_lot(lot.parse()?, &db_pool).await?);
+            println!("{}: {:?}", &lot, verify_lot(lot.parse()?, &db_pool).await?);
         }
     } else if !cmd_line_args.modèles.is_empty() {
         // Process models
         for model in cmd_line_args.modèles.split(',') {
-            println!("{}: {}", &model, verify_model(model, &db_pool).await?);
+            println!("{}: {:?}", &model, verify_model(model, &db_pool).await?);
         }
     } else {
         anyhow::bail!("Entrez une liste de numéros de lot ou une liste de numéros de modèle.")

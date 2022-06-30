@@ -10,14 +10,12 @@ pub async fn process_lot(
 ) -> anyhow::Result<Vec<CutListRow>> {
     let query = include_str!("../sql/lot_query.sql");
 
-    if verify_lot(lot_number, &db_pool).await? {
-        Ok(sqlx::query_as::<_, CutListRow>(&query)
-            .bind(lot_number)
-            .fetch_all(db_pool)
-            .await?)
-    } else {
-        anyhow::bail!("Numéro de lot invalide : {}", lot_number);
-    }
+    verify_lot(lot_number, db_pool).await?;
+
+    Ok(sqlx::query_as::<_, CutListRow>(query)
+        .bind(lot_number)
+        .fetch_all(db_pool)
+        .await?)
 }
 
 #[tokio::test]
@@ -30,9 +28,9 @@ async fn main() -> anyhow::Result<()> {
 
     let db_pool = get_database_pool(&settings.database).await?;
 
-    let results = process_lot(722722, &db_pool).await?;
+    let results = process_lot(730887, &db_pool).await?;
 
-    assert_eq!(results[0].part_code, "2262-0390");
+    assert_eq!(results[0].part_code, "2262-0281");
 
     Ok(())
 }
