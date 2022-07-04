@@ -1,6 +1,6 @@
 SELECT
     TRIM(part.prt_no) AS part_code,
-    TRIM(SPLIT_PART(part.prt_no, '-', 1)) AS material_code,
+    UPPER(TRIM(SPLIT_PART(part.prt_no, '-', 1), 'LATIN1')) AS material_code,
     part.prt_stt_ax1::REAL AS part_length,
     part.prt_stt_ax2::REAL AS part_width,
     (bill_of_materials_mat.bma_budg_qty / model.prt_std_bqty)::INT AS required_quantity,
@@ -18,7 +18,7 @@ SELECT
     TRIM(model.prt_desc1) AS product_description,
     TRIM(COALESCE(SUBSTRING(part.prt_desc1 FROM '\"(.+)\"'), '')) AS lettre_piece,
     'S:/MFI/Dessins/' || part.prt_no || '.jpg' AS picture_filename,
-    TRIM(part.prt_desc1) AS part_description,
+    UPPER(TRIM(TO_ASCII(part.prt_desc1, 'LATIN1'))) AS part_description,
     CASE
         WHEN part.prt_stt_ax1 > 1410.0 OR part.prt_stt_ax2 > 1410.0 THEN 'PALETTE-LONG'
         ELSE 'PALETTE-STANDARD'

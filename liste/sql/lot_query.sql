@@ -18,7 +18,7 @@ SELECT
     TRIM(master_project.prj_name) AS product_description,
     TRIM(COALESCE(SUBSTRING(part.prt_desc1 FROM '\"(.+)\"'), '')) AS lettre_piece,
     'S:/MFI/Dessins/' || part.prt_no || '.jpg' AS picture_filename,
-    TRIM(part.prt_desc1) AS part_description,
+    UPPER(TRIM(TO_ASCII(part.prt_desc1, 'LATIN1'))) AS part_description,
     CASE
         WHEN part.prt_stt_ax1 > 1410.0 OR part.prt_stt_ax2 > 1410.0 THEN 'PALETTE-LONG'
         ELSE 'PALETTE-STANDARD'
