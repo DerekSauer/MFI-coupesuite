@@ -1,9 +1,8 @@
 use clap::Parser;
 use cmd_line::Args;
-use coupesuite_shared::{
-    database::{self, verify_lot, verify_model},
-    settings::Settings,
-};
+use coupesuite_shared::{database, settings::Settings};
+use proc_lot::process_lot;
+use proc_model::process_model;
 
 mod cmd_line;
 mod cut_list;
@@ -24,12 +23,14 @@ async fn main() -> anyhow::Result<()> {
     } else if !cmd_line_args.lots.is_empty() {
         // Process lots
         for lot in cmd_line_args.lots.split(',') {
-            println!("{}: {:?}", &lot, verify_lot(lot.parse()?, &db_pool).await?);
+            let cutlist = process_lot(lot.parse()?, &db_pool).await?;
+            cut_list::write_to_file(&cutlist, &"test.csv")?;
         }
     } else if !cmd_line_args.modèles.is_empty() {
         // Process models
         for model in cmd_line_args.modèles.split(',') {
-            println!("{}: {:?}", &model, verify_model(model, &db_pool).await?);
+            let cutlist = process_model(model, &db_pool).await?;
+            cut_list::write_to_file(&cutlist, &"test.csv")?;
         }
     } else {
         anyhow::bail!("Entrez une liste de numéros de lot ou une liste de numéros de modèle.")
