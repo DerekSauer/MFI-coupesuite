@@ -72,3 +72,18 @@ pub struct CutListRow {
     /// Is this part painted?
     pub painted: bool,
 }
+
+pub fn write_to_file(
+    cut_list: &Vec<CutListRow>,
+    file_path: &impl AsRef<std::path::Path>,
+) -> anyhow::Result<()> {
+    let mut csv_writer = csv::WriterBuilder::new()
+        .quote_style(csv::QuoteStyle::NonNumeric)
+        .from_path(file_path)?;
+
+    for record in cut_list {
+        csv_writer.serialize(record)?;
+    }
+
+    Ok(())
+}
