@@ -9,7 +9,21 @@ pub struct Settings {
     /// Settings file version.
     pub version: String,
 
+    /// Liste application settings.
+    pub liste: ListeSettings,
+
+    /// Database settings.
     pub database: Database,
+}
+
+/// Settings for the `liste` application.
+#[derive(Deserialize, Debug)]
+pub struct ListeSettings {
+    /// Directory to write cutlists for our cut plan optimizer.
+    pub v12_import_dir: String,
+
+    /// Default quantity of parts to use for model number only cutlists.
+    pub default_bom_qty: i32,
 }
 
 impl Settings {
