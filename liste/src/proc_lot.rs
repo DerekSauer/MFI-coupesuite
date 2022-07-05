@@ -1,21 +1,28 @@
 use crate::cut_list::CutListRow;
-use coupesuite_shared::database::verify_lot;
+use coupesuite_shared::database::{verify_lot, SkuInfo};
 
 /// Generate a cut list from a furniture lot number.
 /// The lot number will be validated to make sure it is a unit
 /// of furniture instead of a part.
+///
+/// # Returns
+///
+/// Returns a tuple of the list of parts to cut and information about the sku.
 pub async fn process_lot(
     lot_number: i32,
     db_pool: &sqlx::PgPool,
-) -> anyhow::Result<Vec<CutListRow>> {
+) -> anyhow::Result<(Vec<CutListRow>, SkuInfo)> {
     let query = include_str!("../sql/lot_query.sql");
 
-    verify_lot(lot_number, db_pool).await?;
+    let sku_info = verify_lot(lot_number, db_pool).await?;
 
-    Ok(sqlx::query_as::<_, CutListRow>(query)
-        .bind(lot_number)
-        .fetch_all(db_pool)
-        .await?)
+    Ok((
+        sqlx::query_as::<_, CutListRow>(query)
+            .bind(lot_number)
+            .fetch_all(db_pool)
+            .await?,
+        sku_info,
+    ))
 }
 
 #[tokio::test]
@@ -28,7 +35,7 @@ async fn main() -> anyhow::Result<()> {
 
     let db_pool = get_database_pool(&settings.database).await?;
 
-    let results = process_lot(730887, &db_pool).await?;
+    let (results, _) = process_lot(730887, &db_pool).await?;
 
     assert_eq!(results[0].part_code, "2262-0281");
 
