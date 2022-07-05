@@ -2,6 +2,7 @@ version = "0.1.0"
 
 [liste]
 v12_import_dir = "C:/V12/_WORK/IMPORT"
+default_bom_qty = 100
 
 # SIGM database
 [database]
