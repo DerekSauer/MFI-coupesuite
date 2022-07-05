@@ -35,15 +35,48 @@ async fn main() -> anyhow::Result<()> {
             let mut file_path = export_path.clone();
             file_path.push(format!("{} ({})", sku_info.sku, lot));
             file_path.set_extension("csv");
-            println!("{}", &file_path.to_str().unwrap());
+
+            println!(
+                "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
+                &sku_info.sku,
+                &sku_info.description,
+                &sku_info.quantity,
+                &file_path.to_str().unwrap()
+            );
 
             cut_list::write_to_file(&cutlist, &file_path)?;
         }
     } else if !cmd_line_args.modèles.is_empty() {
+        // If the quantity command line arg is zero,
+        // use the default specified in settings
+        let quantity = if cmd_line_args.quantité == 0 {
+            settings.liste.default_bom_qty
+        } else {
+            cmd_line_args.quantité
+        };
+
         // Process models
         for model in cmd_line_args.modèles.split(',') {
-            let (cutlist, _sku_info) = process_model(model, &db_pool).await?;
-            cut_list::write_to_file(&cutlist, &"test.csv")?;
+            let (mut cutlist, sku_info) = process_model(model, &db_pool).await?;
+
+            // Update quantities in the cutlist
+            for row in cutlist.iter_mut() {
+                row.required_quantity = row.required_quantity * quantity;
+            }
+
+            let mut file_path = export_path.clone();
+            file_path.push(format!("{}", sku_info.sku));
+            file_path.set_extension("csv");
+
+            println!(
+                "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
+                &sku_info.sku,
+                &sku_info.description,
+                &quantity,
+                &file_path.to_str().unwrap()
+            );
+
+            cut_list::write_to_file(&cutlist, &file_path)?;
         }
     } else {
         anyhow::bail!("Entrez une liste de numéros de lot ou une liste de numéros de modèle.")
