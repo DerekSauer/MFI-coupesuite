@@ -33,7 +33,7 @@ async fn main() -> anyhow::Result<()> {
             }
 
             let mut file_path = export_path.clone();
-            file_path.push(format!("{} ({})", sku_info.sku, lot));
+            file_path.push(format!("{} ({})", &sku_info.sku, lot));
             file_path.set_extension("csv");
 
             println!(
@@ -61,11 +61,11 @@ async fn main() -> anyhow::Result<()> {
 
             // Update quantities in the cutlist
             for row in cutlist.iter_mut() {
-                row.required_quantity = row.required_quantity * quantity;
+                row.required_quantity *= quantity;
             }
 
             let mut file_path = export_path.clone();
-            file_path.push(format!("{}", sku_info.sku));
+            file_path.push(&sku_info.sku);
             file_path.set_extension("csv");
 
             println!(
