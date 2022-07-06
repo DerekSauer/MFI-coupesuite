@@ -112,7 +112,7 @@ pub async fn verify_lot(lot_number: i32, db_pool: &sqlx::PgPool) -> anyhow::Resu
         .await?
     {
         Some(result) => Ok(result),
-        None => anyhow::bail!("Numéro de lot invalide : {}", lot_number),
+        None => anyhow::bail!("Numéro de lot invalide: {}", lot_number),
     }
 }
 
