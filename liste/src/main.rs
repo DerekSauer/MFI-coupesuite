@@ -1,7 +1,7 @@
 use clap::Parser;
 use cmd_line::Args;
 use coupesuite_shared::{database, settings::Settings};
-use proc_lot::process_lot;
+use proc_lot::export_lots;
 use proc_model::process_model;
 
 mod cmd_line;
@@ -22,30 +22,14 @@ async fn main() -> anyhow::Result<()> {
             "Entrez une liste de numéros de lot ou une liste de numéros de modèle, pas les deux."
         )
     } else if !cmd_line_args.lots.is_empty() {
-        // Process lots
-        for lot in cmd_line_args.lots.split(',') {
-            let (mut cutlist, sku_info) = process_lot(lot.parse()?, &db_pool).await?;
-
-            // If the lot number is not a `kanban` production
-            // filter out the `kanban` parts
-            if !sku_info.kanban {
-                cutlist.retain(|x| !x.kanban);
-            }
-
-            let mut file_path = export_path.clone();
-            file_path.push(format!("{} ({})", &sku_info.sku, lot));
-            file_path.set_extension("csv");
-
-            println!(
-                "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
-                &sku_info.sku,
-                &sku_info.description,
-                &sku_info.quantity,
-                &file_path.to_str().unwrap()
-            );
-
-            cut_list::write_to_file(&cutlist, &file_path)?;
-        }
+        // Process and exports lots
+        export_lots(
+            &cmd_line_args.lots,
+            cmd_line_args.fusionner,
+            &export_path,
+            &db_pool,
+        )
+        .await?;
     } else if !cmd_line_args.modèles.is_empty() {
         // If the quantity command line arg is zero,
         // use the default specified in settings
