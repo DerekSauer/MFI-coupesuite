@@ -48,11 +48,16 @@ pub async fn export_models(
     export_path: &Path,
     db_pool: &PgPool,
 ) -> anyhow::Result<()> {
-    // Collection of cut data for merging cutlists
-    let mut cutlist_collection: Vec<Vec<CutListRow>> = Vec::new();
+    let model_list: Vec<&str> = model_list.split(',').collect();
+    let list_length = model_list.len();
+    let mut cutlist_collection: Vec<Vec<CutListRow>> = if list_length > 1 {
+        Vec::with_capacity(list_length)
+    } else {
+        Vec::new()
+    };
 
     // Process models. Skip invalid models and keep processing
-    for model_number in model_list.split(',') {
+    for model_number in model_list {
         let (cutlist, sku_info) = match process_model(model_number, db_pool).await {
             Ok(mut good_model) => {
                 // Add real quantity to each row
@@ -70,9 +75,9 @@ pub async fn export_models(
             }
         };
 
-        // If merging cutlists add this model to the master list
-        // and skip exporting it to disk
-        if merged {
+        // If merging cutlists add this model to the master list and skip exporting it to disk
+        // If only one model number was passed, ignore the merge argument
+        if merged && list_length > 1 {
             cutlist_collection.push(cutlist);
             continue;
         }
@@ -93,7 +98,7 @@ pub async fn export_models(
         );
     }
 
-    if merged {
+    if merged && list_length > 1 {
         write_cutlist_collection(&cutlist_collection, export_path)?;
     }
 

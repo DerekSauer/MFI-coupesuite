@@ -44,12 +44,18 @@ pub async fn export_lots(
     export_path: &Path,
     db_pool: &PgPool,
 ) -> anyhow::Result<()> {
-    // Master list of cut data for merging cutlists
-    let mut cutlist_collection: Vec<Vec<CutListRow>> = Vec::new();
+    // Preallocate space for the merged cutlist collection, if there is more than one lot number
+    let lot_list: Vec<&str> = lot_list.split(',').collect();
+    let list_length = lot_list.len();
+    let mut cutlist_collection: Vec<Vec<CutListRow>> = if list_length > 1 {
+        Vec::with_capacity(list_length)
+    } else {
+        Vec::new()
+    };
 
     // Process lots, skip invalid lots and keep processing
-    for lot_number in lot_list.split(',') {
-        // Lot numbers must be numeric
+    for lot_number in lot_list {
+        // Lot numbers must be integers
         let lot_number = match lot_number.parse() {
             Ok(good_lot) => good_lot,
             Err(_) => {
@@ -69,14 +75,14 @@ pub async fn export_lots(
             }
         };
 
-        // If the lot number is not a `kanban` production filter out the `kanban` parts
+        // If the lot number is not a `kanban` production, filter out the `kanban` parts
         if !sku_info.kanban {
             cutlist.retain(|x| !x.kanban);
         }
 
-        // If merging cutlists, add this list to the collection
-        // and skip exporting it to disk
-        if merged {
+        // If merging cutlists, add this list to the collection and skip exporting it to disk
+        // If only one lot number was passed, ignore the merge arg
+        if merged && list_length > 1 {
             cutlist_collection.push(cutlist);
             continue;
         }
@@ -101,7 +107,7 @@ pub async fn export_lots(
         );
     }
 
-    if merged {
+    if merged && list_length > 1 {
         write_cutlist_collection(&cutlist_collection, export_path)?;
     }
 
