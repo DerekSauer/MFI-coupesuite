@@ -93,7 +93,7 @@ pub async fn export_models(
             "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
             &sku_info.sku,
             &sku_info.description,
-            &sku_info.quantity,
+            quantity,
             &file_path.to_str().unwrap()
         );
     }
