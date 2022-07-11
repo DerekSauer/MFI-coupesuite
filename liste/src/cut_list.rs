@@ -3,7 +3,7 @@ use std::path::{Path, PathBuf};
 /// Data defining a part in a cutlist.
 /// Used by our cut pattern optimization software to generate
 /// programs for our CNC panels saws.
-#[derive(serde::Serialize, sqlx::FromRow, Clone, Debug)]
+#[derive(serde::Serialize, sqlx::FromRow, Debug)]
 pub struct CutListRow {
     /// Unique part identifier (part.prt_no in DB).
     pub part_code: String,
@@ -75,6 +75,7 @@ pub struct CutListRow {
     pub painted: bool,
 }
 
+/// Write a single cut list to file.
 pub fn write_cutlist(
     cut_list: &[CutListRow],
     file_path: &impl AsRef<std::path::Path>,
@@ -90,22 +91,8 @@ pub fn write_cutlist(
     Ok(())
 }
 
-fn write_cutlist_collection(
-    cutlist_collection: &[&CutListRow],
-    file_path: &impl AsRef<std::path::Path>,
-) -> anyhow::Result<()> {
-    let mut csv_writer = csv::WriterBuilder::new()
-        .quote_style(csv::QuoteStyle::NonNumeric)
-        .from_path(file_path)?;
-
-    for record in cutlist_collection {
-        csv_writer.serialize(record)?;
-    }
-
-    Ok(())
-}
-
-pub fn write_merged_list(
+/// Write a collection of cutlists to file.
+pub fn write_cutlist_collection(
     cutlist_collection: &Vec<Vec<CutListRow>>,
     export_path: &Path,
 ) -> anyhow::Result<()> {
@@ -124,7 +111,13 @@ pub fn write_merged_list(
     file_path.push(&sku_names);
     file_path.set_extension("csv");
 
-    write_cutlist_collection(&cutlist_collection, &file_path)?;
+    let mut csv_writer = csv::WriterBuilder::new()
+        .quote_style(csv::QuoteStyle::NonNumeric)
+        .from_path(&file_path)?;
+
+    for record in cutlist_collection {
+        csv_writer.serialize(record)?;
+    }
 
     println!(
         "SKU(s): {}\nFicher: {}\n",

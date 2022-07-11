@@ -19,7 +19,7 @@ async fn main() -> anyhow::Result<()> {
     // We either process lots or models, not both
     if !cmd_line_args.lots.is_empty() && !cmd_line_args.modèles.is_empty() {
         anyhow::bail!(
-            "Entrez une liste de numé&ros de lot ou une liste de numéros de modèle, pas les deux."
+            "Entrez une liste de numéros de lot ou une liste de numéros de modèle, pas les deux."
         )
     } else if !cmd_line_args.lots.is_empty() {
         // Process and exports lots

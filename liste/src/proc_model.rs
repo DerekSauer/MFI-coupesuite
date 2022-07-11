@@ -1,4 +1,4 @@
-use crate::cut_list::{self, write_merged_list, CutListRow};
+use crate::cut_list::{self, write_cutlist_collection, CutListRow};
 use coupesuite_shared::database::{verify_model, SkuInfo};
 use sqlx::PgPool;
 use std::path::{Path, PathBuf};
@@ -11,7 +11,7 @@ use std::path::{Path, PathBuf};
 ///
 /// # Returns
 ///
-/// Returns a tuple containing the list of parts to cut an SKU info.
+/// Returns a tuple containing the list of parts to cut and SKU info.
 pub async fn process_model(
     model_number: &str,
     db_pool: &sqlx::PgPool,
@@ -29,6 +29,18 @@ pub async fn process_model(
     ))
 }
 
+/// Export cut lists for furniture models to disk.
+///
+/// The export process will skip any invalid model numbers and continue
+/// to process good data until the list of models is exhausted.
+///
+/// ## Parameters
+///
+/// - `model_list`: String containing a comma seperated list of model numbers.
+/// - `merged`: If true, the cutlists will be merged into a single file.
+/// - `quantity`: A model number has no implicit quantity of parts to produce. This argument lets you specific the quantity.
+/// - `export_path`: Path to the directory where cut lists will be written.
+/// - `db_pool`: The database connection pool.
 pub async fn export_models(
     model_list: &str,
     merged: bool,
@@ -65,6 +77,7 @@ pub async fn export_models(
             continue;
         }
 
+        // Use the model number as the file name
         let mut file_path: PathBuf = export_path.into();
         file_path.push(&cutlist.first().unwrap().product_information);
         file_path.set_extension("csv");
@@ -81,14 +94,14 @@ pub async fn export_models(
     }
 
     if merged {
-        write_merged_list(&cutlist_collection, export_path)?;
+        write_cutlist_collection(&cutlist_collection, export_path)?;
     }
 
     Ok(())
 }
 
 #[tokio::test]
-async fn main() -> anyhow::Result<()> {
+async fn process_model_test() -> anyhow::Result<()> {
     use coupesuite_shared::database::get_database_pool;
     use coupesuite_shared::settings::Settings;
 

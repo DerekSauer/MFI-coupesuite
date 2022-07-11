@@ -1,4 +1,4 @@
-use crate::cut_list::{self, write_merged_list, CutListRow};
+use crate::cut_list::{self, write_cutlist_collection, CutListRow};
 use coupesuite_shared::database::{verify_lot, SkuInfo};
 use sqlx::PgPool;
 use std::path::{Path, PathBuf};
@@ -27,6 +27,17 @@ pub async fn process_lot(
     ))
 }
 
+/// Export cut lists for furniture lot numbers to disk.
+///
+/// The export process will skip any invalid model numbers and continue
+/// to process good data until the list of models is exhausted.
+///
+/// ## Parameters
+///
+/// - `lot_list`: String containing a comma seperated list of lot numbers.
+/// - `merged`: If true, the cutlists will be merged into a single file.
+/// - `export_path`: Path to the directory where cut lists will be written.
+/// - `db_pool`: The database connection pool.
 pub async fn export_lots(
     lot_list: &str,
     merged: bool,
@@ -38,8 +49,7 @@ pub async fn export_lots(
 
     // Process lots, skip invalid lots and keep processing
     for lot_number in lot_list.split(',') {
-        // Lot numbers are numeric.
-        // Parse will fail if the user passes in a model number
+        // Lot numbers must be numeric
         let lot_number = match lot_number.parse() {
             Ok(good_lot) => good_lot,
             Err(_) => {
@@ -59,8 +69,7 @@ pub async fn export_lots(
             }
         };
 
-        // If the lot number is not a `kanban` production
-        // filter out the `kanban` parts
+        // If the lot number is not a `kanban` production filter out the `kanban` parts
         if !sku_info.kanban {
             cutlist.retain(|x| !x.kanban);
         }
@@ -72,6 +81,7 @@ pub async fn export_lots(
             continue;
         }
 
+        // The model number and lot number in parens is the file name
         let mut file_path: PathBuf = export_path.into();
         file_path.push(format!(
             "{} ({})",
@@ -92,14 +102,14 @@ pub async fn export_lots(
     }
 
     if merged {
-        write_merged_list(&cutlist_collection, export_path)?;
+        write_cutlist_collection(&cutlist_collection, export_path)?;
     }
 
     Ok(())
 }
 
 #[tokio::test]
-async fn main() -> anyhow::Result<()> {
+async fn process_lot_test() -> anyhow::Result<()> {
     use coupesuite_shared::database::get_database_pool;
     use coupesuite_shared::settings::Settings;
 
