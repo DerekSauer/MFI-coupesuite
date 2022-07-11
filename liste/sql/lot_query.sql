@@ -6,16 +6,16 @@ SELECT
     project.prj_req_qty::INT AS required_quantity,
     project.prj_no::INT AS no_projet,
     COALESCE(TRIM(edge_top.prt_no), '') AS code_edge_haut,
-    COALESCE(TRIM(edge_top.prt_desc2), '') AS desc_edge_haut,
+    COALESCE(TRIM(TO_ASCII(edge_top.prt_desc2, 'LATIN1')), '') AS desc_edge_haut,
     COALESCE(TRIM(edge_right.prt_no), '') AS code_edge_droite,
-    COALESCE(TRIM(edge_right.prt_desc2), '') AS desc_edge_droite,
+    COALESCE(TRIM(TO_ASCII(edge_right.prt_desc2, 'LATIN1')), '') AS desc_edge_droite,
     COALESCE(TRIM(edge_bottom.prt_no), '') AS code_edge_bas,
-    COALESCE(TRIM(edge_bottom.prt_desc2), '') AS desc_edge_bas,
+    COALESCE(TRIM(TO_ASCII(edge_bottom.prt_desc2, 'LATIN1')), '') AS desc_edge_bas,
     COALESCE(TRIM(edge_left.prt_no), '') AS code_edge_gauche,
-    COALESCE(TRIM(edge_left.prt_desc2), '') AS desc_edge_gauche,
+    COALESCE(TRIM(TO_ASCII(edge_left.prt_desc2, 'LATIN1')), '') AS desc_edge_gauche,
     master_project.prj_no::INT AS product_code,
     TRIM(REPLACE(master_project.prt_no, '90-', '')) AS product_information,
-    TRIM(master_project.prj_name) AS product_description,
+    TRIM(TO_ASCII(master_project.prj_name, 'LATIN1')) AS product_description,
     TRIM(COALESCE(SUBSTRING(part.prt_desc1 FROM '\"(.+)\"'), '')) AS lettre_piece,
     'S:/MFI/Dessins/' || part.prt_no || '.jpg' AS picture_filename,
     UPPER(TRIM(TO_ASCII(part.prt_desc1, 'LATIN1'))) AS part_description,
@@ -25,7 +25,7 @@ SELECT
     END AS type_palette,
     UPPER(TRIM(part.prt_idx3_1)) = 'KANBAN' AS kanban,
     UPPER(TRIM(part.prt_idx3_4)) = 'P' AS painted
-    
+
 FROM
     project
     INNER JOIN part
@@ -34,7 +34,7 @@ FROM
             ON part.pgr_id = part_group.pgr_id
     INNER JOIN project AS master_project
             ON project.prj_source_no = master_project.prj_no
-            
+
     LEFT  JOIN part AS edge_top
             ON UPPER(TRIM(edge_top.prt_no)) = UPPER(TRIM(part.prt_usr_string1))
     LEFT  JOIN part AS edge_right
@@ -43,7 +43,7 @@ FROM
             ON UPPER(TRIM(edge_bottom.prt_no)) = UPPER(TRIM(part.prt_usr_string3))
     LEFT  JOIN part AS edge_left
             ON UPPER(TRIM(edge_left.prt_no)) = UPPER(TRIM(part.prt_usr_string4))
-            
+
 WHERE
         project.prj_source_no = $1
     AND part_group.pgr_no IN ('760', '770')             -- FABRICATED PARTS ONLY
@@ -53,6 +53,6 @@ WHERE
     AND UPPER(TRIM(part.prt_no)) NOT LIKE '040-ANTI%'   -- NO LABELS IN WRONG PART GROUP
     AND part.prt_no <> '040-0057'                       -- NO CARDBOARD IN WRONG PART GROUP
     AND part.prt_no <> '040-0073'                       -- DITTO
-    
+
 ORDER BY
     part_code
