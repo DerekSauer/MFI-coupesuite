@@ -1,7 +1,9 @@
+use std::path::{Path, PathBuf};
+
 /// Data defining a part in a cutlist.
 /// Used by our cut pattern optimization software to generate
 /// programs for our CNC panels saws.
-#[derive(serde::Serialize, sqlx::FromRow, Debug)]
+#[derive(serde::Serialize, sqlx::FromRow, Clone, Debug)]
 pub struct CutListRow {
     /// Unique part identifier (part.prt_no in DB).
     pub part_code: String,
@@ -73,8 +75,8 @@ pub struct CutListRow {
     pub painted: bool,
 }
 
-pub fn write_to_file(
-    cut_list: &Vec<CutListRow>,
+pub fn write_cutlist(
+    cut_list: &[CutListRow],
     file_path: &impl AsRef<std::path::Path>,
 ) -> anyhow::Result<()> {
     let mut csv_writer = csv::WriterBuilder::new()
@@ -84,6 +86,51 @@ pub fn write_to_file(
     for record in cut_list {
         csv_writer.serialize(record)?;
     }
+
+    Ok(())
+}
+
+fn write_cutlist_collection(
+    cutlist_collection: &[&CutListRow],
+    file_path: &impl AsRef<std::path::Path>,
+) -> anyhow::Result<()> {
+    let mut csv_writer = csv::WriterBuilder::new()
+        .quote_style(csv::QuoteStyle::NonNumeric)
+        .from_path(file_path)?;
+
+    for record in cutlist_collection {
+        csv_writer.serialize(record)?;
+    }
+
+    Ok(())
+}
+
+pub fn write_merged_list(
+    cutlist_collection: &Vec<Vec<CutListRow>>,
+    export_path: &Path,
+) -> anyhow::Result<()> {
+    // Get the names of the SKUs in the collection for the export filename
+    let mut sku_names: Vec<String> = Vec::with_capacity(cutlist_collection.len());
+    for cutlist in cutlist_collection {
+        sku_names.push(cutlist.first().unwrap().product_information.clone());
+    }
+    let sku_names = &sku_names.join(", ");
+
+    // Flatten the collection of cutlists into one cutlist
+    let cutlist_collection: Vec<&CutListRow> = cutlist_collection.iter().flatten().collect();
+
+    // Build a filename made up of the SKU names
+    let mut file_path: PathBuf = export_path.into();
+    file_path.push(&sku_names);
+    file_path.set_extension("csv");
+
+    write_cutlist_collection(&cutlist_collection, &file_path)?;
+
+    println!(
+        "SKU(s): {}\nFicher: {}\n",
+        &sku_names,
+        &file_path.to_str().unwrap()
+    );
 
     Ok(())
 }

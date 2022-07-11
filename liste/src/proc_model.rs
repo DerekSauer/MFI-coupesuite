@@ -1,4 +1,4 @@
-use crate::cut_list::{self, CutListRow};
+use crate::cut_list::{self, write_merged_list, CutListRow};
 use coupesuite_shared::database::{verify_model, SkuInfo};
 use sqlx::PgPool;
 use std::path::{Path, PathBuf};
@@ -69,7 +69,7 @@ pub async fn export_models(
         file_path.push(&cutlist.first().unwrap().product_information);
         file_path.set_extension("csv");
 
-        cut_list::write_to_file(&cutlist, &file_path)?;
+        cut_list::write_cutlist(&cutlist, &file_path)?;
 
         println!(
             "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
@@ -78,6 +78,10 @@ pub async fn export_models(
             &sku_info.quantity,
             &file_path.to_str().unwrap()
         );
+    }
+
+    if merged {
+        write_merged_list(&cutlist_collection, export_path)?;
     }
 
     Ok(())

@@ -1,4 +1,4 @@
-use crate::cut_list::{self, CutListRow};
+use crate::cut_list::{self, write_merged_list, CutListRow};
 use coupesuite_shared::database::{verify_lot, SkuInfo};
 use sqlx::PgPool;
 use std::path::{Path, PathBuf};
@@ -37,23 +37,23 @@ pub async fn export_lots(
     let mut cutlist_collection: Vec<Vec<CutListRow>> = Vec::new();
 
     // Process lots, skip invalid lots and keep processing
-    for lot in lot_list.split(',') {
+    for lot_number in lot_list.split(',') {
         // Lot numbers are numeric.
         // Parse will fail if the user passes in a model number
-        let lot_number = match lot.parse() {
+        let lot_number = match lot_number.parse() {
             Ok(good_lot) => good_lot,
             Err(_) => {
-                println!("Error: Numéro de lot incorrect: {}.\nAvez-vous entré un numéro de modèle par erreur?\n", lot);
+                println!("Error: Numéro de lot incorrect: {}.\nAvez-vous entré un numéro de modèle par erreur?\n", lot_number);
                 continue;
             }
         };
 
         let (mut cutlist, sku_info) = match process_lot(lot_number, db_pool).await {
-            Ok(good_data) => good_data,
-            Err(bad_data) => {
+            Ok(good_lot) => good_lot,
+            Err(bad_lot) => {
                 println!(
                     "Error: Problème avec le numéro de lot: {}\n{}\n",
-                    lot, bad_data
+                    lot_number, bad_lot
                 );
                 continue;
             }
@@ -76,9 +76,11 @@ pub async fn export_lots(
         file_path.push(format!(
             "{} ({})",
             &cutlist.first().unwrap().product_information,
-            lot
+            lot_number
         ));
         file_path.set_extension("csv");
+
+        cut_list::write_cutlist(&cutlist, &file_path)?;
 
         println!(
             "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
@@ -87,34 +89,10 @@ pub async fn export_lots(
             &sku_info.quantity,
             &file_path.to_str().unwrap()
         );
-
-        cut_list::write_to_file(&cutlist, &file_path)?;
     }
 
     if merged {
-        // Get the names of the SKUs in the collection for the export filename
-        let mut sku_names: Vec<String> = Vec::with_capacity(cutlist_collection.len());
-        for cutlist in &cutlist_collection {
-            sku_names.push(cutlist.first().unwrap().product_information.clone());
-        }
-        let sku_names = &sku_names.join(", ");
-
-        // Flatten the cutlists into one list
-        let cutlist_collection: Vec<CutListRow> =
-            cutlist_collection.into_iter().flatten().collect();
-
-        // Build a filename made up of the SKU names
-        let mut file_path: PathBuf = export_path.into();
-        file_path.push(&sku_names);
-        file_path.set_extension("csv");
-
-        println!(
-            "SKU(s): {}\nFicher: {}\n",
-            &sku_names,
-            &file_path.to_str().unwrap()
-        );
-
-        cut_list::write_to_file(&cutlist_collection, &file_path)?;
+        write_merged_list(&cutlist_collection, export_path)?;
     }
 
     Ok(())
