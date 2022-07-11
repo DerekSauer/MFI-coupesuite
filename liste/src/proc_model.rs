@@ -1,5 +1,7 @@
-use crate::cut_list::CutListRow;
+use crate::cut_list::{self, CutListRow};
 use coupesuite_shared::database::{verify_model, SkuInfo};
+use sqlx::PgPool;
+use std::path::{Path, PathBuf};
 
 /// Generate a cut list from a furniture model number.
 /// The model number will be validated to make sure it is a unit
@@ -25,6 +27,60 @@ pub async fn process_model(
             .await?,
         sku_info,
     ))
+}
+
+pub async fn export_models(
+    model_list: &str,
+    merged: bool,
+    quantity: i32,
+    export_path: &Path,
+    db_pool: &PgPool,
+) -> anyhow::Result<()> {
+    // Collection of cut data for merging cutlists
+    let mut cutlist_collection: Vec<Vec<CutListRow>> = Vec::new();
+
+    // Process models. Skip invalid models and keep processing
+    for model_number in model_list.split(',') {
+        let (cutlist, sku_info) = match process_model(model_number, db_pool).await {
+            Ok(mut good_model) => {
+                // Add real quantity to each row
+                for row in good_model.0.iter_mut() {
+                    row.required_quantity *= quantity
+                }
+                good_model
+            }
+            Err(bad_model) => {
+                println!(
+                    "Error: Problème avec le numéro de modèle: {}\n{}\n",
+                    model_number, bad_model
+                );
+                continue;
+            }
+        };
+
+        // If merging cutlists add this model to the master list
+        // and skip exporting it to disk
+        if merged {
+            cutlist_collection.push(cutlist);
+            continue;
+        }
+
+        let mut file_path: PathBuf = export_path.into();
+        file_path.push(&cutlist.first().unwrap().product_information);
+        file_path.set_extension("csv");
+
+        cut_list::write_to_file(&cutlist, &file_path)?;
+
+        println!(
+            "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
+            &sku_info.sku,
+            &sku_info.description,
+            &sku_info.quantity,
+            &file_path.to_str().unwrap()
+        );
+    }
+
+    Ok(())
 }
 
 #[tokio::test]
