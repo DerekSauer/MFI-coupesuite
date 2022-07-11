@@ -76,23 +76,23 @@ pub struct CutListRow {
 }
 
 /// Write a single cut list to file.
-pub fn write_cutlist(
+pub async fn write_cutlist(
     cut_list: &[CutListRow],
     file_path: &impl AsRef<std::path::Path>,
 ) -> anyhow::Result<()> {
-    let mut csv_writer = csv::WriterBuilder::new()
-        .quote_style(csv::QuoteStyle::NonNumeric)
-        .from_path(file_path)?;
+    let mut csv_writer = csv_async::AsyncWriterBuilder::new()
+        .quote_style(csv_async::QuoteStyle::NonNumeric)
+        .create_serializer(tokio::fs::File::create(&file_path).await?);
 
     for record in cut_list {
-        csv_writer.serialize(record)?;
+        csv_writer.serialize(record).await?;
     }
 
     Ok(())
 }
 
 /// Write a collection of cutlists to file.
-pub fn write_cutlist_collection(
+pub async fn write_cutlist_collection(
     cutlist_collection: &Vec<Vec<CutListRow>>,
     export_path: &Path,
 ) -> anyhow::Result<()> {
@@ -111,12 +111,12 @@ pub fn write_cutlist_collection(
     file_path.push(&sku_names);
     file_path.set_extension("csv");
 
-    let mut csv_writer = csv::WriterBuilder::new()
-        .quote_style(csv::QuoteStyle::NonNumeric)
-        .from_path(&file_path)?;
+    let mut csv_writer = csv_async::AsyncWriterBuilder::new()
+        .quote_style(csv_async::QuoteStyle::NonNumeric)
+        .create_serializer(tokio::fs::File::create(&file_path).await?);
 
     for record in cutlist_collection {
-        csv_writer.serialize(record)?;
+        csv_writer.serialize(record).await?;
     }
 
     println!(

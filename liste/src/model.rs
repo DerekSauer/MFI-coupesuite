@@ -87,7 +87,7 @@ pub async fn export_models(
         file_path.push(&cutlist.first().unwrap().product_information);
         file_path.set_extension("csv");
 
-        cut_list::write_cutlist(&cutlist, &file_path)?;
+        cut_list::write_cutlist(&cutlist, &file_path).await?;
 
         println!(
             "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
@@ -99,7 +99,7 @@ pub async fn export_models(
     }
 
     if merged && list_length > 1 {
-        write_cutlist_collection(&cutlist_collection, export_path)?;
+        write_cutlist_collection(&cutlist_collection, export_path).await?;
     }
 
     Ok(())
