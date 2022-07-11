@@ -10,7 +10,7 @@ use std::path::{Path, PathBuf};
 /// # Returns
 ///
 /// Returns a tuple of the list of parts to cut and information about the sku.
-pub async fn process_lot(
+async fn process_lot(
     lot_number: i32,
     db_pool: &sqlx::PgPool,
 ) -> anyhow::Result<(Vec<CutListRow>, SkuInfo)> {
