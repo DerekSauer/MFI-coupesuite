@@ -1,13 +1,13 @@
 use clap::Parser;
 use cmd_line::Args;
 use coupesuite_shared::{database, settings::Settings};
-use proc_lot::export_lots;
-use proc_model::export_models;
+use lot::export_lots;
+use model::export_models;
 
 mod cmd_line;
 mod cut_list;
-mod proc_lot;
-mod proc_model;
+mod lot;
+mod model;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
