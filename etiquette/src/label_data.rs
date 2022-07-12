@@ -22,3 +22,15 @@ pub struct LabelData {
     /// Number of labels to print.
     pub print_quantity: i32,
 }
+
+impl LabelData {
+    /// Retrieve label data from the database.
+    pub async fn from_lot(lot_number: i32, db_pool: &sqlx::PgPool) -> anyhow::Result<Self> {
+        let query = include_str!("../sql/label.sql");
+
+        Ok(sqlx::query_as::<_, LabelData>(query)
+            .bind(lot_number)
+            .fetch_one(db_pool)
+            .await?)
+    }
+}
