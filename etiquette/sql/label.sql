@@ -35,4 +35,4 @@ FROM
             ON project.prj_id = documentSelector.prj_id
 
 WHERE
-    project.prj_no = 731442
+    project.prj_no = $1
