@@ -1,2 +1,2 @@
 [workspace]
-members = ["liste", "shared"]
+members = ["etiquette", "liste", "shared"]

@@ -1,0 +1,20 @@
+[package]
+name = "coupesuite-etiquette"
+version = "0.1.0"
+edition = "2021"
+authors = ["Derek Sauer <dsauer@megalak.ca>"]
+description = "Imprimez des étiquettes de service client."
+license = "MPL-2.0"
+
+[[bin]]
+name = "etiquette"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0.58"
+coupesuite-shared = { path = "../shared" }
+clap = { version = "3.2.6", features = ["derive"] }
+tokio = { version = "1.19.2", features = ["full"] }
+tokio-test = "0.4.2"
+serde = { version = "1.0.137", features = ["derive"] }
+sqlx = { version = "0.6.0", features = ["runtime-tokio-rustls", "postgres"] }
