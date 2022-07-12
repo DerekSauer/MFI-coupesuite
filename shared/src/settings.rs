@@ -17,6 +17,12 @@ pub struct Settings {
 
     /// Database settings.
     pub database: Database,
+
+    /// Chromium settings.
+    pub chromium: Chromium,
+
+    /// Foxit PDF Reader settings.
+    pub foxit: Foxit,
 }
 
 /// Settings for the `liste` application.
@@ -37,6 +43,20 @@ pub struct EtiquetteSettings {
 
     /// Number of labels printed will be rounded up to this multiple.
     pub multiple: i32,
+}
+
+/// Settings for the headless chromium browser we'll be using to generate PDFs.
+#[derive(Deserialize, Debug)]
+pub struct Chromium {
+    /// File path to the web browser.
+    pub location: String,
+}
+
+/// Settings for Foxit PDF Reader we'll be using to print PDFs.
+#[derive(Deserialize, Debug)]
+pub struct Foxit {
+    /// File path to Foxit PDF Reader.
+    pub location: String,
 }
 
 impl Settings {

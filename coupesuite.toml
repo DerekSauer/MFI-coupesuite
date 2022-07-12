@@ -1,15 +1,14 @@
-version = "0.1.0"
+version = "0.2.0"
 
+# Paramètres du générateur de listes de coupe
 [liste]
-v12_import_dir = "C:/V12/_WORK/IMPORT"
-default_bom_qty = 100
+v12_import_dir = "C:/V12/_WORK/IMPORT"  # Location du répertoire d'importation de Cutrite
+default_bom_qty = 100                   # Quantité défaut lorsque la quantité n'est pas spécifiée.
 
+# Paramètres de l'imprimante d'étiquettes.
 [etiquette]
-# Trouver avec, `wmic printer get name`, dans le terminal
-nom_imprimante = "Zebra (Bureau Derek)"
-
-# Le nombre d'étiquettes imprimées sera arrondi à ce multiple
-multiple = 6
+nom_imprimante = "Zebra (Bureau Derek)" # Trouver avec, `wmic printer get name`
+multiple = 6                            # Nombre copies imprimées sera arrondi à ce multiple
 
 # SIGM database
 [database]
@@ -17,3 +16,11 @@ hostname = "192.168.0.20"
 port = "5493"
 name = "MFI"
 username = "SIGM"
+
+# Location d'un navigateur Web Chromium pour la génération de PDF
+[chromium]
+location = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
+
+# Location de `Foxit PDF Reader` pour l'impression de PDF
+[foxit]
+location = "C:/Users/DSauer/scoop/apps/foxit-pdf-reader/current/FoxitPDFReader.exe"
