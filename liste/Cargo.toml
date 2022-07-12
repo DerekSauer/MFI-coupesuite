@@ -6,6 +6,14 @@ authors = ["Derek Sauer <dsauer@megalak.ca>"]
 description = "Générez des listes de coupe pour le logiciel d'optimisation de nos scies à panneaux."
 license = "MPL-2.0"
 
+[[bin]]
+name = "liste"
+path = "src/main.rs"
+
+[lib]
+name = "liste"
+path = "src/lib.rs"
+
 [dependencies]
 anyhow = "1.0.58"
 coupesuite-shared = { path = "../shared" }
