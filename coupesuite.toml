@@ -4,6 +4,13 @@ version = "0.1.0"
 v12_import_dir = "C:/V12/_WORK/IMPORT"
 default_bom_qty = 100
 
+[etiquette]
+# Trouver avec, `wmic printer get name`, dans le terminal
+nom_imprimante = "Zebra (Bureau Derek)"
+
+# Le nombre d'étiquettes imprimées sera arrondi à ce multiple
+multiple = 6
+
 # SIGM database
 [database]
 hostname = "192.168.0.20"

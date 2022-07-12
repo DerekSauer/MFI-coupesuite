@@ -12,6 +12,9 @@ pub struct Settings {
     /// Liste application settings.
     pub liste: ListeSettings,
 
+    /// Etiquette application settings.
+    pub etiquette: EtiquetteSettings,
+
     /// Database settings.
     pub database: Database,
 }
@@ -24,6 +27,16 @@ pub struct ListeSettings {
 
     /// Default quantity of parts to use for model number only cutlists.
     pub default_bom_qty: i32,
+}
+
+/// Settings for the `etiquette` application.
+#[derive(Deserialize, Debug)]
+pub struct EtiquetteSettings {
+    /// Windows printer name of the label printer device.
+    pub nom_imprimante: String,
+
+    /// Number of labels printed will be rounded up to this multiple.
+    pub multiple: i32,
 }
 
 impl Settings {
