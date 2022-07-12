@@ -19,11 +19,11 @@ GROUP BY
 )
 
 SELECT
-	UPPER(TRIM(REPLACE(project.prt_no, '90-', ''))) AS modelNumber,
-	project.prj_no::INT                             AS projectNumber,
-	COALESCE(documentSelector.documentList[1], '')  AS document1,
-	COALESCE(documentSelector.documentList[2], '')  AS document2,
-	COALESCE(documentSelector.documentList[3], '')  AS document3,
+	UPPER(TRIM(REPLACE(project.prt_no, '90-', ''))) AS model_Number,
+	project.prj_no::INT                             AS project_Number,
+	COALESCE(documentSelector.documentList[1], '')  AS document_1,
+	COALESCE(documentSelector.documentList[2], '')  AS document_2,
+	COALESCE(documentSelector.documentList[3], '')  AS document_3,
 	TRIM(UPPER(part.prt_idx1_2))                    AS letter,
     project.prj_req_qty::INT                        AS print_quantity
 
