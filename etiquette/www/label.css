@@ -1,0 +1,68 @@
+@page {
+    width: 4in;
+    height: 2in;
+}
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    line-height: 1;
+}
+
+table {
+    border-style: solid;
+    border-width: 0.02cm;
+    border-radius: 0.25cm;
+    border-color: black;
+    padding: 0;
+    margin: 0.25cm;
+
+}
+
+td {
+    border: 1px dashed;
+    margin: 0;
+    padding: 0;
+}
+
+.nexera_logo {
+    font-family: Trade Gothic LT Std, Arial, Helvetica, sans-serif;
+    font-size: 20pt;
+}
+
+.label_letter {
+    font-weight: bold;
+    font-size: large;
+    text-align: center;
+
+}
+
+.label_header {
+    font-style: italic;
+    font-weight: bold;
+    text-align: center;
+}
+
+.label_fieldname {
+    font-weight: bold;
+    text-align: right;
+}
+
+.label_field {
+    font-weight: normal;
+}
+
+.label_email {
+    font-weight: bold;
+    text-align: center;
+    text-decoration: underline;
+}
+
+.label_madein {
+    text-align: center;
+}
+
+.label_carb {
+    font-size: 6pt;
+    text-align: center;
+}
