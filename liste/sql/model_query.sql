@@ -1,6 +1,6 @@
 SELECT
     TRIM(part.prt_no) AS part_code,
-    UPPER(TRIM(SPLIT_PART(part.prt_no, '-', 1), 'LATIN1')) AS material_code,
+    UPPER(TRIM(SPLIT_PART(part.prt_no, '-', 1))) AS material_code,
     part.prt_stt_ax1::REAL AS part_length,
     part.prt_stt_ax2::REAL AS part_width,
     (bill_of_materials_mat.bma_budg_qty / model.prt_std_bqty)::INT AS required_quantity,
