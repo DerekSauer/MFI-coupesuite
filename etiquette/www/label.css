@@ -1,54 +1,53 @@
-@page {
-    width: 4in;
-    height: 2in;
-}
-
 * {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 10pt;
-    line-height: 1;
-}
-
-table {
-    border-style: solid;
-    border-width: 0.02cm;
-    border-radius: 0.25cm;
-    border-color: black;
-    padding: 0;
-    margin: 0.25cm;
-
-}
-
-td {
-    border: 1px dashed;
-    margin: 0;
-    padding: 0;
+    line-height: 1.2;
+    margin: 0.0;
+    padding: 0.0;
 }
 
 .nexera_logo {
     font-family: Trade Gothic LT Std, Arial, Helvetica, sans-serif;
-    font-size: 20pt;
+    font-size: 36pt;
+    font-weight: bold;
+    display: inline-block;
+    letter-spacing: -4pt;
+}
+
+.nexera_logo_suffix {
+    font-family: Trade Gothic LT Std, Arial, Helvetica, sans-serif;
+    font-size: 30pt;
+    font-weight: bold;
+    display: inline-block;
+    margin-left: -5pt;
 }
 
 .label_letter {
     font-weight: bold;
-    font-size: large;
+    font-size: 24pt;
     text-align: center;
-
+    border: 0.02in solid;
+    width: auto;
+    margin: auto;
+    padding: 0 0.05in 0;
+    max-width: 0.75in;
 }
 
 .label_header {
+    font-size: 11pt;
     font-style: italic;
     font-weight: bold;
     text-align: center;
 }
 
 .label_fieldname {
+    font-size: 12pt;
     font-weight: bold;
     text-align: right;
 }
 
 .label_field {
+    font-size: 12pt;
     font-weight: normal;
 }
 
@@ -65,4 +64,27 @@ td {
 .label_carb {
     font-size: 6pt;
     text-align: center;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.label_phone {
+    text-align: right;
+}
+
+.label_date {
+    text-align: right;
+}
+
+@media print {
+    @page {
+        size: 4.0in 2.0in;
+        margin: 0.05in;
+    }
+
+    body {
+        display: block;
+        width: 3.9in;
+        height: 1.9in;
+    }
 }
