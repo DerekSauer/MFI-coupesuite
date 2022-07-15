@@ -12,7 +12,8 @@ mod model;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let cmd_line_args = Args::parse();
-    let settings = Settings::load(&"./coupesuite.toml")?;
+    let working_dir = std::env::current_dir()?;
+    let settings = Settings::load(&working_dir.join("coupesuite.toml"))?;
     let db_pool = database::get_database_pool(&settings.database).await?;
     let export_path = std::path::PathBuf::from(&settings.liste.v12_import_dir);
 
