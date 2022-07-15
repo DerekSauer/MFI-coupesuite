@@ -21,6 +21,6 @@ username = "SIGM"
 [chromium]
 location = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
 
-# Location de `Foxit PDF Reader` pour l'impression de PDF
-[foxit]
-location = "C:/Users/DSauer/scoop/apps/foxit-pdf-reader/current/FoxitPDFReader.exe"
+# Location de `Sumatra PDF` pour l'impression des PDFs
+[sumatrapdf]
+location = "C:/Users/DSauer/scoop/apps/sumatrapdf/current/SumatraPDF.exe"
