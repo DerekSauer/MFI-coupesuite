@@ -18,3 +18,4 @@ tokio = { version = "1.19.2", features = ["full"] }
 tokio-test = "0.4.2"
 serde = { version = "1.0.137", features = ["derive"] }
 sqlx = { version = "0.6.0", features = ["runtime-tokio-rustls", "postgres"] }
+thirtyfour = "0.29.6"
