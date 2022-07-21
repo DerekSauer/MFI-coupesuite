@@ -1,9 +1,10 @@
+use chromiumoxide::cdp::browser_protocol::page::PrintToPdfParams;
+use chromiumoxide::{Browser, BrowserConfig};
 use clap::Parser;
 use cmd_line::Args;
 use coupesuite_shared::database::{self, verify_lot};
 use coupesuite_shared::settings::Settings;
-use thirtyfour::common::capabilities::firefox::FirefoxPreferences;
-use thirtyfour::{prelude::*, FirefoxCapabilities};
+use futures::StreamExt;
 
 mod cmd_line;
 mod label_data;
@@ -28,46 +29,46 @@ async fn main() -> anyhow::Result<()> {
         verify_lot(lot, &db_pool).await?;
 
         // Grab the label's data from the database
-        let label_data = label_data::LabelData::from_lot(lot, &db_pool).await?;
+        let _label_data = label_data::LabelData::from_lot(lot, &db_pool).await?;
 
         // TODO: Templatize the HTML file and insert label data into the placeholders
     }
 
-    // Enable silent printing to desired printer
-    let mut prefs = FirefoxPreferences::new();
-    prefs.set("print.always_print_silent", true)?;
-    prefs.set("print_printer", "Zebra (Bureau Derek)")?;
-    //prefs.set("print_printer", "Back Office Printer")?;
+    let browser_config = BrowserConfig::with_executable(&settings.chromium.location);
+    let (browser, mut handler) = Browser::launch(browser_config).await?;
 
-    // Disable page headers
-    prefs.set("print.print_headercenter", "")?;
-    prefs.set("print.print_headerleft", "")?;
-    prefs.set("print.print_headerright", "")?;
+    let _ = tokio::task::spawn(async move {
+        loop {
+            let _ = handler.next().await.unwrap();
+        }
+    });
 
-    // Disable page footers
-    prefs.set("print.print_footercenter", "")?;
-    prefs.set("print.print_footerleft", "")?;
-    prefs.set("print.print_footerright", "")?;
-
-    // Printer specific settings
-    // TODO: Break these out into the settings file
-    prefs.set("print.printer_Zebra_(Bureau_Derek).print_orientation", 0)?;
-    prefs.set("print.printer_Zebra_(Bureau_Derek).print_margin_bottom", 0)?;
-    prefs.set("print.printer_Zebra_(Bureau_Derek).print_margin_left", 0)?;
-    prefs.set("print.printer_Zebra_(Bureau_Derek).print_margin_right", 0)?;
-    prefs.set("print.printer_Zebra_(Bureau_Derek).print_margin_top", 0)?;
-
-    let mut caps = FirefoxCapabilities::new();
-    caps.set_preferences(prefs)?;
-    caps.set_headless()?;
-
-    let driver = WebDriver::new("http://localhost:4444", caps).await?;
-    driver
-        .get("file://C:/Users/DSauer/Source/coupesuite/etiquette/www/label.html")
+    let page = browser
+        .new_page("file://C:/Users/DSauer/Source/coupesuite/etiquette/www/label.html")
         .await?;
-    println!("Page title: {}", driver.title().await?);
 
-    driver.quit().await?;
+    let pdf_params = PrintToPdfParams {
+        landscape: false.into(),
+        display_header_footer: false.into(),
+        print_background: false.into(),
+        scale: Some(1.0),
+        paper_width: Some(4.0),
+        paper_height: Some(2.0),
+        margin_top: None,
+        margin_left: None,
+        margin_bottom: None,
+        margin_right: None,
+        page_ranges: None,
+        ignore_invalid_page_ranges: None,
+        header_template: None,
+        footer_template: None,
+        prefer_css_page_size: None,
+        transfer_mode: None,
+    };
+
+    page.save_pdf(pdf_params, "./test.pdf").await?;
 
     Ok(())
 }
+
+// gswin64c -dSAFER -dBATCH -dNOPAUSE -dNumCopies=5 -dNoCancel -dDEVICEWIDTHPOINTS=288 -dDEVICEHEIGHTPOINTS=144 -dNEWPDF -sDEVICE=mswinpr2 -sOutputFile="%printer%Zebra (Bureau Derek)" .\test.pdf
