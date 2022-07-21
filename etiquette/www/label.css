@@ -7,29 +7,20 @@
 }
 
 body {
-    width: 3.84in;
-    height: 1.84in;
-}
-
-.nexera_logo_container {
-    min-width: 1.0in;
-    vertical-align: top;
+    width: 3.9in;
+    height: 1.9in;
 }
 
 .nexera_logo {
-    font-family: Trade Gothic LT Std, Arial, Helvetica, sans-serif;
     font-size: 36pt;
     font-weight: bold;
-    display: inline-block;
-    letter-spacing: -4pt;
+    letter-spacing: -4.5pt;
     line-height: 0;
 }
 
 .nexera_logo_suffix {
-    font-family: Trade Gothic LT Std, Arial, Helvetica, sans-serif;
-    font-size: 30pt;
+    font-size: 26pt;
     font-weight: bold;
-    display: inline-block;
     margin-left: -5pt;
     line-height: 0;
 }
@@ -41,8 +32,8 @@ body {
     border: 0.02in solid;
     width: auto;
     margin: auto;
-    padding: 0 0.05in 0;
-    max-width: 0.75in;
+    padding: auto;
+    max-width: 0.8in;
 }
 
 .label_header {
@@ -93,29 +84,5 @@ body {
     @page {
         size: 4.0in 2.0in portrait;
         margin: 0.05in;
-    }
-
-    .page_container {
-        width: 100%;
-        height: 100%;
-        page-break-after: always;
-    }
-
-    .nexera_logo {
-        font-family: Trade Gothic LT Std, Arial, Helvetica, sans-serif;
-        font-size: 36pt;
-        font-weight: bold;
-        display: inline-block;
-        letter-spacing: -4.5pt;
-        line-height: 0;
-    }
-
-    .nexera_logo_suffix {
-        font-family: Trade Gothic LT Std, Arial, Helvetica, sans-serif;
-        font-size: 30pt;
-        font-weight: bold;
-        display: inline-block;
-        margin-left: -5.5pt;
-        line-height: 0;
     }
 }
