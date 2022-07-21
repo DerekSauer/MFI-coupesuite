@@ -6,12 +6,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Etiquette service à la clientèle - 731549</title>
+    <title>Etiquette service à la clientèle - {{ project_number }}</title>
     <meta name="description" content="Autocollant du service client de l'MFI.">
     <meta name="author" content="Megalak Finition Inc.">
 
-    <link rel="stylesheet" href="../../shared/www/normalize.css">
-    <link rel="stylesheet" href="./label.css">
+    <link rel="stylesheet" href="{{ working_dir }}\shared\www\normalize.css">
+    <link rel="stylesheet" href="{{ working_dir }}\etiquette\www\label.css">
 </head>
 
 <body>
@@ -21,9 +21,9 @@
         </tr>
         <tr>
             <td colspan="2" class="label_fieldname">Modèle:</td>
-            <td class="label_field">376006</td>
+            <td class="label_field">{{ model_number }}</td>
             <td rowspan="4">
-                <div class="label_letter">VVV</div>
+                <div class="label_letter">{{ letter }}</div>
             </td>
         </tr>
         <tr>
@@ -32,15 +32,19 @@
                 <span class="nexera_logo_suffix">a</span>
             </td>
             <td class="label_fieldname">Lot:</td>
-            <td class="label_field">731549</td>
+            <td class="label_field">{{ project_number }}</td>
         </tr>
         <tr>
             <td class="label_fieldname">FIS:</td>
-            <td class="label_field">65-376006_R1</td>
+            <td class="label_field">{{ document_1 }}</td>
         </tr>
         <tr>
-            <td></td>
-            <td class="label_field">65-3760XX-P</td>
+            <td>&nbsp;</td>
+            <td class="label_field">{{ document_2 }}</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td class="label_field">{{ document_3 }}</td>
         </tr>
         <tr>
             <td colspan="4">
