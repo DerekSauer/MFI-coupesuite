@@ -17,10 +17,10 @@ port = "5493"
 name = "MFI"
 username = "SIGM"
 
-# Location d'un navigateur Web Chromium pour la génération de PDF
+# Location d'un navigateur web `Chromium` pour la génération de PDF
 [chromium]
 location = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
 
-# Location de `Sumatra PDF` pour l'impression des PDFs
-[sumatrapdf]
-location = "C:/Users/DSauer/scoop/apps/sumatrapdf/current/SumatraPDF.exe"
+# Location de `Ghostscript` pour l'impression des PDFs
+[ghostscript]
+location = "C:/Users/DSauer/scoop/apps/ghostscript/current/bin/gswin64c.exe"

@@ -21,8 +21,8 @@ pub struct Settings {
     /// Chromium settings.
     pub chromium: Chromium,
 
-    /// Sumatra PDF settings.
-    pub sumatrapdf: SumatraPdf,
+    /// Ghostscript settings.
+    pub ghostscript: GhostScript,
 }
 
 /// Settings for the `liste` application.
@@ -52,10 +52,10 @@ pub struct Chromium {
     pub location: String,
 }
 
-/// Settings for Sumatra PDF we'll be using to print PDFs.
+/// Settings for Ghostscript we'll be using to print PDFs.
 #[derive(Deserialize, Debug)]
-pub struct SumatraPdf {
-    /// File path to Foxit PDF Reader.
+pub struct GhostScript {
+    /// File path to Ghostscript.
     pub location: String,
 }
 
