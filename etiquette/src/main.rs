@@ -33,16 +33,13 @@ async fn main() -> anyhow::Result<()> {
     });
 
     for lot in cmd_line_args.lots.split(',') {
-        // SIGM's lot numbers are numeric, make sure of that
+        // SIGM's lot numbers are numeric
         let lot: i32 = match lot.parse() {
             Ok(good_lot) => good_lot,
             Err(_) => anyhow::bail!(
                 "Numéro de lot invalide. Les numéros de lot doivent être des chiffres."
             ),
         };
-
-        // verify_lot() will bail if the lot number doesn't exist or the DB fails
-        verify_lot(lot, &db_pool).await?;
 
         // Grab the label's data from the database
         let label_data = label_data::LabelData::from_lot(lot, &db_pool).await?;

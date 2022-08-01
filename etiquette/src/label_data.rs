@@ -1,3 +1,5 @@
+use coupesuite_shared::database::verify_lot;
+
 /// Data needed to print customer support label.
 #[derive(serde::Serialize, sqlx::FromRow, Debug)]
 pub struct LabelData {
@@ -27,6 +29,9 @@ impl LabelData {
     /// Retrieve label data from the database.
     pub async fn from_lot(lot_number: i32, db_pool: &sqlx::PgPool) -> anyhow::Result<Self> {
         let query = include_str!("../sql/label.sql");
+
+        // verify_lot() will bail if the lot number doesn't exist or the DB fails
+        verify_lot(lot, &db_pool).await?;
 
         Ok(sqlx::query_as::<_, LabelData>(query)
             .bind(lot_number)
