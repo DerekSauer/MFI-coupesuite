@@ -2,9 +2,9 @@ use chromiumoxide::cdp::browser_protocol::page::PrintToPdfParams;
 use chromiumoxide::{Browser, BrowserConfig};
 use clap::Parser;
 use cmd_line::Args;
-use coupesuite_shared::{database, settings::Settings};
+use coupesuite_shared::{database, settings::Settings, templates};
 use futures::StreamExt;
-use tera::{Context, Tera};
+use tera::Context;
 
 mod cmd_line;
 mod label_data;
@@ -43,20 +43,15 @@ async fn main() -> anyhow::Result<()> {
         // Grab the label's data from the database
         let label_data = label_data::LabelData::from_lot(lot, &db_pool).await?;
 
-        // Path to the HTML template
-        let template_path = format!("{}/www/**/*.html", working_dir.to_string_lossy());
-
         // Load the HTML templat&e
-        let tera = Tera::new(&template_path)?;
-
-        //---------------------------------------------------------------------
+        let tera = templates::load_templates().await?;
 
         // Load label data into the templating engine
         let mut context = Context::from_serialize(&label_data)?;
         context.insert("working_dir", &working_dir);
 
         // Render the label with HTML place holders filled in with real data
-        let html = tera.render("labels/label.html", &context)?;
+        let html = templates::render_template("labels/label.html", &tera, &context).await?;
 
         // Load the template so that CSS is processed, then replace with rendered HTML
         let page = browser
@@ -69,8 +64,6 @@ async fn main() -> anyhow::Result<()> {
             )
             .await?;
         page.set_content(&html).await?;
-
-        //---------------------------------------------------------------------
 
         // Rendering parameters for the PDF file
         let pdf_params = PrintToPdfParams {
