@@ -1,8 +1,8 @@
 use clap::Parser;
 use cmd_line::Args;
 use coupesuite_shared::{database, settings::Settings};
-use lot::export_lots;
-use model::export_models;
+use lot::export_lot;
+use model::export_model;
 
 mod cmd_line;
 mod cut_list;
@@ -22,17 +22,23 @@ async fn main() -> anyhow::Result<()> {
     }
 
     // Process and export furniture production lots
+    // When processing a batch, print an error message for invalid
+    // lots and finish processing the remainder
     if !cmd_line_args.lots.is_empty() {
-        export_lots(
-            &cmd_line_args.lots,
-            &export_path,
-            cmd_line_args.verbeux,
-            &db_pool,
-        )
-        .await?;
+        for lot in cmd_line_args.lots.split(',') {
+            match export_lot(&lot, &export_path, cmd_line_args.verbeux, &db_pool).await {
+                Ok(_) => {}
+                Err(err) => {
+                    println!("{}", err);
+                    continue;
+                }
+            };
+        }
     }
 
     // Process and export furniture models
+    // When processing a batch, print an error message for invalid
+    // models and finish processing the remainder
     if !cmd_line_args.modèles.is_empty() {
         // If the quantity command line arg is zero, use the default specified in settings
         let quantity = if cmd_line_args.quantité == 0 {
@@ -41,14 +47,23 @@ async fn main() -> anyhow::Result<()> {
             cmd_line_args.quantité
         };
 
-        export_models(
-            &cmd_line_args.modèles,
-            quantity,
-            &export_path,
-            cmd_line_args.verbeux,
-            &db_pool,
-        )
-        .await?;
+        for model in cmd_line_args.modèles.split(',') {
+            match export_model(
+                &model,
+                quantity,
+                &export_path,
+                cmd_line_args.verbeux,
+                &db_pool,
+            )
+            .await
+            {
+                Ok(_) => {}
+                Err(err) => {
+                    println!("Erreur: {}", err);
+                    continue;
+                }
+            }
+        }
     }
 
     Ok(())

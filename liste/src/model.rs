@@ -1,4 +1,5 @@
 use crate::cut_list::{self, CutListRow};
+use anyhow::Context;
 use coupesuite_shared::database::{verify_model, SkuInfo};
 use sqlx::PgPool;
 use std::path::{Path, PathBuf};
@@ -29,10 +30,7 @@ async fn process_model(
     ))
 }
 
-/// Export cut lists for furniture models to disk.
-///
-/// The export process will skip any invalid model numbers and continue
-/// to process good data until the list of models is exhausted.
+/// Export a cut list for a furniture model to disk.
 ///
 /// ## Parameters
 ///
@@ -41,50 +39,37 @@ async fn process_model(
 /// - `export_path`: Path to the directory where cut lists will be written.
 /// - `verbose`: Print additional details about the process.
 /// - `db_pool`: The database connection pool.
-pub async fn export_models(
-    model_list: &str,
+pub async fn export_model(
+    model_number: &str,
     quantity: i32,
     export_path: &Path,
     verbose: bool,
     db_pool: &PgPool,
 ) -> anyhow::Result<()> {
-    let model_list: Vec<&str> = model_list.split(',').collect();
+    let (mut cutlist, sku_info) = process_model(model_number, db_pool)
+        .await
+        .with_context(|| format!("Problème avec le numéro de modèle: {}", model_number))?;
 
-    // Process models. Skip invalid models and keep processing
-    for model_number in model_list {
-        let (cutlist, sku_info) = match process_model(model_number, db_pool).await {
-            Ok(mut good_model) => {
-                // Add real quantity to each row
-                for row in good_model.0.iter_mut() {
-                    row.required_quantity *= quantity
-                }
-                good_model
-            }
-            Err(bad_model) => {
-                println!(
-                    "Error: Problème avec le numéro de modèle: {}\n{}\n",
-                    model_number, bad_model
-                );
-                continue;
-            }
-        };
+    // Add real quantity to each row
+    for row in cutlist.iter_mut() {
+        row.required_quantity *= quantity
+    }
 
-        // Use the model number as the file name
-        let mut file_path: PathBuf = export_path.into();
-        file_path.push(&cutlist.first().unwrap().product_information);
-        file_path.set_extension("csv");
+    // Use the model number as the file name
+    let mut file_path: PathBuf = export_path.into();
+    file_path.push(&cutlist.first().unwrap().product_information);
+    file_path.set_extension("csv");
 
-        cut_list::write_cutlist(&cutlist, &file_path).await?;
+    cut_list::write_cutlist(&cutlist, &file_path).await?;
 
-        if verbose {
-            println!(
-                "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
-                &sku_info.sku,
-                &sku_info.description,
-                quantity,
-                &file_path.to_str().unwrap()
-            );
-        }
+    if verbose {
+        println!(
+            "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
+            &sku_info.sku,
+            &sku_info.description,
+            quantity,
+            &file_path.to_str().unwrap()
+        );
     }
 
     Ok(())
