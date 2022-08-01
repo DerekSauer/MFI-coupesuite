@@ -26,7 +26,7 @@ async fn main() -> anyhow::Result<()> {
         let mut task_list = cmd_line_args
             .lots
             .split(',')
-            .map(|lot| export_lot(&lot, &export_path, cmd_line_args.verbeux, &db_pool))
+            .map(|lot| export_lot(lot, &export_path, cmd_line_args.verbeux, &db_pool))
             .collect::<FuturesUnordered<_>>();
 
         while let Some(task) = task_list.next().await {
@@ -48,7 +48,7 @@ async fn main() -> anyhow::Result<()> {
             .split(',')
             .map(|model| {
                 export_model(
-                    &model,
+                    model,
                     quantity,
                     &export_path,
                     cmd_line_args.verbeux,
