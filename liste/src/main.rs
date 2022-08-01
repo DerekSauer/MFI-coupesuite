@@ -1,6 +1,7 @@
 use clap::Parser;
 use cmd_line::Args;
 use coupesuite_shared::{database, settings::Settings};
+use futures::{stream::FuturesUnordered, StreamExt};
 use lot::export_lot;
 use model::export_model;
 
@@ -12,8 +13,7 @@ mod model;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let cmd_line_args = Args::parse();
-    let working_dir = std::env::current_dir()?;
-    let settings = Settings::load(&working_dir.join("coupesuite.toml"))?;
+    let settings = Settings::load(&std::env::current_dir()?.join("coupesuite.toml"))?;
     let db_pool = database::get_database_pool(&settings.database).await?;
     let export_path = std::path::PathBuf::from(&settings.liste.v12_import_dir);
 
@@ -21,24 +21,20 @@ async fn main() -> anyhow::Result<()> {
         anyhow::bail!("Entrez une liste de numéros de lot et/ou une liste de numéros de modèle.");
     }
 
-    // Process and export furniture production lots
-    // When processing a batch, print an error message for invalid
-    // lots and finish processing the remainder
+    // Concurrently process lot numbers
     if !cmd_line_args.lots.is_empty() {
-        for lot in cmd_line_args.lots.split(',') {
-            match export_lot(&lot, &export_path, cmd_line_args.verbeux, &db_pool).await {
-                Ok(_) => {}
-                Err(err) => {
-                    println!("{}", err);
-                    continue;
-                }
-            };
+        let mut task_list = cmd_line_args
+            .lots
+            .split(',')
+            .map(|lot| export_lot(&lot, &export_path, cmd_line_args.verbeux, &db_pool))
+            .collect::<FuturesUnordered<_>>();
+
+        while let Some(task) = task_list.next().await {
+            task?;
         }
     }
 
-    // Process and export furniture models
-    // When processing a batch, print an error message for invalid
-    // models and finish processing the remainder
+    // Concurrently process model numbers
     if !cmd_line_args.modèles.is_empty() {
         // If the quantity command line arg is zero, use the default specified in settings
         let quantity = if cmd_line_args.quantité == 0 {
@@ -47,22 +43,22 @@ async fn main() -> anyhow::Result<()> {
             cmd_line_args.quantité
         };
 
-        for model in cmd_line_args.modèles.split(',') {
-            match export_model(
-                &model,
-                quantity,
-                &export_path,
-                cmd_line_args.verbeux,
-                &db_pool,
-            )
-            .await
-            {
-                Ok(_) => {}
-                Err(err) => {
-                    println!("Erreur: {}", err);
-                    continue;
-                }
-            }
+        let mut task_list = cmd_line_args
+            .modèles
+            .split(',')
+            .map(|model| {
+                export_model(
+                    &model,
+                    quantity,
+                    &export_path,
+                    cmd_line_args.verbeux,
+                    &db_pool,
+                )
+            })
+            .collect::<FuturesUnordered<_>>();
+
+        while let Some(task) = task_list.next().await {
+            task?;
         }
     }
 
