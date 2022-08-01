@@ -15,4 +15,8 @@ pub struct Args {
     /// Quantité de modèles lors du traitement d'une liste de modèles.
     #[clap(short, long, value_parser, default_value_t = 0)]
     pub quantité: i32,
+
+    /// Imprimer les détails du traitement.
+    #[clap(short, long, value_parser, default_value_t = false)]
+    pub verbeux: bool,
 }

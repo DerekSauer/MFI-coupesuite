@@ -39,11 +39,13 @@ async fn process_model(
 /// - `model_list`: String containing a comma seperated list of model numbers.
 /// - `quantity`: A model number has no implicit quantity of parts to produce. This argument lets you specific the quantity.
 /// - `export_path`: Path to the directory where cut lists will be written.
+/// - `verbose`: Print additional details about the process.
 /// - `db_pool`: The database connection pool.
 pub async fn export_models(
     model_list: &str,
     quantity: i32,
     export_path: &Path,
+    verbose: bool,
     db_pool: &PgPool,
 ) -> anyhow::Result<()> {
     let model_list: Vec<&str> = model_list.split(',').collect();
@@ -74,13 +76,15 @@ pub async fn export_models(
 
         cut_list::write_cutlist(&cutlist, &file_path).await?;
 
-        println!(
-            "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
-            &sku_info.sku,
-            &sku_info.description,
-            quantity,
-            &file_path.to_str().unwrap()
-        );
+        if verbose {
+            println!(
+                "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
+                &sku_info.sku,
+                &sku_info.description,
+                quantity,
+                &file_path.to_str().unwrap()
+            );
+        }
     }
 
     Ok(())

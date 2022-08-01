@@ -23,7 +23,13 @@ async fn main() -> anyhow::Result<()> {
 
     // Process and export furniture production lots
     if !cmd_line_args.lots.is_empty() {
-        export_lots(&cmd_line_args.lots, &export_path, &db_pool).await?;
+        export_lots(
+            &cmd_line_args.lots,
+            &export_path,
+            cmd_line_args.verbeux,
+            &db_pool,
+        )
+        .await?;
     }
 
     // Process and export furniture models
@@ -35,7 +41,14 @@ async fn main() -> anyhow::Result<()> {
             cmd_line_args.quantité
         };
 
-        export_models(&cmd_line_args.modèles, quantity, &export_path, &db_pool).await?;
+        export_models(
+            &cmd_line_args.modèles,
+            quantity,
+            &export_path,
+            cmd_line_args.verbeux,
+            &db_pool,
+        )
+        .await?;
     }
 
     Ok(())

@@ -36,10 +36,12 @@ async fn process_lot(
 ///
 /// - `lot_list`: String containing a comma seperated list of lot numbers.
 /// - `export_path`: Path to the directory where cut lists will be written.
+/// - `verbose`: Print additional details about the process.
 /// - `db_pool`: The database connection pool.
 pub async fn export_lots(
     lot_list: &str,
     export_path: &Path,
+    verbose: bool,
     db_pool: &PgPool,
 ) -> anyhow::Result<()> {
     let lot_list: Vec<&str> = lot_list.split(',').collect();
@@ -82,13 +84,15 @@ pub async fn export_lots(
 
         cut_list::write_cutlist(&cutlist, &file_path).await?;
 
-        println!(
-            "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
-            &sku_info.sku,
-            &sku_info.description,
-            &sku_info.quantity,
-            &file_path.to_str().unwrap()
-        );
+        if verbose {
+            println!(
+                "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
+                &sku_info.sku,
+                &sku_info.description,
+                &sku_info.quantity,
+                &file_path.to_str().unwrap()
+            );
+        }
     }
 
     Ok(())
