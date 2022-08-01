@@ -48,27 +48,26 @@ async fn main() -> anyhow::Result<()> {
         let label_data = label_data::LabelData::from_lot(lot, &db_pool).await?;
 
         // Path to the HTML template
-        let template_path = working_dir.join("etiquette").join("www").join("*");
+        let template_path = format!("{}/www/**/*.html", working_dir.to_string_lossy());
 
         // Load the HTML templat&e
-        let tera = Tera::new(&template_path.to_string_lossy())?;
+        let tera = Tera::new(&template_path)?;
 
         // Load label data into the templating engine
         let mut context = Context::from_serialize(&label_data)?;
         context.insert("working_dir", &working_dir);
 
         // Render the label with HTML place holders filled in with real data
-        let html = tera.render("label.html", &context)?;
+        let html = tera.render("label/label.html", &context)?;
 
         // Load the template so that CSS is processed, then replace with rendered HTML
         let page = browser
             .new_page(
                 working_dir
-                    .join("etiquette")
                     .join("www")
+                    .join("label")
                     .join("label.html")
-                    .to_str()
-                    .unwrap(),
+                    .to_string_lossy(),
             )
             .await?;
         page.set_content(&html).await?;
@@ -94,17 +93,28 @@ async fn main() -> anyhow::Result<()> {
         };
 
         // Use the web browser to render a PDF of the webpage and save it to a temp directory
-        let temp_path = &temp_dir.join(format!("{}.pdf", label_data.project_number));
+        let temp_path = &temp_dir.join(format!(
+            "Etiquette Service Client - {}.pdf",
+            label_data.project_number
+        ));
         page.save_pdf(pdf_params, &temp_path).await?;
+
+        // Label quantities are rounded up to the nearest multiple of pages
+        let quantity =
+            u32::try_from((label_data.print_quantity / settings.etiquette.multiple + 1) * 6)?;
+
+        println!("Print Quantity: {}\n", quantity);
 
         // Print the PDF
         coupesuite_shared::ghostscript::print_to_printer(
             &temp_path.to_string_lossy(),
-            label_data.print_quantity.try_into()?,
+            quantity,
             &settings.etiquette.nom_imprimante,
             (4.0, 2.0),
             &settings.ghostscript.location,
         )?;
+
+        page.close().await?;
     }
 
     Ok(())
