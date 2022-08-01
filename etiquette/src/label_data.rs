@@ -31,7 +31,7 @@ impl LabelData {
         let query = include_str!("../sql/label.sql");
 
         // verify_lot() will bail if the lot number doesn't exist or the DB fails
-        verify_lot(lot, &db_pool).await?;
+        verify_lot(lot_number, &db_pool).await?;
 
         Ok(sqlx::query_as::<_, LabelData>(query)
             .bind(lot_number)

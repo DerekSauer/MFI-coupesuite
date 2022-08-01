@@ -9,6 +9,7 @@ use tera::{Context, Tera};
 
 mod cmd_line;
 mod label_data;
+mod render_html;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
