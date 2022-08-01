@@ -2,14 +2,13 @@ use chromiumoxide::cdp::browser_protocol::page::PrintToPdfParams;
 use chromiumoxide::{Browser, BrowserConfig};
 use clap::Parser;
 use cmd_line::Args;
-use coupesuite_shared::database::{self, verify_lot};
-use coupesuite_shared::settings::Settings;
+use coupesuite_shared::{database, settings::Settings};
 use futures::StreamExt;
 use tera::{Context, Tera};
 
 mod cmd_line;
 mod label_data;
-mod render_html;
+mod rendering;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -51,24 +50,28 @@ async fn main() -> anyhow::Result<()> {
         // Load the HTML templat&e
         let tera = Tera::new(&template_path)?;
 
+        //---------------------------------------------------------------------
+
         // Load label data into the templating engine
         let mut context = Context::from_serialize(&label_data)?;
         context.insert("working_dir", &working_dir);
 
         // Render the label with HTML place holders filled in with real data
-        let html = tera.render("label/label.html", &context)?;
+        let html = tera.render("labels/label.html", &context)?;
 
         // Load the template so that CSS is processed, then replace with rendered HTML
         let page = browser
             .new_page(
                 working_dir
                     .join("www")
-                    .join("label")
+                    .join("labels")
                     .join("label.html")
                     .to_string_lossy(),
             )
             .await?;
         page.set_content(&html).await?;
+
+        //---------------------------------------------------------------------
 
         // Rendering parameters for the PDF file
         let pdf_params = PrintToPdfParams {
