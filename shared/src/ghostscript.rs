@@ -38,7 +38,7 @@ pub fn print_to_printer(
         &width,
         &height,
         &output_printer,
-        &file_path,
+        file_path,
     ];
 
     // Spawn Ghostscript to print the PDF
