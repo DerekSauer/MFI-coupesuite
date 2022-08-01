@@ -1,4 +1,4 @@
-use crate::cut_list::{self, write_cutlist_collection, CutListRow};
+use crate::cut_list::{self, CutListRow};
 use coupesuite_shared::database::{verify_model, SkuInfo};
 use sqlx::PgPool;
 use std::path::{Path, PathBuf};
@@ -37,24 +37,16 @@ async fn process_model(
 /// ## Parameters
 ///
 /// - `model_list`: String containing a comma seperated list of model numbers.
-/// - `merged`: If true, the cutlists will be merged into a single file.
 /// - `quantity`: A model number has no implicit quantity of parts to produce. This argument lets you specific the quantity.
 /// - `export_path`: Path to the directory where cut lists will be written.
 /// - `db_pool`: The database connection pool.
 pub async fn export_models(
     model_list: &str,
-    merged: bool,
     quantity: i32,
     export_path: &Path,
     db_pool: &PgPool,
 ) -> anyhow::Result<()> {
     let model_list: Vec<&str> = model_list.split(',').collect();
-    let list_length = model_list.len();
-    let mut cutlist_collection: Vec<Vec<CutListRow>> = if list_length > 1 {
-        Vec::with_capacity(list_length)
-    } else {
-        Vec::new()
-    };
 
     // Process models. Skip invalid models and keep processing
     for model_number in model_list {
@@ -75,13 +67,6 @@ pub async fn export_models(
             }
         };
 
-        // If merging cutlists add this model to the master list and skip exporting it to disk
-        // If only one model number was passed, ignore the merge argument
-        if merged && list_length > 1 {
-            cutlist_collection.push(cutlist);
-            continue;
-        }
-
         // Use the model number as the file name
         let mut file_path: PathBuf = export_path.into();
         file_path.push(&cutlist.first().unwrap().product_information);
@@ -96,10 +81,6 @@ pub async fn export_models(
             quantity,
             &file_path.to_str().unwrap()
         );
-    }
-
-    if merged && list_length > 1 {
-        write_cutlist_collection(&cutlist_collection, export_path).await?;
     }
 
     Ok(())

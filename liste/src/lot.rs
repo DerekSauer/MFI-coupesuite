@@ -1,4 +1,4 @@
-use crate::cut_list::{self, write_cutlist_collection, CutListRow};
+use crate::cut_list::{self, CutListRow};
 use coupesuite_shared::database::{verify_lot, SkuInfo};
 use sqlx::PgPool;
 use std::path::{Path, PathBuf};
@@ -35,23 +35,14 @@ async fn process_lot(
 /// ## Parameters
 ///
 /// - `lot_list`: String containing a comma seperated list of lot numbers.
-/// - `merged`: If true, the cutlists will be merged into a single file.
 /// - `export_path`: Path to the directory where cut lists will be written.
 /// - `db_pool`: The database connection pool.
 pub async fn export_lots(
     lot_list: &str,
-    merged: bool,
     export_path: &Path,
     db_pool: &PgPool,
 ) -> anyhow::Result<()> {
-    // Preallocate space for the merged cutlist collection, if there is more than one lot number
     let lot_list: Vec<&str> = lot_list.split(',').collect();
-    let list_length = lot_list.len();
-    let mut cutlist_collection: Vec<Vec<CutListRow>> = if list_length > 1 {
-        Vec::with_capacity(list_length)
-    } else {
-        Vec::new()
-    };
 
     // Process lots, skip invalid lots and keep processing
     for lot_number in lot_list {
@@ -80,13 +71,6 @@ pub async fn export_lots(
             cutlist.retain(|x| !x.kanban);
         }
 
-        // If merging cutlists, add this list to the collection and skip exporting it to disk
-        // If only one lot number was passed, ignore the merge arg
-        if merged && list_length > 1 {
-            cutlist_collection.push(cutlist);
-            continue;
-        }
-
         // The model number and lot number in parens is the file name
         let mut file_path: PathBuf = export_path.into();
         file_path.push(format!(
@@ -105,10 +89,6 @@ pub async fn export_lots(
             &sku_info.quantity,
             &file_path.to_str().unwrap()
         );
-    }
-
-    if merged && list_length > 1 {
-        write_cutlist_collection(&cutlist_collection, export_path).await?;
     }
 
     Ok(())

@@ -1,5 +1,3 @@
-use std::path::{Path, PathBuf};
-
 /// Data defining a part in a cutlist.
 /// Used by our cut pattern optimization software to generate
 /// programs for our CNC panels saws.
@@ -87,43 +85,6 @@ pub async fn write_cutlist(
     for record in cut_list {
         csv_writer.serialize(record).await?;
     }
-
-    Ok(())
-}
-
-/// Write a collection of cutlists to file.
-pub async fn write_cutlist_collection(
-    cutlist_collection: &Vec<Vec<CutListRow>>,
-    export_path: &Path,
-) -> anyhow::Result<()> {
-    // Get the names of the SKUs in the collection for the export filename
-    let mut sku_names: Vec<String> = Vec::with_capacity(cutlist_collection.len());
-    for cutlist in cutlist_collection {
-        sku_names.push(cutlist.first().unwrap().product_information.clone());
-    }
-    let sku_names = &sku_names.join(", ");
-
-    // Flatten the collection of cutlists into one cutlist
-    let cutlist_collection: Vec<&CutListRow> = cutlist_collection.iter().flatten().collect();
-
-    // Build a filename made up of the SKU names
-    let mut file_path: PathBuf = export_path.into();
-    file_path.push(&sku_names);
-    file_path.set_extension("csv");
-
-    let mut csv_writer = csv_async::AsyncWriterBuilder::new()
-        .quote_style(csv_async::QuoteStyle::NonNumeric)
-        .create_serializer(tokio::fs::File::create(&file_path).await?);
-
-    for record in cutlist_collection {
-        csv_writer.serialize(record).await?;
-    }
-
-    println!(
-        "SKU(s): {}\nFicher: {}\n",
-        &sku_names,
-        &file_path.to_str().unwrap()
-    );
 
     Ok(())
 }
