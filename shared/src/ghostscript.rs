@@ -1,3 +1,5 @@
+use crate::browser::PaperSize;
+
 /// Send a PDF file to a printer.
 ///
 /// # Parameters
@@ -14,7 +16,7 @@ pub fn print_to_printer(
     file_path: &str,
     copies: u32,
     printer_name: &str,
-    paper_size: (f32, f32),
+    paper_size: PaperSize,
     ghostscript_path: &str,
 ) -> anyhow::Result<()> {
     let output_printer = format!("-sOutputFile=%printer%{}", printer_name);
@@ -22,10 +24,9 @@ pub fn print_to_printer(
 
     // Function accepts paper size in inches but Ghostscript uses Points
     // A point is 1/72 of an inch
-    let width = (paper_size.0 * 72.0).floor() as i32;
-    let height = (paper_size.1 * 72.0).floor() as i32;
-    let width = format!("-dDEVICEWIDTHPOINTS={}", width);
-    let height = format!("-dDEVICEHEIGHTPOINTS={}", height);
+    let (width, height) = paper_size.value();
+    let width = format!("-dDEVICEWIDTHPOINTS={}", width * 72.0);
+    let height = format!("-dDEVICEHEIGHTPOINTS={}", height * 72.0);
 
     // Build arguments list to pass to Ghostscript
     let ghostscript_args = vec![

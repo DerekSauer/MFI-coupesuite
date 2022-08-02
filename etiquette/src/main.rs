@@ -2,7 +2,12 @@ use chromiumoxide::cdp::browser_protocol::page::PrintToPdfParams;
 use chrono::Local;
 use clap::Parser;
 use cmd_line::Args;
-use coupesuite_shared::{browser::open_browser, database, settings::Settings, templates};
+use coupesuite_shared::{
+    browser::{open_browser, PaperSize},
+    database,
+    settings::Settings,
+    templates,
+};
 use futures::StreamExt;
 use std::io::Write;
 use tera::Context;
@@ -99,15 +104,13 @@ async fn main() -> anyhow::Result<()> {
             u32::try_from((label_data.print_quantity / settings.etiquette.multiple + 1) * 6)?;
 
         // Print the PDF
-        /*
         coupesuite_shared::ghostscript::print_to_printer(
             &temp_path.to_string_lossy(),
             quantity,
             &settings.etiquette.nom_imprimante,
-            (4.0, 2.0),
+            PaperSize::CSLabel,
             &settings.ghostscript.location,
         )?;
-         */
 
         page.close().await?;
     }
