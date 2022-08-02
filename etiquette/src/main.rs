@@ -1,9 +1,8 @@
-use chromiumoxide::cdp::browser_protocol::page::PrintToPdfParams;
 use chrono::Local;
 use clap::Parser;
 use cmd_line::Args;
 use coupesuite_shared::{
-    browser::{open_browser, PaperSize},
+    browser::{open_browser, save_pdf, PaperOrientation, PaperSize},
     database,
     settings::Settings,
     templates,
@@ -60,44 +59,22 @@ async fn main() -> anyhow::Result<()> {
         let html = templates::render_template("labels/label.html", &tera, &context).await?;
 
         // Cache the rendered HTML to disk
-        let html_cache = temp_dir.join(format!(
-            "Etiquette Service Client - {}.html",
-            label_data.project_number
-        ));
+        let html_cache = temp_dir.join(format!("CSLabel {}.html", label_data.project_number));
         {
             let mut file = std::fs::File::create(&html_cache)?;
-            file.write_all(&html.as_bytes())?;
+            file.write_all(html.as_bytes())?;
         }
 
-        // Load the rendered HTML
-        let page = browser.new_page(html_cache.to_string_lossy()).await?;
-
-        // Rendering parameters for the PDF file
-        let pdf_params = PrintToPdfParams {
-            landscape: false.into(),
-            display_header_footer: false.into(),
-            print_background: false.into(),
-            scale: Some(1.0),
-            paper_width: Some(4.0),
-            paper_height: Some(2.0),
-            margin_top: None,
-            margin_left: None,
-            margin_bottom: None,
-            margin_right: None,
-            page_ranges: None,
-            ignore_invalid_page_ranges: None,
-            header_template: None,
-            footer_template: None,
-            prefer_css_page_size: None,
-            transfer_mode: None,
-        };
-
-        // Use the web browser to render a PDF of the webpage and save it to the temp directory
-        let temp_path = &temp_dir.join(format!(
-            "Etiquette Service Client - {}.pdf",
-            label_data.project_number
-        ));
-        page.save_pdf(pdf_params, &temp_path).await?;
+        // Convert the rendered HTML to PDF
+        let temp_path = &temp_dir.join(format!("CSLabel {}.pdf", label_data.project_number));
+        save_pdf(
+            &html_cache,
+            &PaperSize::CSLabel,
+            &PaperOrientation::Portrait,
+            &temp_path,
+            &browser,
+        )
+        .await?;
 
         // Label quantities are rounded up to the nearest multiple of pages
         let quantity =
@@ -108,11 +85,9 @@ async fn main() -> anyhow::Result<()> {
             &temp_path.to_string_lossy(),
             quantity,
             &settings.etiquette.nom_imprimante,
-            PaperSize::CSLabel,
+            &PaperSize::CSLabel,
             &settings.ghostscript.location,
         )?;
-
-        page.close().await?;
     }
 
     Ok(())
