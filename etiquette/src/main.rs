@@ -1,9 +1,10 @@
 use chromiumoxide::cdp::browser_protocol::page::PrintToPdfParams;
-use chromiumoxide::{Browser, BrowserConfig};
+use chrono::Local;
 use clap::Parser;
 use cmd_line::Args;
-use coupesuite_shared::{database, settings::Settings, templates};
+use coupesuite_shared::{browser::open_browser, database, settings::Settings, templates};
 use futures::StreamExt;
+use std::io::Write;
 use tera::Context;
 
 mod cmd_line;
@@ -21,8 +22,7 @@ async fn main() -> anyhow::Result<()> {
     let temp_dir = temp_dir.path();
 
     // Open a headless chromium browser
-    let browser_config = BrowserConfig::with_executable(&settings.chromium.location);
-    let (browser, mut handler) = Browser::launch(browser_config).await?;
+    let (browser, mut handler) = open_browser(&settings).await?;
 
     // Web socket handler
     let _ = tokio::task::spawn(async move {
@@ -49,21 +49,23 @@ async fn main() -> anyhow::Result<()> {
         // Load label data into the templating engine
         let mut context = Context::from_serialize(&label_data)?;
         context.insert("working_dir", &working_dir);
+        context.insert("date_stamp", &Local::now().date().naive_local().to_string());
 
         // Render the label with HTML place holders filled in with real data
         let html = templates::render_template("labels/label.html", &tera, &context).await?;
 
-        // Load the template so that CSS is processed, then replace with rendered HTML
-        let page = browser
-            .new_page(
-                working_dir
-                    .join("www")
-                    .join("labels")
-                    .join("label.html")
-                    .to_string_lossy(),
-            )
-            .await?;
-        page.set_content(&html).await?;
+        // Cache the rendered HTML to disk
+        let html_cache = temp_dir.join(format!(
+            "Etiquette Service Client - {}.html",
+            label_data.project_number
+        ));
+        {
+            let mut file = std::fs::File::create(&html_cache)?;
+            file.write_all(&html.as_bytes())?;
+        }
+
+        // Load the rendered HTML
+        let page = browser.new_page(html_cache.to_string_lossy()).await?;
 
         // Rendering parameters for the PDF file
         let pdf_params = PrintToPdfParams {
@@ -85,7 +87,7 @@ async fn main() -> anyhow::Result<()> {
             transfer_mode: None,
         };
 
-        // Use the web browser to render a PDF of the webpage and save it to a temp directory
+        // Use the web browser to render a PDF of the webpage and save it to the temp directory
         let temp_path = &temp_dir.join(format!(
             "Etiquette Service Client - {}.pdf",
             label_data.project_number
@@ -96,9 +98,8 @@ async fn main() -> anyhow::Result<()> {
         let quantity =
             u32::try_from((label_data.print_quantity / settings.etiquette.multiple + 1) * 6)?;
 
-        println!("Print Quantity: {}\n", quantity);
-
         // Print the PDF
+        /*
         coupesuite_shared::ghostscript::print_to_printer(
             &temp_path.to_string_lossy(),
             quantity,
@@ -106,6 +107,7 @@ async fn main() -> anyhow::Result<()> {
             (4.0, 2.0),
             &settings.ghostscript.location,
         )?;
+         */
 
         page.close().await?;
     }
