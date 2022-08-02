@@ -16,7 +16,7 @@ pub fn print_to_printer(
     file_path: &str,
     copies: u32,
     printer_name: &str,
-    paper_size: PaperSize,
+    paper_size: &PaperSize,
     ghostscript_path: &str,
 ) -> anyhow::Result<()> {
     let output_printer = format!("-sOutputFile=%printer%{}", printer_name);
