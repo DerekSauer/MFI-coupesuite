@@ -22,3 +22,4 @@ serde = { version = "1.0.137", features = ["derive"] }
 sqlx = { version = "0.6.0", features = ["runtime-tokio-rustls", "postgres"] }
 tera = { version = "1.16.0", default-features = false }
 tempfile = "3.3.0"
+chrono = "0.4.19"
