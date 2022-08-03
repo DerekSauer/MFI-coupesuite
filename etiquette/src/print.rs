@@ -17,7 +17,7 @@ pub struct PrintSettings<'a> {
     pub ghostscript_path: &'a str,
 
     /// Print copies rounded up to this number.
-    pub print_multiple: i32,
+    pub print_multiple: u32,
 
     /// HTML template engine containing the label's template.
     pub tera: &'a Tera,
@@ -35,6 +35,7 @@ pub struct PrintSettings<'a> {
 /// Print a customer service label.
 pub async fn print_label(
     lot_number: &str,
+    quantity: &Option<u32>,
     print_settings: &PrintSettings<'_>,
 ) -> anyhow::Result<()> {
     // Grab the label's data from the database
@@ -74,8 +75,13 @@ pub async fn print_label(
         .await?;
 
     // Label quantities are rounded up to the nearest multiple of pages
-    let quantity =
-        u32::try_from((label_data.print_quantity / print_settings.print_multiple + 1) * 6)?;
+    let quantity = match quantity {
+        Some(amount) => (amount / print_settings.print_multiple + 1) * 6,
+        None => {
+            (TryInto::<u32>::try_into(label_data.print_quantity)? / print_settings.print_multiple)
+                * 6
+        }
+    };
 
     // Print the PDF
     print_to_printer(

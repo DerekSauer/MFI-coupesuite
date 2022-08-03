@@ -7,4 +7,8 @@ pub struct Args {
     /// Liste délimitée par des virgules de numéros de lot.
     #[clap(value_parser)]
     pub lots: String,
+
+    /// Remplacer le nombre d'étiquettes imprimées.
+    #[clap(short, long, value_parser)]
+    pub quantité: Option<u32>,
 }

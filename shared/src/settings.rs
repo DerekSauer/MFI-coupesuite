@@ -42,7 +42,7 @@ pub struct EtiquetteSettings {
     pub nom_imprimante: String,
 
     /// Number of labels printed will be rounded up to this multiple.
-    pub multiple: i32,
+    pub multiple: u32,
 }
 
 /// Settings for the headless chromium browser we'll be using to generate PDFs.

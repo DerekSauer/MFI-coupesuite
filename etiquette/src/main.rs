@@ -14,7 +14,7 @@ async fn main() -> anyhow::Result<()> {
     let settings = Settings::load(&std::env::current_dir()?.join("coupesuite.toml"))?;
     let temp_dir = tempfile::tempdir()?;
 
-    // Setup label printing dependencies
+    // Setup label printing dependencies common to all prints
     let print_settings = PrintSettings {
         printer_name: &settings.etiquette.nom_imprimante,
         ghostscript_path: &settings.ghostscript.location,
@@ -26,7 +26,7 @@ async fn main() -> anyhow::Result<()> {
     };
 
     for lot in cmd_line_args.lots.split(',') {
-        print_label(lot, &print_settings).await?;
+        print_label(lot, &cmd_line_args.quantité, &print_settings).await?;
     }
 
     Ok(())
