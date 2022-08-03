@@ -21,6 +21,9 @@ async fn main() -> anyhow::Result<()> {
     let temp_dir = tempfile::tempdir()?;
     let temp_dir = temp_dir.path();
 
+    // Load HTML templates
+    let tera = templates::load_templates().await?;
+
     // Headless browers used to convert our HTML file to PDF.
     let pdf_renderer = HtmlToPdf::new(Some(&settings.chromium.location)).await?;
 
@@ -35,9 +38,6 @@ async fn main() -> anyhow::Result<()> {
 
         // Grab the label's data from the database
         let label_data = label_data::LabelData::from_lot(lot, &db_pool).await?;
-
-        // Load the HTML templat&e
-        let tera = templates::load_templates().await?;
 
         // Load label data into the templating engine
         let mut context = Context::from_serialize(&label_data)?;
