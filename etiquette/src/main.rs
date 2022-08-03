@@ -1,3 +1,4 @@
+#![deny(unused_crate_dependencies)]
 use clap::Parser;
 use cmd_line::Args;
 use coupesuite_shared::htmltopdf::HtmlToPdf;
