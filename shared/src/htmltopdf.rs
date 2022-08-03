@@ -1,9 +1,10 @@
 use chromiumoxide::{cdp::browser_protocol::page::PrintToPdfParams, Browser, BrowserConfig};
+use futures::StreamExt;
 use std::path::Path;
 use tokio::task::JoinHandle;
-use futures::StreamExt;
 
 /// Tool to convert HTML documents into PDF files.
+#[derive(Debug)]
 pub struct HtmlToPdf {
     /// A headless Chromium web brower that performs the conversion.
     browser: Browser,
