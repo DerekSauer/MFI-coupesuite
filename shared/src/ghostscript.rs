@@ -1,4 +1,4 @@
-use crate::browser::PaperSize;
+use crate::htmltopdf::PaperSize;
 
 /// Send a PDF file to a printer.
 ///

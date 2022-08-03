@@ -9,6 +9,7 @@ license = "MPL-2.0"
 [dependencies]
 anyhow = "1.0.58"
 chromiumoxide = { version = "0.3.5", features = ["tokio-runtime"] }
+futures = "0.3.21"
 serde = { version = "1.0.137", features = ["derive"] }
 toml = "0.5"
 tokio = {version = "1.19.2", features = ["full"] }

@@ -1,13 +1,9 @@
 use chrono::Local;
 use clap::Parser;
 use cmd_line::Args;
-use coupesuite_shared::{
-    browser::{open_browser, save_pdf, PaperOrientation, PaperSize},
-    database,
-    settings::Settings,
-    templates,
-};
-use futures::StreamExt;
+use coupesuite_shared::ghostscript::print_to_printer;
+use coupesuite_shared::htmltopdf::{HtmlToPdf, PaperOrientation, PaperSize};
+use coupesuite_shared::{database, settings::Settings, templates};
 use std::io::Write;
 use tera::Context;
 
@@ -25,15 +21,8 @@ async fn main() -> anyhow::Result<()> {
     let temp_dir = tempfile::tempdir()?;
     let temp_dir = temp_dir.path();
 
-    // Open a headless chromium browser
-    let (browser, mut handler) = open_browser(&settings).await?;
-
-    // Web socket handler
-    let _ = tokio::task::spawn(async move {
-        loop {
-            let _ = handler.next().await.unwrap();
-        }
-    });
+    // Headless browers used to convert our HTML file to PDF.
+    let pdf_renderer = HtmlToPdf::new(Some(&settings.chromium.location)).await?;
 
     for lot in cmd_line_args.lots.split(',') {
         // SIGM's lot numbers are numeric
@@ -67,21 +56,21 @@ async fn main() -> anyhow::Result<()> {
 
         // Convert the rendered HTML to PDF
         let temp_path = &temp_dir.join(format!("CSLabel {}.pdf", label_data.project_number));
-        save_pdf(
-            &html_cache,
-            &PaperSize::CSLabel,
-            &PaperOrientation::Portrait,
-            &temp_path,
-            &browser,
-        )
-        .await?;
+        pdf_renderer
+            .save_pdf(
+                &html_cache,
+                &PaperSize::CSLabel,
+                &PaperOrientation::Portrait,
+                &temp_path,
+            )
+            .await?;
 
         // Label quantities are rounded up to the nearest multiple of pages
         let quantity =
             u32::try_from((label_data.print_quantity / settings.etiquette.multiple + 1) * 6)?;
 
         // Print the PDF
-        coupesuite_shared::ghostscript::print_to_printer(
+        print_to_printer(
             &temp_path.to_string_lossy(),
             quantity,
             &settings.etiquette.nom_imprimante,
