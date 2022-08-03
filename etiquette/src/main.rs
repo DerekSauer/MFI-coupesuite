@@ -1,8 +1,10 @@
-#![deny(unused_crate_dependencies)]
+//#![deny(unused_crate_dependencies)]
 use clap::Parser;
 use cmd_line::Args;
 use coupesuite_shared::htmltopdf::HtmlToPdf;
 use coupesuite_shared::{database, settings::Settings, templates};
+use futures::stream::FuturesUnordered;
+use futures::StreamExt;
 use print::{print_label, PrintSettings};
 
 mod cmd_line;
@@ -26,8 +28,16 @@ async fn main() -> anyhow::Result<()> {
         db_pool: &database::get_database_pool(&settings.database).await?,
     };
 
-    for lot in cmd_line_args.lots.split(',') {
-        print_label(lot, &cmd_line_args.quantité, &print_settings).await?;
+    // Add print jobs to the task pool
+    let mut task_list = cmd_line_args
+        .lots
+        .split(',')
+        .map(|lot| print_label(lot, &cmd_line_args.quantité, &print_settings))
+        .collect::<FuturesUnordered<_>>();
+
+    // Execute print jobs
+    while let Some(task) = task_list.next().await {
+        task?;
     }
 
     Ok(())
