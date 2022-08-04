@@ -31,7 +31,7 @@ FROM
     project
 	INNER JOIN part
             ON project.prt_id = part.prt_id
-	INNER JOIN documentSelector
+	LEFT  JOIN documentSelector
             ON project.prj_id = documentSelector.prj_id
 
 WHERE
