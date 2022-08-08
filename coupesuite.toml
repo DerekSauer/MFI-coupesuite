@@ -10,6 +10,12 @@ default_bom_qty = 100                   # Quantité défaut lorsque la quantité
 nom_imprimante = "Zebra (Bureau Derek)" # Trouver avec, `wmic printer get name`
 multiple = 6                            # Nombre copies imprimées sera arrondi à ce multiple
 
+# Paramètres d'impression du formulaire de production.
+[formulaire]
+nom_imprimante = "Back Office Printer"  # Trouver avec, `wmic printer get name`
+copies_defaut = 1                       # Nombre de copies par défaut.
+copies_mdf = 2                          # Nombre de copies par défaut pour les projets avec MDF.
+
 # SIGM database
 [database]
 hostname = "192.168.0.20"

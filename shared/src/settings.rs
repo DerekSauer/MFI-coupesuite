@@ -15,6 +15,9 @@ pub struct Settings {
     /// Etiquette application settings.
     pub etiquette: EtiquetteSettings,
 
+    /// Production form application settings.
+    pub formulaire: FormulaireSettings,
+
     /// Database settings.
     pub database: Database,
 
@@ -43,6 +46,19 @@ pub struct EtiquetteSettings {
 
     /// Number of labels printed will be rounded up to this multiple.
     pub multiple: u32,
+}
+
+/// Settings for the `formulaire` application.
+#[derive(Deserialize, Debug)]
+pub struct FormulaireSettings {
+    /// Windows printer name of the destination printer.
+    pub nom_imprimante: String,
+
+    /// Number of copies to print by default.
+    pub copies_defaut: u32,
+
+    /// Number of copies to print by default for jobs with MDF components.
+    pub copies_mdf: u32,
 }
 
 /// Settings for the headless chromium browser we'll be using to generate PDFs.
