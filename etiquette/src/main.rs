@@ -1,4 +1,3 @@
-//#![deny(unused_crate_dependencies)]
 use clap::Parser;
 use cmd_line::Args;
 use coupesuite_shared::htmltopdf::HtmlToPdf;
@@ -42,18 +41,3 @@ async fn main() -> anyhow::Result<()> {
 
     Ok(())
 }
-
-/*
-// Concurrently process lot numbers
-if !cmd_line_args.lots.is_empty() {
-    let mut task_list = cmd_line_args
-        .lots
-        .split(',')
-        .map(|lot| export_lot(lot, &export_path, cmd_line_args.verbeux, &db_pool))
-        .collect::<FuturesUnordered<_>>();
-
-    while let Some(task) = task_list.next().await {
-        task?;
-    }
-}
-*/
