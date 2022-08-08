@@ -10,6 +10,10 @@ license = "MPL-2.0"
 name = "etiquette"
 path = "src/main.rs"
 
+[lib]
+name = "etiquette"
+path = "src/lib.rs"
+
 [dependencies]
 anyhow = "1.0.58"
 coupesuite-shared = { path = "../shared" }
