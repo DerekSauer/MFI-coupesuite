@@ -33,7 +33,7 @@ pub struct FormData {
 
 impl FormData {
     /// Retrieve label data from the database.
-    pub async fn from_lot(lot_number: &str, db_pool: &sqlx::PgPool) -> anyhow::Result<Self> {
+    pub async fn from_lot(lot_number: &str, db_pool: &sqlx::PgPool) -> anyhow::Result<Vec<Self>> {
         let query = include_str!("../sql/form.sql");
 
         // SIGM's lot numbers are numeric
@@ -44,7 +44,7 @@ impl FormData {
 
         Ok(sqlx::query_as::<_, FormData>(query)
             .bind(lot_number)
-            .fetch_one(db_pool)
+            .fetch_all(db_pool)
             .await?)
     }
 }

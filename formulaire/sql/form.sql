@@ -2,8 +2,8 @@ SELECT
 	TRIM(part.prt_no) AS part_number,
 	UPPER(TRIM(TO_ASCII(part.prt_desc1, 'LATIN1'))) AS description,
 	project.prj_req_qty::INT AS quantity,
-	part.prt_stt_ax1::FLOAT AS length,
-	part.prt_stt_ax2::FLOAT AS width,
+	part.prt_stt_ax1::REAL AS length,
+	part.prt_stt_ax2::REAL AS width,
 	UPPER(TRIM(part.prt_idx3_1)) AS machining_time,
 	UPPER(TRIM(part.prt_idx3_2)) AS edging,
 	UPPER(TRIM(part.prt_idx3_3)) AS robot,
@@ -25,4 +25,4 @@ WHERE
 	AND part.prt_no <> '040-0057'
 
 ORDER BY
-	partnumber
+	part_number
