@@ -1,10 +1,11 @@
 use clap::Parser;
 use cmd_line::Args;
 use coupesuite_shared::htmltopdf::HtmlToPdf;
+use coupesuite_shared::print::PrintSettings;
 use coupesuite_shared::{database, settings::Settings, templates};
 use futures::stream::FuturesUnordered;
 use futures::StreamExt;
-use print::{print_label, PrintSettings};
+use print::print_label;
 
 mod cmd_line;
 mod label_data;

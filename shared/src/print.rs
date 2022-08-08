@@ -1,0 +1,28 @@
+use crate::htmltopdf::HtmlToPdf;
+use sqlx::PgPool;
+use tera::Tera;
+
+/// Common settings used for printing labels.
+#[derive(Debug)]
+pub struct PrintSettings<'a> {
+    /// Windows printer name of the label printer to use.
+    pub printer_name: &'a str,
+
+    /// Path to the `gswin64c.exe` Ghostscript binary.
+    pub ghostscript_path: &'a str,
+
+    /// Print copies rounded up to this number.
+    pub print_multiple: u32,
+
+    /// HTML template engine containing the label's template.
+    pub tera: &'a Tera,
+
+    /// HTML to PDF renderer.
+    pub pdf_renderer: &'a HtmlToPdf,
+
+    /// Temporary path to store intermediary files.
+    pub temp_path: &'a std::path::Path,
+
+    /// Connection pool for the database.
+    pub db_pool: &'a PgPool,
+}
