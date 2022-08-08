@@ -70,6 +70,19 @@ pub async fn get_database_pool(connection_settings: &Database) -> anyhow::Result
     Ok(PgPool::connect(&connection_string).await?)
 }
 
+/// Attempt to parse a textual lot number into the i32 that our database expects.
+pub fn try_parse_lot(lot_number: &str) -> anyhow::Result<i32> {
+    match lot_number.parse() {
+        Ok(good_lot) => Ok(good_lot),
+        Err(_) => {
+            anyhow::bail!(
+                "Numéro de lot,  {}, invalide. Les numéros de lot doivent être des chiffres.",
+                lot_number
+            )
+        }
+    }
+}
+
 /// Verify if a lot number is a valid furniture production lot.
 ///
 /// Our database assigns a unique project number to each run of furniture

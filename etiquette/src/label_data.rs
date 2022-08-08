@@ -1,4 +1,4 @@
-use coupesuite_shared::database::verify_lot;
+use coupesuite_shared::database::{try_parse_lot, verify_lot};
 
 /// Data needed to print customer support label.
 #[derive(serde::Serialize, sqlx::FromRow, Debug)]
@@ -31,14 +31,7 @@ impl LabelData {
         let query = include_str!("../sql/label.sql");
 
         // SIGM's lot numbers are numeric
-        let lot_number: i32 = match lot_number.parse() {
-            Ok(good_lot) => good_lot,
-            Err(_) => {
-                anyhow::bail!(
-                    "Numéro de lot invalide. Les numéros de lot doivent être des chiffres."
-                )
-            }
-        };
+        let lot_number = try_parse_lot(lot_number)?;
 
         // verify_lot() will bail if the lot number doesn't exist or the DB fails
         verify_lot(lot_number, db_pool).await?;
