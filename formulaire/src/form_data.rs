@@ -13,10 +13,10 @@ pub struct FormData {
     pub quantity: i32,
 
     /// Length of the part (mm).
-    pub length: f32,
+    pub length: String,
 
     /// Width of the part (mm).
-    pub width: f32,
+    pub width: String,
 
     /// Unusued.
     pub machining_time: String,

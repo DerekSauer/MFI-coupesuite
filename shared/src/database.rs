@@ -18,7 +18,7 @@ pub struct Database {
 }
 
 /// Stores basic information about the Sku being verified.
-#[derive(sqlx::FromRow, Debug)]
+#[derive(serde::Serialize, sqlx::FromRow, Debug)]
 pub struct SkuInfo {
     /// SKU part number.
     pub sku: String,

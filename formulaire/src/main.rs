@@ -3,9 +3,11 @@ use cmd_line::Args;
 use coupesuite_shared::{
     database, htmltopdf::HtmlToPdf, print::PrintSettings, settings::Settings, templates,
 };
+use formulaire::print::print_form;
 
 mod cmd_line;
 mod form_data;
+mod print;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -23,6 +25,14 @@ async fn main() -> anyhow::Result<()> {
         temp_path: temp_dir.path(),
         db_pool: &database::get_database_pool(&settings.database).await?,
     };
+
+    print_form(
+        &cmd_line_args.lots,
+        cmd_line_args.quantité,
+        &settings,
+        &print_settings,
+    )
+    .await?;
 
     Ok(())
 }
