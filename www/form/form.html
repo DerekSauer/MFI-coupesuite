@@ -1,0 +1,86 @@
+<!doctype html>
+
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Formulaire de production - {{ lot_number }}</title>
+    <meta name="description" content="Formulaire de production.">
+    <meta name="author" content="Megalak Finition Inc.">
+
+    <link rel="stylesheet" href="{{ working_dir }}\www\normalize.css">
+    <link rel="stylesheet" href="{{ working_dir }}\www\form\form.css">
+</head>
+
+<body>
+    <header>
+        <table>
+            <tr>
+                <td class="header_model">{{ sku_data.sku }}</td>
+                <td class="header_quantity">Quantité: {{ sku_data.quantity }}</td>
+            </tr>
+            <tr>
+                <td class="header_project">Project: {{ lot_number }}</td>
+                <td class="header_description">{{ sku_data.description }}</td>
+            </tr>
+        </table>
+    </header>
+
+    <br>
+
+    <table class="data_table">
+        <thead>
+            <tr>
+                <th class="data_header_bottom data_quantity">Qté</th>
+                <th class="data_header_bottom data_part_number">Code</th>
+                <th class="data_header_bottom data_description">Description</th>
+                <th class="data_header_bottom data_dims">Long</th>
+                <th class="data_header_bottom data_dims">Larg</th>
+                <th class="data_header_bottom data_misc data_header_small">Manque mcx</th>
+                <th class="data_header_bottom data_misc data_header_small">Temps</th>
+                <th class="data_header_bottom data_misc data_header_small">Edge</th>
+                <th class="data_header_bottom data_machines data_header_small">Machines</th>
+                <th class="data_header_bottom data_edge_man data_header_small">Man</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in part_data %}
+            <tr class="data_row">
+                <td class="data_text_right data_quantity">{{ row.quantity }}</td>
+                <td class="data_text_left data_part_number">{{ row.part_number }}</td>
+                <td class="data_text_left data_description">{{ row.description }}</td>
+                <td class="data_text_right data_dims">{{ row.length }}</td>
+                <td class="data_text_right data_dims">{{ row.width }}</td>
+                <td class="data_text_center data_misc data_text_underline"></td>
+                <td class="data_text_center data_misc data_text_underline">{{ row.machining_time }}</td>
+                <td class="data_text_center data_misc data_text_underline">{{ row.edging }}</td>
+                <td class="data_text_center data_machines data_text_underline">{{ row.robot }}</td>
+                <td class="data_text_center data_edge_man data_text_underline">{{ row.manual_edge }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+
+    <footer class="footer_table">
+        <table>
+            <tr>
+                <td class="footer_notes">Notes</td>
+                <td></td>
+                <td rowspan="2" class="footer_image_container"><img class="footer_image"
+                        src="file://S:/MFI/Images pour Feuille De Production/611057.png" alt="{{ sku_data.sku }}"
+                        width="2844" height="1447" />
+                </td>
+            </tr>
+            <tr>
+                <td class="footer_mdf_flag">{% if sku_data.painted_parts %}MDF{% else %}&nbsp;{% endif %}</td>
+                <td></td>
+            </tr>
+        </table>
+    </footer>
+</body>
+
+</html>

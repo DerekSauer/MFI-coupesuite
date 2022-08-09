@@ -1,0 +1,183 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    margin: 0.0;
+    padding: 0.0;
+    vertical-align: bottom;
+}
+
+body {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+table {
+    table-layout: fixed;
+    width: 8in;
+}
+
+.header_model {
+    font-size: 24pt;
+    font-weight: bold;
+    width: 3in;
+}
+
+.header_quantity {
+    font-size: 24pt;
+    font-weight: bold;
+    text-align: right;
+    width: auto;
+}
+
+.header_project {
+    font-size: 14pt;
+    font-weight: bold;
+    width: 3in;
+}
+
+.header_description {
+    font-size: 14pt;
+    font-weight: bold;
+    text-align: right;
+    width: auto;
+}
+
+.data_table {
+    /*border-spacing: 0.075in 0.15in;*/
+    border-top: 1.5pt solid black;
+}
+
+.data_header {
+    font-size: 10pt;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: text-bottom;
+    border-top: 1.5pt solid black;
+    border-bottom: 1.5pt solid black;
+    border-collapse: collapse;
+}
+
+.data_header_small {
+    font-size: 8pt;
+}
+
+.data_header_bottom {
+    vertical-align: bottom;
+    border-bottom: 1.5pt solid black;
+}
+
+.data_text_left {
+    text-align: left;
+}
+
+.data_text_center {
+    text-align: center;
+}
+
+.data_text_right {
+    text-align: right;
+}
+
+.data_text_underline {
+    border-bottom: 1px solid black;
+}
+
+.data_quantity {
+    width: 0.4in;
+    max-width: 0.4in;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.data_part_number {
+    width: 0.7in;
+    max-width: 0.7in;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.data_description {
+    width: auto;
+    max-width: 2.5in;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.data_dims {
+    width: 0.6in;
+    max-width: 0.6in;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.data_machines {
+    font-size: 8pt;
+    width: 0.9in;
+    max-width: 1.0in;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.data_edge_man {
+    font-size: 8pt;
+    width: 0.3in;
+    max-width: 0.3in;
+}
+
+.data_misc {
+    font-size: 8pt;
+    width: 0.4in;
+    max-width: 0.4in;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.footer_table {
+    margin-top: auto;
+}
+
+.footer_notes {
+    font-size: 14pt;
+    font-weight: bold;
+    text-align: center;
+    border-top: 1.5pt solid black;
+    border-bottom: 1.5pt solid black;
+    width: 3.25in;
+    height: 20pt;
+}
+
+.footer_mdf_flag {
+    font-size: 40pt;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: top;
+}
+
+.footer_image_container {
+    border: 1.5pt solid black;
+    width: 4.5in;
+    height: calc(4.5in * 1447 / 2844);
+    text-align: center;
+    vertical-align: center;
+}
+
+.footer_image {
+    margin: 0.1in;
+    width: 4.3in;
+    height: calc(4.3in * 1447 / 2844);
+    object-fit: contain;
+}
+
+@media print {
+    @page {
+        size: 8.5in 11.0in portrait;
+        margin: 0.25in;
+    }
+}
