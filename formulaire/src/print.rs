@@ -99,12 +99,5 @@ pub async fn print_form(
         print_settings.ghostscript_path,
     )?;
 
-    println!(
-        "PDF: {}\n\nPress enter to continue.",
-        &pdf_path.to_string_lossy()
-    );
-    let mut derp = String::new();
-    std::io::stdin().read_line(&mut derp)?;
-
     Ok(())
 }
