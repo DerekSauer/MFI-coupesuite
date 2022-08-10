@@ -37,7 +37,12 @@ pub async fn print_form(
     print_settings: &PrintSettings<'_>,
 ) -> anyhow::Result<()> {
     // Grab the label's data from the database
-    let (form_data, sku_data) = FormData::from_lot(lot_number, print_settings.db_pool).await?;
+    let (mut form_data, sku_data) = FormData::from_lot(lot_number, print_settings.db_pool).await?;
+
+    // Remove kanban parts if the lot is not a kanban production
+    if !sku_data.kanban {
+        form_data.retain(|x| x.machining_time.is_empty());
+    }
 
     // Build template data
     let template_data = TemplateData {
