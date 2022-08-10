@@ -57,7 +57,10 @@ pub async fn print_form(
         .join(format!("Prod Form {}.html", lot_number));
     templates::render_to_file("form/form.html", print_settings.tera, &context, &html_path)?;
 
-    println!("HTML: {}", &html_path.to_string_lossy());
+    println!(
+        "HTML: {}\n\nPress enter to continue.",
+        &html_path.to_string_lossy()
+    );
     let mut derp = String::new();
     std::io::stdin().read_line(&mut derp)?;
 
@@ -69,7 +72,7 @@ pub async fn print_form(
         .pdf_renderer
         .save_pdf(
             &html_path,
-            &PaperSize::CSLabel,
+            &PaperSize::Letter,
             &PaperOrientation::Portrait,
             &pdf_path,
         )
@@ -92,9 +95,16 @@ pub async fn print_form(
         &pdf_path.to_string_lossy(),
         quantity,
         print_settings.printer_name,
-        &PaperSize::CSLabel,
+        &PaperSize::Letter,
         print_settings.ghostscript_path,
     )?;
+
+    println!(
+        "PDF: {}\n\nPress enter to continue.",
+        &pdf_path.to_string_lossy()
+    );
+    let mut derp = String::new();
+    std::io::stdin().read_line(&mut derp)?;
 
     Ok(())
 }
