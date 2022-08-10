@@ -33,6 +33,7 @@ pub fn print_to_printer(
         "-dBATCH",
         "-dNOPAUSE",
         "-dNoCancel",
+        "-dQUIET",
         "-dNEWPDF",
         "-sDEVICE=mswinpr2",
         &print_quantity,
