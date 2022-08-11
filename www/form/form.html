@@ -14,8 +14,58 @@
     <link rel="stylesheet" href="{{ working_dir }}\www\form\form.css">
 </head>
 
-<body>
-    <header>
+<body id="page_container">
+    <header id="header_container">
+        <div id="header_SKU">{{ sku_data.sku }}</div>
+        <div id="header_quantity">Quantité: {{ sku_data.quantity }}</div>
+        <div id="header_lot">Projet: {{ lot_number }}</div>
+        <div id="header_description">{{ sku_data.description }}</div>
+    </header>
+
+    <main id="main_container">
+        <div id="main_table_row" class="over_underline">
+            <div class="main_table_header_labels">Qté</div>
+            <div class="main_table_header_labels">Code</div>
+            <div class="main_table_header_labels">Description</div>
+            <div class="main_table_header_labels">Long</div>
+            <div class="main_table_header_labels">Larg</div>
+            <div class="main_table_header_labels_sm">Manque Mcx</div>
+            <div class="main_table_header_labels_sm">Temps (min)</div>
+            <div class="main_table_header_labels_sm">Edge</div>
+            <div class="main_table_header_labels_sm">Machines</div>
+            <div class="main_table_header_labels_sm">Man</div>
+        </div>
+        <div id="main_table_row">
+            {% for row in part_data %}
+            <div class="text_right numeral_margin">{{ row.quantity }}</div>
+            <div>{{ row.part_number }}</div>
+            <div class="overflow">{{ row.description }}</div>
+            <div class="text_right">{{ row.length }}</div>
+            <div class="text_right">{{ row.width }}</div>
+            <div class="main_table_datarow_text_sm underline"></div>
+            <div class="main_table_datarow_text_sm text_center underline">{{ row.machining_time }}</div>
+            <div class="main_table_datarow_text_sm text_center underline">{{ row.edging }}</div>
+            <div class="main_table_datarow_text_sm text_center underline">{{ row.robot }}</div>
+            <div class="main_table_datarow_text_sm text_center underline">{{ row.manual_edge }}</div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer id="footer_container">
+        <div id="footer_note_header">Notes</div>
+        <div id="footer_note_body">{% if sku_data.painted_parts %}MDF{% else %}&nbsp;{% endif %}</div>
+        <div id="footer_image_container"><img id="footer_image"
+                src="file://S:/MFI/Images pour Feuille De Production/{{ sku_data.sku }}.png" alt="{{ sku_data.sku }}" />
+        </div>
+    </footer>
+</body>
+
+</html>
+
+<!--
+
+    <body>
+    <header class="header_container">
         <table>
             <tr>
                 <td class="header_model">{{ sku_data.sku }}</td>
@@ -28,44 +78,42 @@
         </table>
     </header>
 
-    <br>
+    <main class="main_container">
+        <table class="data_table">
+            <thead>
+                <tr>
+                    <th class="data_header_bottom data_quantity">Qté</th>
+                    <th class="data_header_bottom data_part_number">Code</th>
+                    <th class="data_header_bottom data_description">Description</th>
+                    <th class="data_header_bottom data_dims">Long</th>
+                    <th class="data_header_bottom data_dims">Larg</th>
+                    <th class="data_header_bottom data_misc data_header_small">Manque mcx</th>
+                    <th class="data_header_bottom data_misc data_header_small">Temps</th>
+                    <th class="data_header_bottom data_misc data_header_small">Edge</th>
+                    <th class="data_header_bottom data_machines data_header_small">Machines</th>
+                    <th class="data_header_bottom data_edge_man data_header_small">Man</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in part_data %}
+                <tr class="data_row">
+                    <td class="data_text_right data_quantity">{{ row.quantity }}</td>
+                    <td class="data_text_left data_part_number">{{ row.part_number }}</td>
+                    <td class="data_text_left data_description">{{ row.description }}</td>
+                    <td class="data_text_right data_dims">{{ row.length }}</td>
+                    <td class="data_text_right data_dims">{{ row.width }}</td>
+                    <td class="data_text_center data_misc data_text_underline"></td>
+                    <td class="data_text_center data_misc data_text_underline">{{ row.machining_time }}</td>
+                    <td class="data_text_center data_misc data_text_underline">{{ row.edging }}</td>
+                    <td class="data_text_center data_machines data_text_underline">{{ row.robot }}</td>
+                    <td class="data_text_center data_edge_man data_text_underline">{{ row.manual_edge }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
 
-    <table class="data_table">
-        <thead>
-            <tr>
-                <th class="data_header_bottom data_quantity">Qté</th>
-                <th class="data_header_bottom data_part_number">Code</th>
-                <th class="data_header_bottom data_description">Description</th>
-                <th class="data_header_bottom data_dims">Long</th>
-                <th class="data_header_bottom data_dims">Larg</th>
-                <th class="data_header_bottom data_misc data_header_small">Manque mcx</th>
-                <th class="data_header_bottom data_misc data_header_small">Temps</th>
-                <th class="data_header_bottom data_misc data_header_small">Edge</th>
-                <th class="data_header_bottom data_machines data_header_small">Machines</th>
-                <th class="data_header_bottom data_edge_man data_header_small">Man</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in part_data %}
-            <tr class="data_row">
-                <td class="data_text_right data_quantity">{{ row.quantity }}</td>
-                <td class="data_text_left data_part_number">{{ row.part_number }}</td>
-                <td class="data_text_left data_description">{{ row.description }}</td>
-                <td class="data_text_right data_dims">{{ row.length }}</td>
-                <td class="data_text_right data_dims">{{ row.width }}</td>
-                <td class="data_text_center data_misc data_text_underline"></td>
-                <td class="data_text_center data_misc data_text_underline">{{ row.machining_time }}</td>
-                <td class="data_text_center data_misc data_text_underline">{{ row.edging }}</td>
-                <td class="data_text_center data_machines data_text_underline">{{ row.robot }}</td>
-                <td class="data_text_center data_edge_man data_text_underline">{{ row.manual_edge }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <br>
-
-    <footer class="footer_table">
+    <footer class="footer_container">
         <table>
             <tr>
                 <td class="footer_notes">Notes</td>
@@ -83,4 +131,4 @@
     </footer>
 </body>
 
-</html>
+-->
