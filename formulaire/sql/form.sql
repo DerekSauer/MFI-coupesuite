@@ -19,8 +19,8 @@ WHERE
     AND part_group.pgr_no IN ('760', '770')
 
     -- FILTER OUT MISCLASSIFIED COMPONENTS
-	AND NOT part.prt_desc1 LIKE UPPER('FOAM%')
-	AND NOT part.prt_no LIKE UPPER('040-ANTI%')
+	AND NOT TRIM(UPPER(part.prt_desc1)) LIKE 'FOAM%'
+	AND NOT TRIM(UPPER(part.prt_no)) LIKE '040-ANTI%'
 	AND part.prt_no <> '040-0073'
 	AND part.prt_no <> '040-0057'
 
