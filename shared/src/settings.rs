@@ -59,6 +59,9 @@ pub struct FormulaireSettings {
 
     /// Number of copies to print by default for jobs with MDF components.
     pub copies_mdf: u32,
+
+    /// Chemin d'accès au répertoire contenant les images affichées sur le formulaire.
+    pub fichier_images: String,
 }
 
 /// Settings for the headless chromium browser we'll be using to generate PDFs.

@@ -25,8 +25,8 @@ struct TemplateData<'a> {
     /// Working directory of the app.
     working_dir: &'a PathBuf,
 
-    /// Today's date.
-    date_stamp: &'a str,
+    /// Path to the image displayed on the form
+    image_path: &'a PathBuf,
 }
 
 /// Print a production tracking form.
@@ -44,13 +44,33 @@ pub async fn print_form(
         form_data.retain(|x| x.machining_time.is_empty());
     }
 
+    // Find the form's furniture image prefering SVG files over PNG over JPG
+    // If no image is found use the placeholder and bail if that can't be found
+    let mut image_path =
+        std::path::Path::new(&app_settings.formulaire.fichier_images).join(&sku_data.sku);
+    image_path.set_extension("svg");
+
+    if !image_path.exists() {
+        image_path.set_extension("png");
+    }
+    if !image_path.exists() {
+        image_path.set_extension("jpg");
+    }
+    if !image_path.exists() {
+        image_path.set_file_name("Placeholder");
+        image_path.set_extension("png");
+    }
+    if !image_path.exists() {
+        anyhow::bail!("Image du meuble introuvable: {}", &sku_data.sku);
+    }
+
     // Build template data
     let template_data = TemplateData {
         sku_data: &sku_data,
         part_data: &form_data,
         lot_number: lot_number,
         working_dir: &std::env::current_dir()?,
-        date_stamp: &chrono::Local::now().date().naive_local().to_string(),
+        image_path: &image_path,
     };
 
     // Load label data into the templating engine
@@ -61,13 +81,6 @@ pub async fn print_form(
         .temp_path
         .join(format!("Prod Form {}.html", lot_number));
     templates::render_to_file("form/form.html", print_settings.tera, &context, &html_path)?;
-
-    println!(
-        "HTML: {}\n\nPress enter to continue.",
-        &html_path.to_string_lossy()
-    );
-    let mut derp = String::new();
-    std::io::stdin().read_line(&mut derp)?;
 
     // Convert the rendered HTML to PDF
     let pdf_path = &print_settings

@@ -54,8 +54,8 @@
     <footer id="footer_container">
         <div id="footer_note_header">Notes</div>
         <div id="footer_note_body">{% if sku_data.painted_parts %}MDF{% else %}&nbsp;{% endif %}</div>
-        <div id="footer_image_container"><img id="footer_image"
-                src="file://S:/MFI/Images pour Feuille De Production/{{ sku_data.sku }}.png" alt="{{ sku_data.sku }}" />
+        <div id="footer_image_container"><img id="footer_image" src="file://{{ image_path }}"
+                alt="{{ sku_data.sku }}" />
         </div>
     </footer>
 </body>

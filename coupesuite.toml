@@ -15,6 +15,7 @@ multiple = 6                            # Nombre copies imprimées sera arrondi 
 nom_imprimante = "Back Office Printer"  # Trouver avec, `wmic printer get name`
 copies_defaut = 1                       # Nombre de copies par défaut.
 copies_mdf = 2                          # Nombre de copies par défaut pour les projets avec MDF.
+fichier_images = "S:/MFI/Images pour Feuille De Production"
 
 # SIGM database
 [database]
