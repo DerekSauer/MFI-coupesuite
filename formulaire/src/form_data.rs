@@ -33,6 +33,7 @@ pub struct FormData {
 
 impl FormData {
     /// Retrieve label data from the database.
+    #[allow(dead_code)] // TODO: Remove when main app is complete.
     pub async fn from_lot(
         lot_number: &str,
         db_pool: &sqlx::PgPool,

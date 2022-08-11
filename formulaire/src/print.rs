@@ -30,6 +30,7 @@ struct TemplateData<'a> {
 }
 
 /// Print a production tracking form.
+#[allow(dead_code)] // TODO: Remove when main app is complete.
 pub async fn print_form(
     lot_number: &str,
     quantity: Option<u32>,
@@ -68,7 +69,7 @@ pub async fn print_form(
     let template_data = TemplateData {
         sku_data: &sku_data,
         part_data: &form_data,
-        lot_number: lot_number,
+        lot_number,
         working_dir: &std::env::current_dir()?,
         image_path: &image_path,
     };
