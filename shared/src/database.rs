@@ -34,6 +34,9 @@ pub struct SkuInfo {
 
     /// Does this SKU contain painted parts (effects reports printed)?
     pub painted_parts: bool,
+
+    /// Addition packing information stored in the SKU's metadata.
+    pub packing_instructions: String,
 }
 
 /// Retrieve a database connection pool.
