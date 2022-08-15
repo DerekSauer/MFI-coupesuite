@@ -18,6 +18,9 @@ pub struct Settings {
     /// Production form application settings.
     pub formulaire: FormulaireSettings,
 
+    /// Transfer manifest application settings.
+    pub bon: BonSettings,
+
     /// Database settings.
     pub database: Database,
 
@@ -62,6 +65,16 @@ pub struct FormulaireSettings {
 
     /// Chemin d'accès au répertoire contenant les images affichées sur le formulaire.
     pub fichier_images: String,
+}
+
+/// Settings for the `bon` application.
+#[derive(Deserialize, Debug)]
+pub struct BonSettings {
+    /// Windows printer name of the destination printer.
+    pub nom_imprimante: String,
+
+    /// Number of copies to print by default.
+    pub copies_defaut: u32,
 }
 
 /// Settings for the headless chromium browser we'll be using to generate PDFs.
