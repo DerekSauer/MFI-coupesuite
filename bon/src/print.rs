@@ -56,7 +56,7 @@ pub async fn print_bon(
     let html_path = print_settings
         .temp_path
         .join(format!("Bon de transfert {}.html", lot_number));
-    templates::render_to_file("bon/bonm.html", print_settings.tera, &context, &html_path)?;
+    templates::render_to_file("bon/bon.html", print_settings.tera, &context, &html_path)?;
 
     // Convert the rendered HTML to PDF
     let pdf_path = &print_settings
