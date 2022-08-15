@@ -1,5 +1,3 @@
-use std::path::PathBuf;
-
 use crate::form_data::FormData;
 use coupesuite_shared::{
     database::SkuInfo,
@@ -9,6 +7,7 @@ use coupesuite_shared::{
     settings::Settings,
     templates,
 };
+use std::path::PathBuf;
 
 /// Data used to fill in the HTML template.
 #[derive(serde::Serialize, sqlx::FromRow, Debug)]
