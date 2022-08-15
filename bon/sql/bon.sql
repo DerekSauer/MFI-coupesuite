@@ -26,7 +26,7 @@ ORDER BY
 )
 
 SELECT
-    UPPER(TRIM(SUBSTRING(part.prt_desc1 FROM '\"(.+)\"'))) AS part_letter,
+    COALESCE(UPPER(TRIM(SUBSTRING(part.prt_desc1 FROM '\"(.+)\"'))), '') AS part_letter,
     project.prj_req_qty::INT AS qty_to_ship,
     project.prj_no AS part_lot_number,
     UPPER(TRIM(TO_ASCII(part.prt_no, 'LATIN1'))) AS part_number,
