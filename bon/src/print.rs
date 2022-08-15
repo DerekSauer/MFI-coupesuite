@@ -75,13 +75,7 @@ pub async fn print_bon(
     // Override default print quantity if needed
     let quantity = match quantity {
         Some(quantity) => quantity,
-        None => {
-            if sku_data.painted_parts {
-                app_settings.formulaire.copies_mdf
-            } else {
-                app_settings.formulaire.copies_defaut
-            }
-        }
+        None => app_settings.bon.copies_defaut,
     };
 
     // Print the PDF
@@ -90,6 +84,7 @@ pub async fn print_bon(
         quantity,
         print_settings.printer_name,
         &PaperSize::Letter,
+        &PaperOrientation::Landscape,
         print_settings.ghostscript_path,
     )?;
 

@@ -1,0 +1,88 @@
+<!doctype html>
+
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Bon de transfert - {{ lot_number }}</title>
+    <meta name="description" content="Bon de transfert.">
+    <meta name="author" content="Megalak Finition Inc.">
+
+    <link rel="stylesheet" href="{{ working_dir }}\www\normalize.css">
+    <link rel="stylesheet" href="{{ working_dir }}\www\bon\bon.css">
+</head>
+
+<body id="page_container">
+    <header id="header_container">
+        <div><img src="{{ working_dir }}\www\MFI_Logo.svg" alt="Megalak Finition Inc." id="header_logo" /></div>
+        <div id="header_title_container">
+            <div id="header_title">Bon de transfert Terrebonne</div>
+            <div id="header_lot">Numéro de lot: {{ lot_number }}</div>
+        </div>
+        <div id="header_packing">{{ sku_data.packing_instructions }}</div>
+        <div id="header_sku_container">
+            <div id="header_model_sku">{{ sku_data.sku }}: <span id="header_model_desc">{{ sku_data.description
+                    }}</span></div>
+        </div>
+    </header>
+
+    <main id="main_container">
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2" class="small_cell">Lettre</th>
+                    <th rowspan="2" class="med_cell">A produire</th>
+                    <th colspan="3" class="auto_cell">Qté expédiée à Terrebonne</th>
+                    <th rowspan="2" class="large_cell">No. projet</th>
+                    <th rowspan="2" class="large_cell">No. pièce</th>
+                    <th class="auto_cell">Description</th>
+                    <th rowspan="2" class="small_cell">Nouv. décompte</th>
+                </tr>
+                <tr>
+                    <th class="med_cell">1</th>
+                    <th class="med_cell">2</th>
+                    <th class="med_cell">3</th>
+                    <th class="auto_cell">Pièces communes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in part_data %}
+                <tr>
+                    <td class="small_cell">{{ row.part_letter }}</td>
+                    <td class="med_cell">{{ row.qty_to_ship }}</td>
+                    <td class="med_cell"></td>
+                    <td class="med_cell"></td>
+                    <td class="med_cell"></td>
+                    <td class="large_cell">{{ row.part_lot_number }}</td>
+                    <td class="large_cell">{{ row.part_number }}</td>
+                    <td class="auto_cell">
+                        <table>
+                            <tr class="inner_tr">
+                                <td class="inner_td overflow">{{ row.part_description }}</td>
+                            </tr>
+                            <tr>
+                                <td class="inner_td overflow">{{ row.common_skus }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="small_cell"></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+
+    <footer id="footer_container">
+        <div>Date d'expédition</div>
+        <div class="text_right">1:</div>
+        <div class="footer_underlines">&nbsp;</div>
+        <div class="text_right">2:</div>
+        <div class="footer_underlines">&nbsp;</div>
+        <div class="text_right">3:</div>
+        <div class="footer_underlines">&nbsp;</div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,174 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    padding: 0;
+    margin: 0;
+}
+
+@media print {
+    @page {
+        size: letter landscape;
+        margin: 0.25in;
+    }
+}
+
+.text_center {
+    text-align: center;
+}
+
+.text_right {
+    text-align: right;
+}
+
+.overflow {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/*** PAGE CONTAINER **********************************************************/
+#page_container {
+    min-width: 10.5in;
+    max-width: 10.5in;
+    min-height: 8.0in;
+    max-height: 8.0in;
+
+    display: grid;
+    grid-template-rows: 1.35in auto auto;
+    grid-template-areas:
+        "header"
+        "main"
+        "footer";
+}
+
+/*** HEADER ELEMENTS *********************************************************/
+#header_container {
+    display: grid;
+    grid-area: header;
+    grid-template-columns: 2fr 3fr 2fr;
+    grid-template-rows: 0.75in 0.5in;
+    grid-template-areas:
+        "logo lot packing"
+        "desc desc desc";
+    column-gap: 0.25in;
+    row-gap: 0in;
+}
+
+#header_logo {
+    display: grid;
+    grid-area: logo;
+    width: auto;
+    height: 0.75in;
+}
+
+#header_title_container {
+    display: grid;
+    grid-area: lot;
+    align-items: center;
+    border: 1px solid black;
+    box-shadow: 5px 5px 0px 0px black;
+}
+
+#header_title {
+    font-size: 18pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+#header_lot {
+    font-size: 14pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+#header_packing {
+    grid-area: packing;
+    font-size: 12pt;
+    font-weight: bold;
+    border: 1px solid black;
+    box-shadow: 5px 5px 0px 0px black;
+    padding: 0.05in;
+}
+
+#header_sku_container {
+    display: grid;
+    grid-area: desc;
+    align-items: end;
+    border-bottom: 1.5pt solid black;
+}
+
+#header_model_sku {
+    font-size: 18pt;
+    font-weight: bold;
+}
+
+#header_model_desc {
+    font-size: 18pt;
+    font-weight: normal;
+}
+
+/*** MAIN ELEMENTS ***********************************************************/
+#main_container {
+    display: grid;
+    align-items: start;
+}
+
+table {
+    width: 100%;
+    height: auto;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+thead {
+    border-bottom: 1px solid black;
+    vertical-align: bottom;
+}
+
+td {
+    border: 1px solid black;
+}
+
+.inner_td {
+    border: none;
+    text-align: left;
+    padding-left: 0.1in;
+}
+
+.inner_tr {
+    border-bottom: 1px solid black;
+}
+
+.small_cell {
+    width: 0.5in;
+    min-width: 0.5in;
+}
+
+.med_cell {
+    width: 0.7in;
+    min-width: 0.7in;
+}
+
+.large_cell {
+    width: 0.9in;
+    min-width: 0.9in;
+}
+
+.auto_cell {
+    width: auto;
+}
+
+/*** FOOTER ELEMENTS *********************************************************/
+#footer_container {
+    display: grid;
+    grid-area: footer;
+    grid-template-columns: 2fr 0.25fr 4fr 0.25fr 4fr 0.25fr 4fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+        "date one two three";
+    column-gap: 0.1in;
+    align-items: end;
+}
+
+.footer_underlines {
+    border-bottom: 1px solid black;
+}
