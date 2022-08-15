@@ -63,6 +63,7 @@ pub async fn print_label(
         quantity,
         print_settings.printer_name,
         &PaperSize::CSLabel,
+        &PaperOrientation::Portrait,
         print_settings.ghostscript_path,
     )?;
 

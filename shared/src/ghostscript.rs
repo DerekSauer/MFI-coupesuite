@@ -1,4 +1,4 @@
-use crate::htmltopdf::PaperSize;
+use crate::htmltopdf::{PaperOrientation, PaperSize};
 
 /// Send a PDF file to a printer.
 ///
@@ -17,6 +17,7 @@ pub fn print_to_printer(
     copies: u32,
     printer_name: &str,
     paper_size: &PaperSize,
+    paper_orientation: &PaperOrientation,
     ghostscript_path: &str,
 ) -> anyhow::Result<()> {
     let output_printer = format!("-sOutputFile=%printer%{}", printer_name);
@@ -24,7 +25,11 @@ pub fn print_to_printer(
 
     // Function accepts paper size in inches but Ghostscript uses Points
     // A point is 1/72 of an inch
-    let (width, height) = paper_size.value();
+    // Swap values if needed for portrait or landscape orientations
+    let (width, height) = match paper_orientation {
+        PaperOrientation::Portrait => (paper_size.value().0, paper_size.value().1),
+        PaperOrientation::Landscape => (paper_size.value().1, paper_size.value().0),
+    };
     let width = format!("-dDEVICEWIDTHPOINTS={}", width * 72.0);
     let height = format!("-dDEVICEHEIGHTPOINTS={}", height * 72.0);
 

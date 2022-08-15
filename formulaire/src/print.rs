@@ -114,6 +114,7 @@ pub async fn print_form(
         quantity,
         print_settings.printer_name,
         &PaperSize::Letter,
+        &PaperOrientation::Portrait,
         print_settings.ghostscript_path,
     )?;
 
