@@ -4,7 +4,7 @@ use coupesuite_shared::{
     database, htmltopdf::HtmlToPdf, print::PrintSettings, settings::Settings, templates,
 };
 use formulaire::print::print_form;
-use futures::stream::FuturesOrdered;
+use futures::stream::FuturesUnordered;
 use futures::StreamExt;
 
 mod cmd_line;
@@ -33,7 +33,7 @@ async fn main() -> anyhow::Result<()> {
         .lots
         .split(',')
         .map(|lot| print_form(lot, cmd_line_args.quantité, &settings, &print_settings))
-        .collect::<FuturesOrdered<_>>();
+        .collect::<FuturesUnordered<_>>();
 
     // Execute the task list
     while let Some(task) = task_list.next().await {
