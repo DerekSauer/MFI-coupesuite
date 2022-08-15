@@ -2,34 +2,37 @@ use coupesuite_shared::database::{try_parse_lot, verify_lot, SkuInfo};
 
 /// Row data needed to print a transfer manifest form.
 #[derive(serde::Serialize, sqlx::FromRow, Debug)]
-pub struct FormData {
+pub struct BonData {
     /// Letter for this part used as a reference in the assembly guide.
-    part_letter: String,
+    pub part_letter: String,
 
     /// Quantity needed to ship.
-    qty_to_ship: i32,
+    pub qty_to_ship: i32,
 
     /// Part's lot number, distinct from the model's lot number.
-    part_lot_number: i32,
+    pub part_lot_number: i32,
 
     /// The part's uniquely identifying part number.
-    part_number: String,
+    pub part_number: String,
 
     /// Description of the part.
-    part_description: String,
+    pub part_description: String,
 
     /// Other models where this part is used.
-    common_skus: String
+    pub common_skus: String,
+
+    /// Kanban flag.
+    pub machining_time: String,
 }
 
-impl FormData {
+impl BonData {
     /// Retrieve label data from the database.
     #[allow(dead_code)] // TODO: Remove when main app is complete.
     pub async fn from_lot(
         lot_number: &str,
         db_pool: &sqlx::PgPool,
     ) -> anyhow::Result<(Vec<Self>, SkuInfo)> {
-        let query = include_str!("../sql/bom.sql");
+        let query = include_str!("../sql/bon.sql");
 
         // SIGM's lot numbers are numeric
         let lot_number = try_parse_lot(lot_number)?;
@@ -40,7 +43,7 @@ impl FormData {
         sku_info.sku = sku_info.sku.replace("90-", "");
 
         Ok((
-            sqlx::query_as::<_, FormData>(query)
+            sqlx::query_as::<_, BonData>(query)
                 .bind(lot_number)
                 .fetch_all(db_pool)
                 .await?,

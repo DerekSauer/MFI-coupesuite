@@ -31,7 +31,8 @@ SELECT
     project.prj_no AS part_lot_number,
     UPPER(TRIM(TO_ASCII(part.prt_no, 'LATIN1'))) AS part_number,
     UPPER(TRIM(TO_ASCII(part.prt_desc1, 'LATIN1'))) AS part_description,
-    ARRAY_TO_STRING(common_skus.sku[1:10], ', ') AS common_skus
+    ARRAY_TO_STRING(common_skus.sku[1:10], ', ') AS common_skus,
+    UPPER(TRIM(part.prt_idx3_1)) AS machining_time
 
 FROM
     project
