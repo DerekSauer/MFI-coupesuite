@@ -1,0 +1,228 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    padding: 0;
+    margin: 0;
+}
+
+@font-face {
+    font-family: 'LibreBarcode39';
+    src: url('../../www/LibreBarcode39-Regular.ttf') format('truetype')
+}
+
+@media print {
+    @page {
+        size: legal landscape;
+        margin: 0.25in;
+    }
+}
+
+.text_center {
+    text-align: center;
+}
+
+.text_right {
+    text-align: right;
+}
+
+.overflow {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/*** PAGE CONTAINER **********************************************************/
+.page_container {
+    min-width: 13.5in;
+    max-width: 13.5in;
+    min-height: 8.0in;
+    max-height: 8.0in;
+
+    display: grid;
+    grid-template-columns: auto 3.8in;
+    grid-template-rows: 7.2in 0.75in;
+    grid-template-areas:
+        "drawing  data"
+        "barcodes barcodes";
+    column-gap: 0.1in;
+    row-gap: 0.05in;
+
+    break-after: page;
+}
+
+/*** DRAWING CONTAINER *******************************************************/
+.drawing_container {
+    display: grid;
+    grid-area: drawing;
+    border: 2px solid black;
+}
+
+.drawing_image {
+    width: auto;
+    height: 7.0in;
+    margin: auto;
+}
+
+/*** DATA CONTAINER **********************************************************/
+.data_container {
+    display: grid;
+    grid-area: data;
+    row-gap: 2mm;
+}
+
+.border_1px {
+    outline: 1px solid black;
+}
+
+.data_header {
+    display: grid;
+    grid-template-rows: auto auto;
+    border: 2px solid black;
+}
+
+.data_model_label {
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
+    align-items: center;
+}
+
+.data_model {
+    display: grid;
+    font-size: 32pt;
+    font-weight: bold;
+    text-align: center;
+    align-items: center;
+}
+
+.data_quantities {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto;
+    border: 2px solid black;
+}
+
+.data_part_desc {
+    display: grid;
+    grid-template-columns: auto auto;
+    border: 2px solid black;
+}
+
+.data_pallets {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    border: 2px solid black;
+}
+
+.data_material {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+        "color color      color "
+        "code1 thickness1 sides1"
+        "code2 thickness2 sides2";
+    border: 2px solid black;
+}
+
+.data_material_color {
+    display: grid;
+    grid-area: color;
+}
+
+.data_dimensions {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+        "label length1 width1"
+        "label length2 width2";
+    border: 2px solid black;
+}
+
+.data_dimensions_label {
+    display: grid;
+    grid-area: label;
+}
+
+.data_cnc {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    border: 2px solid black;
+}
+
+.data_project {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    border: 2px solid black;
+}
+
+.data_tracking {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto auto auto auto;
+    grid-template-areas:
+        "header  setup     operator  machine   total    "
+        "couper  setup1    operator1 machine1  total1   "
+        "edge    setup2    operator2 machine2  total2   "
+        "usinage setup3    operator3 machine2  total3   "
+        "inspect signature signature signature signature"
+        "footer  final     final     final     pret     ";
+
+    border: 2px solid black;
+}
+
+.data_signature {
+    display: grid;
+    grid-area: signature
+}
+
+.data_final {
+    display: grid;
+    grid-area: final;
+}
+
+/*** BARCODES CONTAINER ******************************************************/
+.barcodes_container {
+    display: grid;
+    grid-area: barcodes;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto;
+    grid-template-areas: "edge project cnc";
+    column-gap: 1.0in;
+    justify-content: right;
+}
+
+.barcode_cell {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto 8mm auto;
+    grid-template-areas:
+        "label"
+        "code"
+        "footer"
+}
+
+.barcode_label {
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
+    align-content: end;
+}
+
+.barcode {
+    font-family: LibreBarcode39;
+    font-weight: normal;
+    font-size: 36pt;
+    transform: translateY(-1.5mm) scale(0.8, 1.2);
+    text-align: center;
+    align-content: center;
+}
+
+.barcode_footer {
+    font-size: 10pt;
+    text-align: center;
+    align-content: start;
+}

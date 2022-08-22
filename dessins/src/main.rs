@@ -3,10 +3,12 @@ use cmd_line::Args;
 use coupesuite_shared::{
     database, htmltopdf::HtmlToPdf, print::PrintSettings, settings::Settings, templates,
 };
-use dessin_data::DessinData;
+use futures::{stream::FuturesUnordered, StreamExt};
+use print::print_dessins;
 
 mod cmd_line;
 mod dessin_data;
+mod print;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -16,7 +18,7 @@ async fn main() -> anyhow::Result<()> {
 
     // Setup label printing dependencies common to all prints
     let print_settings = PrintSettings {
-        printer_name: &settings.formulaire.nom_imprimante,
+        printer_name: &settings.dessins.nom_imprimante,
         ghostscript_path: &settings.ghostscript.location,
         print_multiple: 0, // Unused
         tera: &templates::load_templates().await?,
@@ -24,6 +26,18 @@ async fn main() -> anyhow::Result<()> {
         temp_path: temp_dir.path(),
         db_pool: &database::get_database_pool(&settings.database).await?,
     };
+
+    // Add all print tasks to the task list
+    let mut task_list = cmd_line_args
+        .lots
+        .split(',')
+        .map(|lot| print_dessins(lot, cmd_line_args.quantité, &settings, &print_settings))
+        .collect::<FuturesUnordered<_>>();
+
+    // Execute the task list
+    while let Some(task) = task_list.next().await {
+        task?;
+    }
 
     Ok(())
 }

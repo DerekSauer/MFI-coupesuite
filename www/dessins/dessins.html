@@ -1,0 +1,128 @@
+<!doctype html>
+
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Dessins de pièces - {{ lot_number }}</title>
+    <meta name="description" content="Dessins de pièces.">
+    <meta name="author" content="Megalak Finition Inc.">
+
+    <link rel="stylesheet" href="{{ working_dir }}\www\normalize.css">
+    <link rel="stylesheet" href="{{ working_dir }}\www\dessins\dessins.css">
+</head>
+
+<body>
+    {% for row in part_data %}
+    <div class="page_container">
+        <div class="drawing_container"><img src="{{ row.image_path }}" alt="{{ row.part_number }}"
+                class="drawing_image" />
+        </div>
+        <div class="data_container">
+            <div class="data_header">
+                <div class="data_model_label">No. modèle - Lettre de la pièce</div>
+                <div class="data_model">{{ sku_data.sku }}-{{ row.lettre }}</div>
+            </div>
+            <div class="data_quantities">
+                <div>Qté a produire</div>
+                <div>Qté de trous</div>
+                <div>Lettre</div>
+                <div>{{ row.req_quantity }}</div>
+                <div>{{ row.num_holes }}</div>
+                <div></div>
+            </div>
+            <div class="data_part_desc">
+                <div>{{ row.part_description }}</div>
+                <div>{{ row.part_number }}</div>
+            </div>
+            <div class="data_pallets">
+                <div>Qté par palette</div>
+                <div>Pallete</div>
+                <div>{{ row.parts_per_pallet }}</div>
+                <div>{{ row.pallet_number }} de {{ row.total_pallets }}</div>
+            </div>
+            <div class="data_material">
+                <div class="data_material_color">{{ row.material_color }}</div>
+                <div>Code couleur</div>
+                <div>Épaisseur</div>
+                <div>No. faces Lam.</div>
+                <div>{{ row.material_code }}</div>
+                <div>{{ row.thickness }}</div>
+                <div>{{ row.material_faces }}</div>
+            </div>
+            <div class="data_dimensions">
+                <div class="data_dimensions_label">Dimensions brutes</div>
+                <div>Longueuer</div>
+                <div>Largeur</div>
+                <div>{{ row.length }}</div>
+                <div>{{ row.width }}</div>
+            </div>
+            <div class="data_cnc">
+                <div>Machine CNC</div>
+                <div>Programme CNC</div>
+                <div>{{ row.cnc_machines }}</div>
+                <div>{{ row.cnc_program }}</div>
+            </div>
+            <div class="data_project">
+                <div>No. projet</div>
+                <div>Projet maître</div>
+                <div>{{ row.project_number }}</div>
+                <div>{{ lot_number }}</div>
+            </div>
+            <div class="data_tracking">
+                <div></div>
+                <div>Setup</div>
+                <div>Operateur</div>
+                <div>Machine</div>
+                <div>Total fini</div>
+
+                <div>Couper</div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+
+                <div>Edge</div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+
+                <div>Usinage</div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+
+                <div>Inspection</div>
+                <div class="data_signature"></div>
+
+                <div></div>
+                <div class="data_final">Total prêt à expédier</div>
+                <div></div>
+            </div>
+        </div>
+        <div class="barcodes_container">
+            <div class="barcode_cell">
+                <div class="barcode_label">Programme edge</div>
+                <div class="barcode">*{{ row.edge_program }}*</div>
+                <div class="barcode_footer">{{ row.edge_program }}</div>
+            </div>
+            <div class="barcode_cell">
+                <div class="barcode_label">No. projet</div>
+                <div class="barcode">*{{ row.project_number }}*</div>
+                <div class="barcode_footer">{{ row.project_number }}</div>
+            </div>
+            <div class="barcode_cell">
+                <div class="barcode_label">Programme CNC</div>
+                <div class="barcode">*{{ row.cnc_program }}*</div>
+                <div class="barcode_footer">{{ row.cnc_program }}</div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+
+</html>
