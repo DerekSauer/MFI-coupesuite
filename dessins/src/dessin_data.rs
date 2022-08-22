@@ -53,6 +53,9 @@ pub struct DessinData {
 
     /// Total number of pallets needed to stack all the parts.
     pub total_pallets: i32,
+
+    /// Flag indicating if the part is a kanban component or not.
+    pub machining_time: String,
 }
 
 impl DessinData {
