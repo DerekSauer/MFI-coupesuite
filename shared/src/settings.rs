@@ -21,6 +21,9 @@ pub struct Settings {
     /// Transfer manifest application settings.
     pub bon: BonSettings,
 
+    /// Blueprint printing settings.
+    pub dessins: DessinSettings,
+
     /// Database settings.
     pub database: Database,
 
@@ -75,6 +78,19 @@ pub struct BonSettings {
 
     /// Number of copies to print by default.
     pub copies_defaut: u32,
+}
+
+/// Settings for the `dessin` application.
+#[derive(Deserialize, Debug)]
+pub struct DessinSettings {
+    /// Windows printer name of the destination printer.
+    pub nom_imprimante: String,
+
+    /// Number of copies to print by default.
+    pub copies_defaut: u32,
+
+    /// Location of the drawings
+    pub fichier_dessins: String,
 }
 
 /// Settings for the headless chromium browser we'll be using to generate PDFs.

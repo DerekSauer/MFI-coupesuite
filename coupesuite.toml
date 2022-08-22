@@ -22,6 +22,12 @@ fichier_images = "S:/MFI/Images pour Feuille De Production"
 nom_imprimante = "Back Office Printer"  # Trouver avec, `wmic printer get name`
 copies_defaut = 1                       # Nombre de copies par défaut.
 
+# Paramètres d'impression du bon de transfert.
+[dessins]
+nom_imprimante = "Back Office Printer"  # Trouver avec, `wmic printer get name`
+copies_defaut = 1                       # Nombre de copies par défaut.
+fichier_dessins = "S:/MFI/Dessins"      # Location des images des dessins
+
 # SIGM database
 [database]
 hostname = "192.168.0.20"
