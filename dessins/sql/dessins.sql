@@ -62,7 +62,8 @@ SELECT
     END::INT AS parts_per_pallet,
     GENERATE_SERIES(1, COALESCE(CEIL(project.prj_req_qty / NULLIF(TRIM(part.prt_idx2_1), '')::INT), 1)::INT) AS pallet_number,
     COALESCE(CEIL(project.prj_req_qty / NULLIF(part.prt_idx2_1,'')::INT), 1)::INT AS total_pallets,
-    UPPER(TRIM(part.prt_idx3_1)) AS machining_time
+    UPPER(TRIM(part.prt_idx3_1)) AS machining_time,
+    '' AS image_path
 
 FROM       
     project    

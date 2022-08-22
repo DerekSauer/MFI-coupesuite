@@ -56,6 +56,9 @@ pub struct DessinData {
 
     /// Flag indicating if the part is a kanban component or not.
     pub machining_time: String,
+
+    /// Location of the drawing's image file
+    pub image_path: String,
 }
 
 impl DessinData {
