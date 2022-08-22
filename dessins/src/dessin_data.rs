@@ -21,6 +21,9 @@ pub struct DessinData {
     /// Filename of the CNC program.
     pub cnc_program: String,
 
+    /// Filename of the edge banding program.
+    pub edge_program: String,
+
     /// List of CNC machines that can produce this part.
     pub cnc_machines: String,
 
@@ -28,13 +31,13 @@ pub struct DessinData {
     pub num_holes: String,
 
     /// Length of the part in millimeters.
-    pub length: f32,
+    pub length: String,
 
     /// Width of the part in millimeters.
-    pub width: f32,
+    pub width: String,
 
     /// Thickness of the part in millimeters.
-    pub thickness: f32,
+    pub thickness: String,
 
     /// Material code of the panel(s) used to make this part.
     pub material_code: String,
