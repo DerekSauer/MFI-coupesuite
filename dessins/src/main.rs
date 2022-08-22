@@ -3,8 +3,10 @@ use cmd_line::Args;
 use coupesuite_shared::{
     database, htmltopdf::HtmlToPdf, print::PrintSettings, settings::Settings, templates,
 };
+use dessin_data::DessinData;
 
 mod cmd_line;
+mod dessin_data;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
