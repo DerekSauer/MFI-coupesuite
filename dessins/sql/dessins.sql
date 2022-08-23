@@ -46,7 +46,7 @@ SELECT
     UPPER(TRIM(TO_ASCII(part.prt_no, 'LATIN1'))) AS part_number,
     UPPER(TRIM(TO_ASCII(part.prt_desc1, 'LATIN1'))) AS part_description,
     project.prj_req_qty::INT AS req_quantity,
-    SUBSTRING(part.prt_desc1 FROM '\"(.+)\"') AS lettre,
+    COALESCE(SUBSTRING(part.prt_desc1 FROM '\"(.+)\"'), '') AS lettre,
     COALESCE(NULLIF(TRIM(part.prt_dsgn_no), ''), REPLACE(UPPER(TRIM(TO_ASCII(part.prt_no, 'LATIN1'))), '-', '')) AS cnc_program,
     REPLACE(UPPER(TRIM(TO_ASCII(part.prt_no, 'LATIN1'))), '-', '') AS edge_program,
     UPPER(TRIM(part.prt_idx3_3)) AS cnc_machines,
