@@ -3,29 +3,29 @@ version = "0.2.0"
 # Paramètres du générateur de listes de coupe
 [liste]
 v12_import_dir = "C:/V12/_WORK/IMPORT"  # Location du répertoire d'importation de Cutrite
-default_bom_qty = 100                   # Quantité défaut lorsque la quantité n'est pas spécifiée.
+default_bom_qty = 100                   # Quantité défaut lorsque la quantité n'est pas spécifiée
 
 # Paramètres de l'imprimante d'étiquettes.
 [etiquette]
 nom_imprimante = "Zebra (Bureau Derek)" # Trouver avec, `wmic printer get name`
-multiple = 6                            # Nombre copies imprimées sera arrondi à ce multiple
+extra = 6                               # Nombre copies extra a l'imprimées
 
-# Paramètres d'impression du formulaire de production.
+# Paramètres d'impression du formulaire de production
 [formulaire]
 nom_imprimante = "Back Office Printer"  # Trouver avec, `wmic printer get name`
-copies_defaut = 1                       # Nombre de copies par défaut.
-copies_mdf = 2                          # Nombre de copies par défaut pour les projets avec MDF.
+copies_defaut = 1                       # Nombre de copies par défaut
+copies_mdf = 2                          # Nombre de copies par défaut pour les projets avec MDF
 fichier_images = "S:/MFI/Images pour Feuille De Production"
 
 # Paramètres d'impression du bon de transfert.
 [bon]
 nom_imprimante = "Back Office Printer"  # Trouver avec, `wmic printer get name`
-copies_defaut = 1                       # Nombre de copies par défaut.
+copies_defaut = 1                       # Nombre de copies par défaut
 
 # Paramètres d'impression du bon de transfert.
 [dessins]
 nom_imprimante = "Back Office Printer"  # Trouver avec, `wmic printer get name`
-copies_defaut = 1                       # Nombre de copies par défaut.
+copies_defaut = 1                       # Nombre de copies par défaut
 fichier_dessins = "S:/MFI/Dessins"      # Location des images des dessins
 
 # SIGM database

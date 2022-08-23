@@ -3,6 +3,7 @@ use coupesuite_shared::{
     ghostscript::print_to_printer,
     htmltopdf::{PaperOrientation, PaperSize},
     print::PrintSettings,
+    settings::Settings,
     templates,
 };
 
@@ -10,6 +11,7 @@ use coupesuite_shared::{
 pub async fn print_label(
     lot_number: &str,
     quantity: &Option<u32>,
+    app_settings: &Settings,
     print_settings: &PrintSettings<'_>,
 ) -> anyhow::Result<()> {
     // Grab the label's data from the database
@@ -48,13 +50,11 @@ pub async fn print_label(
         )
         .await?;
 
-    // Label quantities are rounded up to the nearest multiple of pages
-    let quantity = match quantity {
-        Some(amount) => (amount / print_settings.print_multiple + 1) * 6,
-        None => {
-            (TryInto::<u32>::try_into(label_data.print_quantity)? / print_settings.print_multiple)
-                * 6
-        }
+    // If the user asked for a specific quantity, print that
+    // Otherwise print what the label's data demands plus a few extra
+    let quantity: u32 = match quantity {
+        Some(amount) => *amount,
+        None => u32::try_from(label_data.print_quantity)? + app_settings.etiquette.extra,
     };
 
     // Print the PDF

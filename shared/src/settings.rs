@@ -51,7 +51,7 @@ pub struct EtiquetteSettings {
     pub nom_imprimante: String,
 
     /// Number of labels printed will be rounded up to this multiple.
-    pub multiple: u32,
+    pub extra: u32,
 }
 
 /// Settings for the `formulaire` application.

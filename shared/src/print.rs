@@ -11,9 +11,6 @@ pub struct PrintSettings<'a> {
     /// Path to the `gswin64c.exe` Ghostscript binary.
     pub ghostscript_path: &'a str,
 
-    /// Print copies rounded up to this number.
-    pub print_multiple: u32,
-
     /// HTML template engine containing the label's template.
     pub tera: &'a Tera,
 

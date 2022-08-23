@@ -21,7 +21,6 @@ async fn main() -> anyhow::Result<()> {
     let print_settings = PrintSettings {
         printer_name: &settings.formulaire.nom_imprimante,
         ghostscript_path: &settings.ghostscript.location,
-        print_multiple: 0, // Unused
         tera: &templates::load_templates().await?,
         pdf_renderer: &HtmlToPdf::new(Some(&settings.chromium.location)).await?,
         temp_path: temp_dir.path(),
