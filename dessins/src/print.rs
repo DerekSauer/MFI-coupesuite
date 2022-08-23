@@ -86,12 +86,6 @@ pub async fn print_dessins(
         )
         .await?;
 
-    println!(
-        "HTML: {}\nPDF: {}\n",
-        &html_path.to_str().unwrap(),
-        &pdf_path.to_str().unwrap()
-    );
-
     // Override default print quantity if needed
     let quantity = match quantity {
         Some(quantity) => quantity,

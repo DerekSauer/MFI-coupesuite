@@ -10,7 +10,7 @@ use coupesuite_shared::{
 /// Print a customer service label.
 pub async fn print_label(
     lot_number: &str,
-    quantity: &Option<u32>,
+    quantity: Option<u32>,
     app_settings: &Settings,
     print_settings: &PrintSettings<'_>,
 ) -> anyhow::Result<()> {
@@ -53,7 +53,7 @@ pub async fn print_label(
     // If the user asked for a specific quantity, print that
     // Otherwise print what the label's data demands plus a few extra
     let quantity: u32 = match quantity {
-        Some(amount) => *amount,
+        Some(amount) => amount,
         None => u32::try_from(label_data.print_quantity)? + app_settings.etiquette.extra,
     };
 
