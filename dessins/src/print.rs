@@ -127,8 +127,8 @@ fn find_image(part_number: &str, image_root_path: &Path) -> anyhow::Result<PathB
         image_path.set_extension("jpg");
     }
     if !image_path.exists() {
-        image_path.set_file_name("Placeholder");
-        image_path.set_extension("png");
+        image_path.set_file_name("DEFAUT");
+        image_path.set_extension("jpg");
     }
     if !image_path.exists() {
         anyhow::bail!("Image du pièce introuvable: {}", part_number);
