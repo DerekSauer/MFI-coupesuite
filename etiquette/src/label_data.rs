@@ -1,4 +1,4 @@
-use coupesuite_shared::database::{try_parse_lot, verify_lot};
+use coupesuite_shared::database::{try_parse_lot, verify_lot, SkuInfo};
 
 /// Data needed to print customer support label.
 #[derive(serde::Serialize, sqlx::FromRow, Debug)]
@@ -27,18 +27,24 @@ pub struct LabelData {
 
 impl LabelData {
     /// Retrieve label data from the database.
-    pub async fn from_lot(lot_number: &str, db_pool: &sqlx::PgPool) -> anyhow::Result<Self> {
+    pub async fn from_lot(
+        lot_number: &str,
+        db_pool: &sqlx::PgPool,
+    ) -> anyhow::Result<(Self, SkuInfo)> {
         let query = include_str!("../sql/label.sql");
 
         // SIGM's lot numbers are numeric
         let lot_number = try_parse_lot(lot_number)?;
 
         // verify_lot() will bail if the lot number doesn't exist or the DB fails
-        verify_lot(lot_number, db_pool).await?;
+        let sku_info = verify_lot(lot_number, db_pool).await?;
 
-        Ok(sqlx::query_as::<_, LabelData>(query)
-            .bind(lot_number)
-            .fetch_one(db_pool)
-            .await?)
+        Ok((
+            sqlx::query_as::<_, LabelData>(query)
+                .bind(lot_number)
+                .fetch_one(db_pool)
+                .await?,
+            sku_info,
+        ))
     }
 }

@@ -15,7 +15,17 @@ pub async fn print_label(
     print_settings: &PrintSettings<'_>,
 ) -> anyhow::Result<()> {
     // Grab the label's data from the database
-    let label_data = label_data::LabelData::from_lot(lot_number, print_settings.db_pool).await?;
+    let (label_data, sku_info) =
+        label_data::LabelData::from_lot(lot_number, print_settings.db_pool).await?;
+
+    // Kanban models don't have labels, just bail
+    if sku_info.kanban {
+        println!(
+            "INFO: Le numéro de lot, {}, est un Kanban, l'impression de l'étiquette a été ignorée.",
+            lot_number,
+        );
+        return Ok(());
+    }
 
     // Load label data into the templating engine
     let mut context = tera::Context::from_serialize(&label_data)?;
