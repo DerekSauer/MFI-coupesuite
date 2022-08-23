@@ -58,8 +58,8 @@ pub async fn export_model(
     }
 
     // Use the model number as the file name
-    let mut file_path: PathBuf = app_settings.liste.v12_import_dir.to_string().into();
-    file_path.push(&cutlist.first().unwrap().product_information);
+    let mut file_path = PathBuf::from(&app_settings.liste.v12_import_dir);
+    file_path.push(&sku_info.sku);
     file_path.set_extension("csv");
 
     cut_list::write_cutlist(&cutlist, &file_path).await?;

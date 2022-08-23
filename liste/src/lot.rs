@@ -63,11 +63,7 @@ pub async fn export_lot(
 
     // The model number and lot number in parens is the file name
     let mut file_path: PathBuf = app_settings.liste.v12_import_dir.to_string().into();
-    file_path.push(format!(
-        "{} ({})",
-        &cutlist.first().unwrap().product_information,
-        lot_number
-    ));
+    file_path.push(format!("{} ({})", &sku_info.sku, lot_number));
     file_path.set_extension("csv");
 
     cut_list::write_cutlist(&cutlist, &file_path).await?;

@@ -15,7 +15,6 @@ async fn main() -> anyhow::Result<()> {
     let cmd_line_args = Args::parse();
     let app_settings = Settings::load(&std::env::current_dir()?.join("coupesuite.toml"))?;
     let db_pool = database::get_database_pool(&app_settings.database).await?;
-    let export_path = std::path::PathBuf::from(&app_settings.liste.v12_import_dir);
 
     if cmd_line_args.lots.is_empty() && cmd_line_args.modèles.is_empty() {
         anyhow::bail!("Entrez une liste de numéros de lot et/ou une liste de numéros de modèle.");
