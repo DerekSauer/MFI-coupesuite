@@ -1,8 +1,11 @@
 use crate::cut_list::{self, CutListRow};
 use anyhow::Context;
-use coupesuite_shared::database::{verify_model, SkuInfo};
+use coupesuite_shared::{
+    database::{verify_model, SkuInfo},
+    settings::Settings,
+};
 use sqlx::PgPool;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 /// Generate a cut list from a furniture model number.
 /// The model number will be validated to make sure it is a unit
@@ -42,8 +45,7 @@ async fn process_model(
 pub async fn export_model(
     model_number: &str,
     quantity: i32,
-    export_path: &Path,
-    verbose: bool,
+    app_settings: &Settings,
     db_pool: &PgPool,
 ) -> anyhow::Result<()> {
     let (mut cutlist, sku_info) = process_model(model_number, db_pool)
@@ -56,21 +58,11 @@ pub async fn export_model(
     }
 
     // Use the model number as the file name
-    let mut file_path: PathBuf = export_path.into();
+    let mut file_path: PathBuf = app_settings.liste.v12_import_dir.to_string().into();
     file_path.push(&cutlist.first().unwrap().product_information);
     file_path.set_extension("csv");
 
     cut_list::write_cutlist(&cutlist, &file_path).await?;
-
-    if verbose {
-        println!(
-            "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
-            &sku_info.sku,
-            &sku_info.description,
-            quantity,
-            &file_path.to_str().unwrap()
-        );
-    }
 
     Ok(())
 }

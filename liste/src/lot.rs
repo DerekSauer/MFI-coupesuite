@@ -1,8 +1,11 @@
 use crate::cut_list::{self, CutListRow};
 use anyhow::Context;
-use coupesuite_shared::database::{verify_lot, SkuInfo};
+use coupesuite_shared::{
+    database::{verify_lot, SkuInfo},
+    settings::Settings,
+};
 use sqlx::PgPool;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 /// Generate a cut list from a furniture lot number.
 /// The lot number will be validated to make sure it is a unit
@@ -38,8 +41,7 @@ async fn process_lot(
 /// - `db_pool`: The database connection pool.
 pub async fn export_lot(
     lot_number: &str,
-    export_path: &Path,
-    verbose: bool,
+    app_settings: &Settings,
     db_pool: &PgPool,
 ) -> anyhow::Result<()> {
     // Lot numbers must be integers
@@ -60,7 +62,7 @@ pub async fn export_lot(
     }
 
     // The model number and lot number in parens is the file name
-    let mut file_path: PathBuf = export_path.into();
+    let mut file_path: PathBuf = app_settings.liste.v12_import_dir.to_string().into();
     file_path.push(format!(
         "{} ({})",
         &cutlist.first().unwrap().product_information,
@@ -69,16 +71,6 @@ pub async fn export_lot(
     file_path.set_extension("csv");
 
     cut_list::write_cutlist(&cutlist, &file_path).await?;
-
-    if verbose {
-        println!(
-            "SKU: {}\nDescription: {}\nQuantité: {}\nFicher: {}\n",
-            &sku_info.sku,
-            &sku_info.description,
-            &sku_info.quantity,
-            &file_path.to_str().unwrap()
-        );
-    }
 
     Ok(())
 }

@@ -102,7 +102,7 @@ pub async fn print_dessins(
     print_to_printer(
         &pdf_path.to_string_lossy(),
         quantity,
-        print_settings.printer_name,
+        &app_settings.dessins.nom_imprimante,
         &PaperSize::Legal,
         &PaperOrientation::Landscape,
         print_settings.ghostscript_path,

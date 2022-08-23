@@ -112,7 +112,7 @@ pub async fn print_form(
     print_to_printer(
         &pdf_path.to_string_lossy(),
         quantity,
-        print_settings.printer_name,
+        &app_settings.formulaire.nom_imprimante,
         &PaperSize::Letter,
         &PaperOrientation::Portrait,
         print_settings.ghostscript_path,

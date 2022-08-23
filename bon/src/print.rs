@@ -82,7 +82,7 @@ pub async fn print_bon(
     print_to_printer(
         &pdf_path.to_string_lossy(),
         quantity,
-        print_settings.printer_name,
+        &app_settings.bon.nom_imprimante,
         &PaperSize::Letter,
         &PaperOrientation::Landscape,
         print_settings.ghostscript_path,

@@ -13,9 +13,9 @@ mod model;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let cmd_line_args = Args::parse();
-    let settings = Settings::load(&std::env::current_dir()?.join("coupesuite.toml"))?;
-    let db_pool = database::get_database_pool(&settings.database).await?;
-    let export_path = std::path::PathBuf::from(&settings.liste.v12_import_dir);
+    let app_settings = Settings::load(&std::env::current_dir()?.join("coupesuite.toml"))?;
+    let db_pool = database::get_database_pool(&app_settings.database).await?;
+    let export_path = std::path::PathBuf::from(&app_settings.liste.v12_import_dir);
 
     if cmd_line_args.lots.is_empty() && cmd_line_args.modèles.is_empty() {
         anyhow::bail!("Entrez une liste de numéros de lot et/ou une liste de numéros de modèle.");
@@ -26,7 +26,7 @@ async fn main() -> anyhow::Result<()> {
         let mut task_list = cmd_line_args
             .lots
             .split(',')
-            .map(|lot| export_lot(lot, &export_path, cmd_line_args.verbeux, &db_pool))
+            .map(|lot| export_lot(lot, &app_settings, &db_pool))
             .collect::<FuturesUnordered<_>>();
 
         while let Some(task) = task_list.next().await {
@@ -38,7 +38,7 @@ async fn main() -> anyhow::Result<()> {
     if !cmd_line_args.modèles.is_empty() {
         // If the quantity command line arg is zero, use the default specified in settings
         let quantity = if cmd_line_args.quantité == 0 {
-            settings.liste.default_bom_qty
+            app_settings.liste.default_bom_qty
         } else {
             cmd_line_args.quantité
         };
@@ -46,15 +46,7 @@ async fn main() -> anyhow::Result<()> {
         let mut task_list = cmd_line_args
             .modèles
             .split(',')
-            .map(|model| {
-                export_model(
-                    model,
-                    quantity,
-                    &export_path,
-                    cmd_line_args.verbeux,
-                    &db_pool,
-                )
-            })
+            .map(|model| export_model(model, quantity, &app_settings, &db_pool))
             .collect::<FuturesUnordered<_>>();
 
         while let Some(task) = task_list.next().await {

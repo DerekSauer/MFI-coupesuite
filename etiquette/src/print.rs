@@ -61,7 +61,7 @@ pub async fn print_label(
     print_to_printer(
         &pdf_path.to_string_lossy(),
         quantity,
-        print_settings.printer_name,
+        &app_settings.etiquette.nom_imprimante,
         &PaperSize::CSLabel,
         &PaperOrientation::Portrait,
         print_settings.ghostscript_path,

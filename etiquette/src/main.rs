@@ -19,7 +19,6 @@ async fn main() -> anyhow::Result<()> {
 
     // Setup label printing dependencies common to all prints
     let print_settings = PrintSettings {
-        printer_name: &app_settings.etiquette.nom_imprimante,
         ghostscript_path: &app_settings.ghostscript.location,
         tera: &templates::load_templates().await?,
         pdf_renderer: &HtmlToPdf::new(Some(&app_settings.chromium.location)).await?,
