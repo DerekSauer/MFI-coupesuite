@@ -1,6 +1,6 @@
 [package]
 name = "coupesuite-shared"
-version = "0.2.0"
+version = "1.0.0"
 edition = "2021"
 authors = ["Derek Sauer <dsauer@megalak.ca>"]
 description = "Fonctions communes à travers Coupésuite."
