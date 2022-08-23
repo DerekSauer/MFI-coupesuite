@@ -33,7 +33,7 @@ pub async fn print_dessins(
     app_settings: &Settings,
     print_settings: &PrintSettings<'_>,
 ) -> anyhow::Result<()> {
-    // Grab the bon de transfert's data from the database
+    // Grab the drawing data from the database
     let (mut dessin_data, sku_data) =
         DessinData::from_lot(lot_number, print_settings.db_pool).await?;
 
@@ -45,7 +45,7 @@ pub async fn print_dessins(
     // Add file path to drawing images
     let image_path = std::path::Path::new(&app_settings.dessins.fichier_dessins);
     for part in dessin_data.iter_mut() {
-        part.image_path = find_image(&part.part_number, &image_path)?
+        part.image_path = find_image(&part.part_number, image_path)?
             .to_string_lossy()
             .to_string();
     }
@@ -91,14 +91,11 @@ pub async fn print_dessins(
         &html_path.to_str().unwrap(),
         &pdf_path.to_str().unwrap()
     );
-    let mut pause = String::new();
-    std::io::stdin().read_line(&mut pause)?;
-    return Ok(());
 
     // Override default print quantity if needed
     let quantity = match quantity {
         Some(quantity) => quantity,
-        None => app_settings.bon.copies_defaut,
+        None => app_settings.dessins.copies_defaut,
     };
 
     // Print the PDF

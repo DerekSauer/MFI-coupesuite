@@ -22,89 +22,106 @@
         </div>
         <div class="data_container">
             <div class="data_header">
-                <div class="data_model_label">No. modèle - Lettre de la pièce</div>
-                <div class="data_model">{{ sku_data.sku }}-{{ row.lettre }}</div>
-            </div>
-            <div class="data_quantities">
-                <div>Qté a produire</div>
-                <div>Qté de trous</div>
-                <div>Lettre</div>
-                <div>{{ row.req_quantity }}</div>
-                <div>{{ row.num_holes }}</div>
-                <div></div>
+                <div class="data_model_label border_bottom">No. modèle - Lettre de la pièce</div>
+                <div class="data_model overflow">{{ sku_data.sku }}{% if row.lettre != '' %}-{{ row.lettre }}{% endif %}
+                </div>
             </div>
             <div class="data_part_desc">
-                <div>{{ row.part_description }}</div>
-                <div>{{ row.part_number }}</div>
+                <div class="data_heading border_right overflow">{{ row.part_description }}</div>
+                <div class="data_heading">{{ row.part_number }}</div>
+            </div>
+            <div class="data_quantities">
+                <div class="border_bottom data_heading">Qté a produire</div>
+                <div class="border_bottom border_left border_right data_heading">No. de trous</div>
+                <div class="border_bottom data_heading">Lettre</div>
+                <div class="data_big_text">{{ row.req_quantity }}</div>
+                <div class="border_left border_right data_big_text">{{ row.num_holes }}</div>
+                <div></div>
             </div>
             <div class="data_pallets">
-                <div>Qté par palette</div>
-                <div>Pallete</div>
-                <div>{{ row.parts_per_pallet }}</div>
+                <div class="data_heading border_bottom border_right">Qté par palette</div>
+                <div class="data_heading border_bottom">Pallete</div>
+                <div class="border_right">{{ row.parts_per_pallet }}</div>
                 <div>{{ row.pallet_number }} de {{ row.total_pallets }}</div>
             </div>
             <div class="data_material">
-                <div class="data_material_color">{{ row.material_color }}</div>
-                <div>Code couleur</div>
-                <div>Épaisseur</div>
-                <div>No. faces Lam.</div>
+                <div class="data_material_color data_heading border_bottom">{% if row.material_code == '040' %}CARTON{%
+                    else %}{{ row.material_color }}{% endif %}</div>
+                <div class="data_small_text">Code couleur</div>
+                <div class="data_small_text border_left border_right">Épaisseur</div>
+                <div class="data_small_text">No. faces Lam.</div>
                 <div>{{ row.material_code }}</div>
-                <div>{{ row.thickness }}</div>
+                <div class="border_left border_right">{{ row.thickness }}</div>
                 <div>{{ row.material_faces }}</div>
             </div>
             <div class="data_dimensions">
-                <div class="data_dimensions_label">Dimensions brutes</div>
-                <div>Longueuer</div>
-                <div>Largeur</div>
-                <div>{{ row.length }}</div>
-                <div>{{ row.width }}</div>
+                <div class="data_dimensions_label data_heading">Dimensions brutes</div>
+                <div class="data_small_text border_left border_right">Longueuer</div>
+                <div class="data_small_text">Largeur</div>
+                <div class="border_left border_right data_heading">{{ row.length }}</div>
+                <div class="data_heading">{{ row.width }}</div>
             </div>
             <div class="data_cnc">
-                <div>Machine CNC</div>
-                <div>Programme CNC</div>
-                <div>{{ row.cnc_machines }}</div>
+                <div class="data_heading border_bottom border_right">Machine CNC</div>
+                <div class="data_heading border_bottom">Programme CNC</div>
+                <div class="border_right overflow">{{ row.cnc_machines }}</div>
                 <div>{{ row.cnc_program }}</div>
             </div>
             <div class="data_project">
-                <div>No. projet</div>
-                <div>Projet maître</div>
-                <div>{{ row.project_number }}</div>
+                <div class="data_heading border_bottom border_right">No. projet</div>
+                <div class="data_heading border_bottom">Projet maître</div>
+                <div class="border_right">{{ row.project_number }}</div>
                 <div>{{ lot_number }}</div>
             </div>
-            <div class="data_tracking">
-                <div></div>
-                <div>Setup</div>
-                <div>Operateur</div>
-                <div>Machine</div>
-                <div>Total fini</div>
-
-                <div>Couper</div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-
-                <div>Edge</div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-
-                <div>Usinage</div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-
-                <div>Inspection</div>
-                <div class="data_signature"></div>
-
-                <div></div>
-                <div class="data_final">Total prêt à expédier</div>
-                <div></div>
+            <div>
+                <table class="data_table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th class="data_tracking_column_header">Setup</th>
+                            <th class="data_tracking_column_header">Operateur</th>
+                            <th class="data_tracking_column_header">Machine</th>
+                            <th class="data_tracking_column_header">Total fini</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="data_tracking_row_header">Couper</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="data_tracking_row_header">Edge</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="data_tracking_row_header">Usinage</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="data_tracking_row_header">Inspection</th>
+                            <td colspan="4"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="data_tracking_row_header data_tracking_signature data_thick_border">
+                                Total prêt à expédier
+                            </td>
+                            <td class="data_thick_border"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="barcodes_container">
+            <div></div>
             <div class="barcode_cell">
                 <div class="barcode_label">Programme edge</div>
                 <div class="barcode">*{{ row.edge_program }}*</div>

@@ -1,8 +1,9 @@
 * {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 10pt;
+    font-size: 12pt;
     padding: 0;
     margin: 0;
+    border-collapse: collapse;
 }
 
 @font-face {
@@ -13,7 +14,7 @@
 @media print {
     @page {
         size: legal landscape;
-        margin: 0.25in;
+        margin: 0.23in;
     }
 }
 
@@ -28,6 +29,38 @@
 .overflow {
     white-space: nowrap;
     overflow: hidden;
+}
+
+.border_top {
+    border-top: 1px solid black;
+}
+
+.border_bottom {
+    border-bottom: 1px solid black;
+}
+
+.border_left {
+    border-left: 1px solid black;
+}
+
+.border_right {
+    border-right: 1px solid black;
+}
+
+.border_top_t {
+    border-top: 2px solid black;
+}
+
+.border_bottom_t {
+    border-bottom: 2px solid black;
+}
+
+.border_left_t {
+    border-left: 2px solid black;
+}
+
+.border_right_t {
+    border-right: 2px solid black;
 }
 
 /*** PAGE CONTAINER **********************************************************/
@@ -46,7 +79,7 @@
     column-gap: 0.1in;
     row-gap: 0.05in;
 
-    break-after: page;
+    page-break-after: always;
 }
 
 /*** DRAWING CONTAINER *******************************************************/
@@ -67,15 +100,35 @@
     display: grid;
     grid-area: data;
     row-gap: 2mm;
+    align-items: start;
+    align-content: space-between;
+    text-align: center;
 }
 
-.border_1px {
-    outline: 1px solid black;
+.data_heading {
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.data_heading_emphasis {
+    font-size: 12pt;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+}
+
+.data_big_text {
+    font-size: 24pt;
+    font-weight: bold;
+}
+
+.data_small_text {
+    font-size: 8pt;
 }
 
 .data_header {
     display: grid;
-    grid-template-rows: auto auto;
+    grid-template-rows: 1fr auto;
     border: 2px solid black;
 }
 
@@ -83,7 +136,7 @@
     font-size: 12pt;
     font-weight: bold;
     text-align: center;
-    align-items: center;
+    align-items: end;
 }
 
 .data_model {
@@ -96,8 +149,8 @@
 
 .data_quantities {
     display: grid;
-    grid-template-columns: auto auto auto;
-    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr;
     border: 2px solid black;
 }
 
@@ -143,6 +196,7 @@
 .data_dimensions_label {
     display: grid;
     grid-area: label;
+    align-content: center;
 }
 
 .data_cnc {
@@ -159,39 +213,47 @@
     border: 2px solid black;
 }
 
-.data_tracking {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto auto auto auto auto auto;
-    grid-template-areas:
-        "header  setup     operator  machine   total    "
-        "couper  setup1    operator1 machine1  total1   "
-        "edge    setup2    operator2 machine2  total2   "
-        "usinage setup3    operator3 machine2  total3   "
-        "inspect signature signature signature signature"
-        "footer  final     final     final     pret     ";
-
+.data_table {
+    width: 100%;
     border: 2px solid black;
 }
 
-.data_signature {
-    display: grid;
-    grid-area: signature
+td,
+th {
+    height: 7mm;
+    padding: 1mm;
+    border: 1px solid black;
 }
 
-.data_final {
-    display: grid;
-    grid-area: final;
+.data_thick_border {
+    border: 2px solid black;
+}
+
+.data_tracking_column_header {
+    font-size: 10pt;
+    font-weight: bold;
+    width: 20%;
+}
+
+.data_tracking_row_header {
+    font-size: 10pt;
+    font-weight: bold;
+    text-align: right;
+}
+
+.data_tracking_signature {
+    font-size: 12pt;
+    font-weight: bold;
 }
 
 /*** BARCODES CONTAINER ******************************************************/
 .barcodes_container {
     display: grid;
     grid-area: barcodes;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 100% 1fr 1fr 1fr;
     grid-template-rows: auto;
-    grid-template-areas: "edge project cnc";
-    column-gap: 1.0in;
+    grid-template-areas: "filler edge project cnc";
+    column-gap: 0.75in;
     justify-content: right;
 }
 
@@ -216,7 +278,7 @@
     font-family: LibreBarcode39;
     font-weight: normal;
     font-size: 36pt;
-    transform: translateY(-1.5mm) scale(0.8, 1.2);
+    transform: translateY(-1.25mm) scale(0.8, 1.2);
     text-align: center;
     align-content: center;
 }
