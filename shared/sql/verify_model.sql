@@ -20,7 +20,7 @@ GROUP BY
 )
 
 SELECT
-    TRIM(UPPER(TO_ASCII(part.prt_no, 'LATIN1'))) AS sku,
+    TRIM(UPPER(TO_ASCII(REPLACE(part.prt_no, '90-', ''), 'LATIN1'))) AS sku,
     TRIM(UPPER(TO_ASCII(part.prt_desc1, 'LATIN1'))) AS description,
     0::INT AS quantity,
     part_group.pgr_no = '765' AS kanban,

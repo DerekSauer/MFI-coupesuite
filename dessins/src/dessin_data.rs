@@ -77,9 +77,7 @@ impl DessinData {
         let lot_number = try_parse_lot(lot_number)?;
 
         // verify_lot() will bail if the lot number doesn't exist or the DB fails
-        // Remove the leading '90-' from the SKU for a cleaner model number
-        let mut sku_info = verify_lot(lot_number, db_pool).await?;
-        sku_info.sku = sku_info.sku.replace("90-", "");
+        let sku_info = verify_lot(lot_number, db_pool).await?;
 
         Ok((
             sqlx::query_as::<_, DessinData>(query)

@@ -1,6 +1,6 @@
 [package]
 name = "coupesuite-liste"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 authors = ["Derek Sauer <dsauer@megalak.ca>"]
 description = "Générez des listes de coupe pour le logiciel d'optimisation de nos scies à panneaux."
