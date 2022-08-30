@@ -42,7 +42,7 @@ GROUP BY
 )
   
 SELECT
-    project.prj_source_no AS project_number,
+    project.prj_no AS project_number,
     UPPER(TRIM(TO_ASCII(part.prt_no, 'LATIN1'))) AS part_number,
     UPPER(TRIM(TO_ASCII(part.prt_desc1, 'LATIN1'))) AS part_description,
     project.prj_req_qty::INT AS req_quantity,
