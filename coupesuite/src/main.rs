@@ -28,6 +28,13 @@ async fn main() -> anyhow::Result<()> {
 
     for lot_number in cmd_line_args.lots.split(',') {
         print_lot(lot_number, &app_settings, &print_settings).await?;
+
+        // Pause processing if the user wants a delay between each lot
+        if cmd_line_args.pause {
+            use std::io::{stdin, Read};
+            println!("Lot #{lot_number} terminé, appuyez sur ENTER pour continuer.");
+            stdin().read(&mut [0])?;
+        }
     }
 
     Ok(())

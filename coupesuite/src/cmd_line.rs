@@ -7,4 +7,8 @@ pub struct Args {
     /// Liste délimitée par des virgules de numéros de lot.
     #[clap(value_parser)]
     pub lots: String,
+
+    /// Pause du traitement entre chaque lot (pour changer de papier)?
+    #[clap(short, long, action)]
+    pub pause: bool,
 }
