@@ -31,9 +31,10 @@ async fn main() -> anyhow::Result<()> {
 
         // Pause processing if the user wants a delay between each lot
         if cmd_line_args.pause {
-            use std::io::{stdin, Read};
+            use std::io::stdin;
             println!("Lot #{lot_number} terminé, appuyez sur ENTER pour continuer.");
-            stdin().read(&mut [0])?;
+            let mut temp = String::new();
+            stdin().read_line(&mut temp)?;
         }
     }
 
