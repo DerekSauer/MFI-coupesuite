@@ -44,8 +44,12 @@ FROM
             ON part.prt_id = common_skus.prt_id
 
 WHERE
-        part_group.pgr_no = '760'
-    AND project.prj_source_no = $1
+        project.prj_source_no = $1
+    AND part_group.pgr_no IN ('760', '770')
+    AND part.prt_desc1 NOT LIKE 'FOAM%'
+    AND part.prt_no NOT LIKE '040-ANTIT%'
+    AND part.prt_no <> '040-0057'
+    AND part.prt_no <> '040-0073'
 
 ORDER BY
     part_letter
