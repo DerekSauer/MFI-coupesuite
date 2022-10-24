@@ -10,6 +10,10 @@ default_bom_qty = 100                   # Quantité défaut lorsque la quantité
 nom_imprimante = "Zebra (Bureau Derek)" # Trouver avec, `wmic printer get name`
 extra = 6                               # Nombre copies extra a l'imprimées
 
+# Paramètres de l'imprimante d'étiquettes.
+[edge]
+nom_imprimante = "Zebra (Bureau Derek)" # Trouver avec, `wmic printer get name`
+
 # Paramètres d'impression du formulaire de production
 [formulaire]
 nom_imprimante = "Back Office Printer"  # Trouver avec, `wmic printer get name`

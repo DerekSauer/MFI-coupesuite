@@ -15,6 +15,9 @@ pub struct Settings {
     /// Etiquette application settings.
     pub etiquette: EtiquetteSettings,
 
+    /// Edge application settings.
+    pub edge: EdgeSettings,
+
     /// Production form application settings.
     pub formulaire: FormulaireSettings,
 
@@ -52,6 +55,13 @@ pub struct EtiquetteSettings {
 
     /// Number of labels printed will be rounded up to this multiple.
     pub extra: u32,
+}
+
+/// Settings for the `edge` application.
+#[derive(Deserialize, Debug)]
+pub struct EdgeSettings {
+    /// Windows printer name of the label printer device.
+    pub nom_imprimante: String,
 }
 
 /// Settings for the `formulaire` application.

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Etiquette plaqueues - {{ no_piece }}</title>
+    <meta name="description" content="Autocollant du plaqueues robotisé." />
+    <meta name="author" content="Megalak Finition Inc." />
+
+    <link rel="stylesheet" href="{{ working_dir }}\www\normalize.css" />
+    <link rel="stylesheet" href="{{ working_dir }}\www\labels\edge.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="edge_top">{{ edge_haut }}</div>
+      <div class="inner_container">
+        <div class="edge_left">{{ edge_gauche }}</div>
+        <div class="image_container">
+          <img src="{{ datamatrix }}" alt="datamatrix" />
+        </div>
+        <div class="data_container">
+          <div class="no_piece">{{ no_piece }}</div>
+          <p>{{ desc_piece }}</p>
+          <p><b>Dims:</b> {{ longueur }} × {{ largeur }} × {{ epaisseur }}</p>
+          <p><b>Faces laminées:</b> {{ face_laminees }}</p>
+        </div>
+        <div class="edge_right">{{ edge_droite }}</div>
+      </div>
+      <div class="edge_bottom">{{ edge_bas }}</div>
+    </div>
+  </body>
+</html>

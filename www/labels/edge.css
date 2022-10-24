@@ -1,0 +1,81 @@
+* {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 3.9in;
+  height: 1.9in;
+}
+
+@media print {
+  @page {
+    size: 4in 2in portrait;
+    margin: 0.05in;
+  }
+}
+
+.container {
+  display: grid;
+  grid-template-rows: 5mm auto 5mm;
+}
+
+.inner_container {
+  display: grid;
+  grid-template-columns: 5mm 35mm auto 5mm;
+}
+
+.image_container {
+  display: grid;
+  margin: 1mm;
+}
+
+.data_container {
+  display: grid;
+  border-left: 1px solid black;
+}
+
+.no_piece {
+  display: grid;
+  font-weight: bold;
+  font-size: 125%;
+  border-bottom: 1px solid black;
+  justify-items: center;
+  align-items: center;
+}
+
+.edge_top {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  border: 1px solid black;
+}
+
+.edge_bottom {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  border: 1px solid black;
+}
+
+.edge_left {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  text-orientation: mixed;
+  writing-mode: vertical-rl;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+
+.edge_right {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  text-orientation: mixed;
+  writing-mode: vertical-lr;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}

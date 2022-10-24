@@ -1,0 +1,28 @@
+[package]
+name = "coupesuite-edge"
+version = "0.0.1"
+edition = "2021"
+authors = ["Derek Sauer <dsauer@megalak.ca>"]
+description = "Imprimez des étiquettes de plaquese."
+license = "MPL-2.0"
+
+[[bin]]
+name = "edge"
+path = "src/main.rs"
+
+[lib]
+name = "edge"
+path = "src/lib.rs"
+
+[dependencies]
+anyhow = "1.0.58"
+coupesuite-shared = { path = "../shared" }
+clap = { version = "3.2.6", features = ["derive"] }
+tokio = { version = "1.19.2", features = ["fs", "macros", "rt"] }
+serde = { version = "1.0.137", features = ["derive"] }
+sqlx = { version = "0.6.0", features = ["runtime-tokio-rustls", "postgres"] }
+tera = { version = "1.16.0", default-features = false }
+tempfile = "3.3.0"
+futures = "0.3.21"
+chrono = "0.4.22"
+datamatrix = { version = "0.3.0", default-features = false }
