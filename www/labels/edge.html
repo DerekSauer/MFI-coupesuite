@@ -29,7 +29,10 @@
         <div class="data_container">
           <div class="no_piece">{{ no_piece }}</div>
           <p>{{ desc_piece }}</p>
-          <p><b>Dims:</b> {{ longueur }} × {{ largeur }} × {{ epaisseur }}</p>
+          <p>
+            <b>Dims:</b> {{ longueur | round(precision=2) }} × {{ largeur |
+            round(precision=2) }} × {{ epaisseur | round(precision=2) }}
+          </p>
           <p><b>Faces laminées:</b> {{ face_laminees }}</p>
         </div>
         <div class="edge_right"><p class="rotate_cw">{{ edge_droite }}</p></div>
