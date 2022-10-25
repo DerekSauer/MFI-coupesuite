@@ -6,30 +6,43 @@
 }
 
 body {
-  width: 3.9in;
-  height: 1.9in;
+  width: 4in;
+  height: 2in;
 }
 
 @media print {
   @page {
     size: 4in 2in portrait;
-    margin: 0.05in;
+    margin: 0;
   }
 }
 
 .container {
   display: grid;
-  grid-template-rows: 5mm auto 5mm;
+  grid-template-rows: 5mm 1fr 5mm;
+  margin: 2mm;
 }
 
 .inner_container {
   display: grid;
-  grid-template-columns: 5mm 35mm auto 5mm;
+  grid-template-columns: 5mm 38mm auto 5mm;
+}
+
+img {
+  min-width: 33.1mm;
+  width: 33.1mm;
+  max-width: 33.1mm;
+
+  min-height: 33.1mm;
+  height: 33.1mm;
+  max-height: 33.1mm;
+
+  margin: auto;
 }
 
 .image_container {
   display: grid;
-  margin: 1mm;
+  min-height: 38mm;
 }
 
 .data_container {
@@ -64,8 +77,6 @@ body {
   display: grid;
   justify-items: center;
   align-items: center;
-  text-orientation: mixed;
-  writing-mode: vertical-rl;
   border-left: 1px solid black;
   border-right: 1px solid black;
 }
@@ -74,8 +85,19 @@ body {
   display: grid;
   justify-items: center;
   align-items: center;
-  text-orientation: mixed;
-  writing-mode: vertical-lr;
   border-left: 1px solid black;
   border-right: 1px solid black;
+}
+
+.rotate_cw {
+  writing-mode: vertical-lr;
+  transform: scale(-1);
+}
+
+.rotate_ccw {
+  writing-mode: vertical-rl;
+}
+
+.rotate_top {
+  transform: scale(-1);
 }

@@ -15,11 +15,16 @@
 
   <body>
     <div class="container">
-      <div class="edge_top">{{ edge_haut }}</div>
+      <div class="edge_top"><p class="rotate_top">{{ edge_haut }}</p></div>
       <div class="inner_container">
-        <div class="edge_left">{{ edge_gauche }}</div>
+        <div class="edge_left"><p class="rotate_ccw">{{ edge_gauche }}</p></div>
         <div class="image_container">
-          <img src="{{ datamatrix }}" alt="datamatrix" />
+          <img
+            src="{{ datamatrix }}"
+            alt="datamatrix"
+            width="264"
+            height="264"
+          />
         </div>
         <div class="data_container">
           <div class="no_piece">{{ no_piece }}</div>
@@ -27,9 +32,9 @@
           <p><b>Dims:</b> {{ longueur }} × {{ largeur }} × {{ epaisseur }}</p>
           <p><b>Faces laminées:</b> {{ face_laminees }}</p>
         </div>
-        <div class="edge_right">{{ edge_droite }}</div>
+        <div class="edge_right"><p class="rotate_cw">{{ edge_droite }}</p></div>
       </div>
-      <div class="edge_bottom">{{ edge_bas }}</div>
+      <div class="edge_bottom"><p>{{ edge_bas }}</p></div>
     </div>
   </body>
 </html>
