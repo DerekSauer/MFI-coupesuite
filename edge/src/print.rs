@@ -15,13 +15,15 @@ pub async fn print_label(
     print_settings: &PrintSettings<'_>,
 ) -> anyhow::Result<()> {
     // Grab the label's data from the database
-    let label_data = label_data::LabelData::from_part(part_number, print_settings.db_pool).await?;
+    let label_data = match label_data::LabelData::from_part(part_number, print_settings.db_pool).await {
+        Ok(data) => data,
+        Err(_) => anyhow::bail!("Numéro de pièce invalide: {}", part_number)
+    };
 
-    // Render a datamatrix of the part number
     let datamatrix_path = &print_settings
         .temp_path
         .join(format!("EdgeLabel DM {}.svg", label_data.no_piece));
-    generate_datamatrix_svg(&label_data.no_piece, &datamatrix_path.to_string_lossy())?;
+    generate_datamatrix_svg(&label_data.no_piece, datamatrix_path)?;
 
     // Load label data into the templating engine
     let mut context = tera::Context::from_serialize(&label_data)?;
@@ -56,11 +58,6 @@ pub async fn print_label(
     // If the user asked for a specific quantity, print that other wise just one label
     let quantity: u32 = quantity.unwrap_or(1);
 
-    // Debugging
-    println!("{}", html_path.to_string_lossy());
-    let mut debug_buffer = String::new();
-    std::io::stdin().read_line(&mut debug_buffer)?;
-
     // Print the PDF
     print_to_printer(
         &pdf_path.to_string_lossy(),
@@ -78,7 +75,7 @@ pub async fn print_label(
 ///
 /// * `part_number`: Part number.
 /// * `filepath`: Path to where the datamatrix image should be stored.
-fn generate_datamatrix_svg(part_number: &str, filepath: &str) -> anyhow::Result<()> {
+fn generate_datamatrix_svg(part_number: &str, filepath: &impl AsRef<std::path::Path>) -> anyhow::Result<()> {
     use datamatrix::{placement::PathSegment, DataMatrix, SymbolList};
     use std::fmt::Write;
     use std::fs::File;
