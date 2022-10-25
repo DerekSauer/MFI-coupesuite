@@ -1,5 +1,5 @@
 [workspace]
-members = ["bon", "coupesuite", "dessins", "edge", "etiquette", "formulaire", "liste", "shared"]
+members = ["bon", "coupesuite", "dessins", "edge", "etiquette", "formulaire", "liste", "shared", "publish"]
 
 [profile.release]
 lto = "fat"

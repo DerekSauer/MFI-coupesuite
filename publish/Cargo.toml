@@ -1,0 +1,17 @@
+[package]
+name = "coupesuite-publish"
+version = "1.0.0"
+edition = "2021"
+authors = ["Derek Sauer <dsauer@megalak.ca>"]
+description = "Package the application workspace into a distribution directory."
+license = "MPL-2.0"
+
+[[bin]]
+name = "publish"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0.58"
+fs_extra = "1.2.0"
+serde = { version = "1.0.137", features = ["derive"] }
+toml = "0.5"
