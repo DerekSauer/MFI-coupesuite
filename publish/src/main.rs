@@ -1,8 +1,6 @@
+use coupesuite_shared::settings::Settings;
 use serde::Deserialize;
-use std::{
-    fs::File,
-    io::{Read, Write},
-};
+use std::{fs::File, io::Read, path::PathBuf};
 
 /// Root structure of the workspace's `Cargo.toml`.
 #[derive(Deserialize, Debug)]
@@ -23,6 +21,8 @@ struct Workspace {
 /// that can be installed on other machines. This application must be called
 /// from the root directory of the workspace.
 fn main() -> anyhow::Result<()> {
+    let app_settings = Settings::load(&std::env::current_dir()?.join("coupesuite.toml"))?;
+
     let root_directory = std::env::current_dir()?;
 
     // Create and/or empty the `dist` directory
@@ -104,6 +104,22 @@ fn main() -> anyhow::Result<()> {
             .join("dist")
             .join("coupesuite.toml")
             .display()
+    );
+
+    // Copy Ghostscript binaries to the workspace directory
+    let mut gs_path = PathBuf::from(&app_settings.ghostscript.location);
+    gs_path.pop();
+
+    let copy_options = fs_extra::dir::CopyOptions {
+        content_only: true,
+        ..Default::default()
+    };
+    fs_extra::dir::copy(&gs_path, &root_directory.join("dist"), &copy_options)?;
+
+    println!(
+        "{} -> {}",
+        &gs_path.display(),
+        &root_directory.join("dist").display()
     );
 
     Ok(())
