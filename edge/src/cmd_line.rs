@@ -11,4 +11,8 @@ pub struct Args {
     /// Le nombre d'étiquettes imprimées.
     #[clap(short, long, value_parser)]
     pub quantité: Option<u32>,
+
+    /// Enregistrez une copie des documents au format PDF dans ce répertoire.
+    #[clap(short, long, action)]
+    pub enregistrer: bool,
 }
