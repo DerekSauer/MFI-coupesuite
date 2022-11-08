@@ -97,7 +97,7 @@ pub async fn print_dessins(
         // If the user wants a PDF copy for themselves save one to the current directory
         if save_local_pdf {
             path_list.push(PathBuf::from(format!(
-                "./Bon de transfert - {} ({}).pdf",
+                "./Dessins - {} ({}).pdf",
                 &sku_data.sku, lot_number
             )));
         }
