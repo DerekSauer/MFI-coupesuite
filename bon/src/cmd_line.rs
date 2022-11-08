@@ -12,7 +12,7 @@ pub struct Args {
     #[clap(short, long, value_parser)]
     pub quantité: Option<u32>,
 
-    // Enregistrez une copie des documents au format PDF dans ce répertoire.
+    /// Enregistrez une copie des documents au format PDF.
     #[clap(short, long, action)]
     pub enregistrer: bool,
 }
