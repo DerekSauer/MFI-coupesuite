@@ -6,14 +6,14 @@
 }
 
 body {
-  width: 4in;
-  height: 2in;
+  width: 3.90in;
+  height: 1.90in;
 }
 
 @media print {
   @page {
     size: 4in 2in portrait;
-    margin: 0;
+    margin: 0.00in;
   }
 }
 
