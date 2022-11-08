@@ -71,7 +71,7 @@ pub async fn print_label(
 
         // If the user wants a PDF copy for themselves save one to the current directory
         if save_local_pdf {
-            path_list.push(PathBuf::from(format!(
+            path_list.push(PathBuf::from(&app_settings.pdf.location).join(format!(
                 "./Etiquette de service - {} ({}).pdf",
                 &sku_info.sku, lot_number
             )));

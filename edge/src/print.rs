@@ -63,10 +63,10 @@ pub async fn print_label(
 
         // If the user wants a PDF copy for themselves save one to the current directory
         if save_local_pdf {
-            path_list.push(PathBuf::from(format!(
-                "./Etiquette Edge - {}.pdf",
-                &label_data.no_piece
-            )));
+            path_list.push(
+                PathBuf::from(&app_settings.pdf.location)
+                    .join(format!("./Etiquette Edge - {}.pdf", &label_data.no_piece)),
+            );
         }
 
         // Convert the rendered HTML to PDF
