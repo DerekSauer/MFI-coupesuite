@@ -55,10 +55,10 @@ async fn print_lot(
 ) -> anyhow::Result<()> {
     tokio::try_join!(
         export_lot(lot_number, app_settings, print_settings.db_pool),
-        print_label(lot_number, None, app_settings, print_settings),
-        print_form(lot_number, None, app_settings, print_settings),
-        print_bon(lot_number, None, app_settings, print_settings),
-        print_dessins(lot_number, None, app_settings, print_settings)
+        print_label(lot_number, None, false, app_settings, print_settings),
+        print_form(lot_number, None, false, app_settings, print_settings),
+        print_bon(lot_number, None, false, app_settings, print_settings),
+        print_dessins(lot_number, None, false, app_settings, print_settings)
     )?;
 
     Ok(())
