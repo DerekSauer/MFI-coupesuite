@@ -1,6 +1,6 @@
 [package]
 name = "coupesuite-bon"
-version = "1.0.2"
+version = "1.1.0"
 edition = "2021"
 authors = ["Derek Sauer <dsauer@megalak.ca>"]
 description = "Imprimez le bon de transfert."
