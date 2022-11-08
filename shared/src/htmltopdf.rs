@@ -54,7 +54,7 @@ impl HtmlToPdf {
         input_html_path: &impl AsRef<Path>,
         paper_size: &PaperSize,
         paper_orientation: &PaperOrientation,
-        output_pdf_path: &impl AsRef<Path>,
+        output_pdf_path: &[impl AsRef<Path>],
     ) -> anyhow::Result<()> {
         // Open the HTML file in the browser
         let page = self
@@ -75,7 +75,10 @@ impl HtmlToPdf {
         };
 
         // Save the PDF to disk and cleanup
-        page.save_pdf(pdf_params, output_pdf_path).await?;
+        for path in output_pdf_path {
+            let pdf_params = pdf_params.clone();
+            page.save_pdf(pdf_params, path).await?;
+        }
         page.close().await?;
 
         Ok(())
