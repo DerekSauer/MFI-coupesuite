@@ -30,7 +30,15 @@ async fn main() -> anyhow::Result<()> {
     let mut task_list = cmd_line_args
         .lots
         .split(',')
-        .map(|lot| print_label(lot, cmd_line_args.quantité, &app_settings, &print_settings))
+        .map(|lot| {
+            print_label(
+                lot,
+                cmd_line_args.quantité,
+                cmd_line_args.enregistrer,
+                &app_settings,
+                &print_settings,
+            )
+        })
         .collect::<FuturesUnordered<_>>();
 
     // Execute print jobs
