@@ -35,6 +35,9 @@ pub struct Settings {
 
     /// Ghostscript settings.
     pub ghostscript: GhostScript,
+
+    /// PDF settings.
+    pub pdf: Pdf,
 }
 
 /// Settings for the `liste` application.
@@ -114,6 +117,13 @@ pub struct Chromium {
 #[derive(Deserialize, Debug)]
 pub struct GhostScript {
     /// File path to Ghostscript.
+    pub location: String,
+}
+
+/// Settings for the file location of PDFs the user want to permanently save.
+#[derive(Deserialize, Debug)]
+pub struct Pdf {
+    /// File path where PDFs should be saved.
     pub location: String,
 }
 

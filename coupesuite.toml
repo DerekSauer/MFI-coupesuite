@@ -19,7 +19,7 @@ nom_imprimante = "Zebra (Bureau Derek)" # Trouver avec, `wmic printer get name`
 nom_imprimante = "Back Office Printer"  # Trouver avec, `wmic printer get name`
 copies_defaut = 1                       # Nombre de copies par défaut
 copies_mdf = 2                          # Nombre de copies par défaut pour les projets avec MDF
-fichier_images = "S:/MFI/Images pour Feuille De Production"
+fichier_images = "S:/MFI/Images pour Feuille De Production/"
 
 # Paramètres d'impression du bon de transfert.
 [bon]
@@ -30,7 +30,7 @@ copies_defaut = 1                       # Nombre de copies par défaut
 [dessins]
 nom_imprimante = "Back Office Printer"  # Trouver avec, `wmic printer get name`
 copies_defaut = 1                       # Nombre de copies par défaut
-fichier_dessins = "S:/MFI/Dessins"      # Location des images des dessins
+fichier_dessins = "S:/MFI/Dessins/"      # Location des images des dessins
 
 # SIGM database
 [database]
@@ -46,3 +46,7 @@ location = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
 # Location de `Ghostscript` pour l'impression des PDFs
 [ghostscript]
 location = "C:/Users/DSauer/scoop/apps/ghostscript/current/bin/gswin64c.exe"
+
+# Chemin du fichier où les PDF doivent être enregistrés. 
+[pdf]
+location = "C:/Users/DSauer/Downloads/"
