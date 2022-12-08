@@ -6,7 +6,7 @@ use clap::Parser;
 pub struct Args {
     /// Liste délimitée par des virgules de numéros de pièces.
     #[clap(value_parser)]
-    pub pieces: String,
+    pub pièces: Option<String>,
 
     /// Le nombre d'étiquettes imprimées.
     #[clap(short, long, value_parser)]
@@ -15,4 +15,8 @@ pub struct Args {
     /// Enregistrez une copie des documents au format PDF dans ce répertoire.
     #[clap(short, long, action)]
     pub enregistrer: bool,
+
+    /// Lancer l'application en mode serveur.
+    #[clap(short, long, action)]
+    pub serveur: bool,
 }
