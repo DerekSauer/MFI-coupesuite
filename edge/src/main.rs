@@ -39,7 +39,7 @@ async fn main() -> anyhow::Result<()> {
         println!("scannez un code-barres de numéro de pièce.             ");
         println!("Tapez <q> et appuyez sur <ENTER> pour quitter.         ");
         println!("=======================================================");
-        println!("");
+        println!();
 
         // Remain in an endless loop accepting inputs until the user kills the
         // application with `q`
@@ -56,7 +56,7 @@ async fn main() -> anyhow::Result<()> {
             } else {
                 // Handle other inputs
                 match print_label(
-                    &input.to_lowercase().trim(),
+                    input.to_lowercase().trim(),
                     cmd_line_args.quantité,
                     cmd_line_args.enregistrer,
                     &app_settings,
