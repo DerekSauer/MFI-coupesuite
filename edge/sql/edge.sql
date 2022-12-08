@@ -34,4 +34,6 @@ FROM
             ON SPLIT_PART(part.prt_no, '-', 1) = lamination.code_matiere
 
 WHERE
-    TRIM(part.prt_no) = $1
+    -- REMOVE DASHES IN THE INPUT AND TEST TERMS FOR COMPATIBILITY
+    -- WITH BARCODE SCANNERS IN THE SHOP
+    TRIM(REPLACE(part.prt_no, '-', '')) = TRIM(REPLACE($1, '-', ''))
