@@ -103,7 +103,7 @@ pub async fn print_bon(
         // Print the PDF
         if print_quantity > 0 {
             print_to_printer(
-                &pdf_temp_path.to_str().unwrap(),
+                pdf_temp_path.to_str().unwrap(),
                 print_quantity,
                 &app_settings.bon.nom_imprimante,
                 &PaperSize::Letter,

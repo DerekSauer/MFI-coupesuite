@@ -41,7 +41,7 @@ pub fn render_to_file(
     context: &tera::Context,
     output_path: &impl AsRef<std::path::Path>,
 ) -> anyhow::Result<()> {
-    let file = std::fs::File::create(&output_path)?;
+    let file = std::fs::File::create(output_path)?;
 
     Ok(tera.render_to(template_name, context, file)?)
 }

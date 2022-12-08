@@ -146,7 +146,7 @@ impl Settings {
     pub fn load(file_path: &impl AsRef<Path>) -> anyhow::Result<Self> {
         let mut toml_file = String::new();
 
-        File::open(&file_path).and_then(|mut file| file.read_to_string(&mut toml_file))?;
+        File::open(file_path).and_then(|mut file| file.read_to_string(&mut toml_file))?;
 
         Ok(toml::from_str(&toml_file)?)
     }

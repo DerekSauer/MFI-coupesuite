@@ -72,7 +72,7 @@ fn main() -> anyhow::Result<()> {
         let destination = &root_directory
             .join("dist")
             .join(format!("{}.exe", &project));
-        fs_extra::file::copy(&target, &destination, &fs_extra::file::CopyOptions::new())?;
+        fs_extra::file::copy(target, destination, &fs_extra::file::CopyOptions::new())?;
 
         println!("{} -> {}", &target.display(), &destination.display());
     }

@@ -49,7 +49,7 @@ pub fn print_to_printer(
     ];
 
     // Spawn Ghostscript to print the PDF
-    let status = std::process::Command::new(&ghostscript_path)
+    let status = std::process::Command::new(ghostscript_path)
         .args(&ghostscript_args)
         .status()?;
 
