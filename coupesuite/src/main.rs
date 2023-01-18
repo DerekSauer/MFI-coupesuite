@@ -8,8 +8,10 @@ use dessins::print::print_dessins;
 use etiquette::print::print_label;
 use formulaire::print::print_form;
 use liste::lot::export_lot;
+use lot_data::LotData;
 
 mod cmd_line;
+mod lot_data;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -26,8 +28,32 @@ async fn main() -> anyhow::Result<()> {
         db_pool: &database::get_database_pool(&app_settings.database).await?,
     };
 
-    for lot_number in cmd_line_args.lots.split(',') {
-        print_lot(lot_number, &app_settings, &print_settings).await?;
+    // Retrieve a list of lot number from the DB if printing today's lots (-j flag),
+    // or print the list given by the user
+    let lot_numbers: String = if cmd_line_args.jour {
+        match LotData::today(&print_settings.db_pool).await?.lot_numbers {
+            Some(lots) => lots,
+            None => anyhow::bail!("Aucun numéro de lot n'a été généré à la date d'aujourd'hui."),
+        }
+    } else {
+        match cmd_line_args.lots {
+            Some(lots) => lots,
+            None => anyhow::bail!(
+                "Veuillez entrer une liste de numéros de lots séparés par des virgules."
+            ),
+        }
+    };
+
+    // Print the documentation for each lot retrieved above
+    for lot_number in lot_numbers.split(',') {
+        print_lot(
+            lot_number,
+            cmd_line_args.quantité,
+            cmd_line_args.enregistrer,
+            &app_settings,
+            &print_settings,
+        )
+        .await?;
 
         // Pause processing if the user wants a delay between each lot
         if cmd_line_args.pause {
@@ -41,7 +67,7 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-/// Print all the productiondocumentation needed for a lot of furniture.
+/// Print all the production documentation needed for a lot of furniture.
 ///
 /// ## Remarks
 /// It does not matter in which order the documents for each lot exit the
@@ -50,15 +76,17 @@ async fn main() -> anyhow::Result<()> {
 /// but print each lot's documentation concurrently.
 async fn print_lot(
     lot_number: &str,
+    copies: Option<u32>,
+    save: bool,
     app_settings: &Settings,
     print_settings: &PrintSettings<'_>,
 ) -> anyhow::Result<()> {
     tokio::try_join!(
         export_lot(lot_number, app_settings, print_settings.db_pool),
-        print_label(lot_number, None, false, app_settings, print_settings),
-        print_form(lot_number, None, false, app_settings, print_settings),
-        print_bon(lot_number, None, false, app_settings, print_settings),
-        print_dessins(lot_number, None, false, app_settings, print_settings)
+        print_label(lot_number, copies, save, app_settings, print_settings),
+        print_form(lot_number, copies, save, app_settings, print_settings),
+        print_bon(lot_number, copies, save, app_settings, print_settings),
+        print_dessins(lot_number, copies, save, app_settings, print_settings)
     )?;
 
     Ok(())
