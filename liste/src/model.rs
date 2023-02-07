@@ -50,7 +50,7 @@ pub async fn export_model(
 ) -> anyhow::Result<()> {
     let (mut cutlist, sku_info) = process_model(model_number, db_pool)
         .await
-        .with_context(|| format!("Problème avec le numéro de modèle: {}", model_number))?;
+        .with_context(|| format!("Problème avec le numéro de modèle: {model_number}"))?;
 
     // Add real quantity to each row
     for row in cutlist.iter_mut() {

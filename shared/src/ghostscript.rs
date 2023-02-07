@@ -20,8 +20,8 @@ pub fn print_to_printer(
     paper_orientation: &PaperOrientation,
     ghostscript_path: &str,
 ) -> anyhow::Result<()> {
-    let output_printer = format!("-sOutputFile=%printer%{}", printer_name);
-    let print_quantity: String = format!("-dNumCopies={}", copies);
+    let output_printer = format!("-sOutputFile=%printer%{printer_name}");
+    let print_quantity: String = format!("-dNumCopies={copies}");
 
     // Function accepts paper size in inches but Ghostscript uses Points
     // A point is 1/72 of an inch

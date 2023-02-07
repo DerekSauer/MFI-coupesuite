@@ -94,13 +94,13 @@ pub async fn print_form(
         // Cache the rendered HTML to disk
         let html_path = print_settings
             .temp_path
-            .join(format!("Prod Form {}.html", lot_number));
+            .join(format!("Prod Form {lot_number}.html"));
         templates::render_to_file("form/form.html", print_settings.tera, &context, &html_path)?;
 
         // Temporary location to cache rendered PDFs
         let pdf_temp_path = &print_settings
             .temp_path
-            .join(format!("Prod Form {}.pdf", lot_number));
+            .join(format!("Prod Form {lot_number}.pdf"));
 
         // If the user wants a printed form, save the rendered PDF to a temp
         // directory prior to printing with Ghostscript
@@ -120,7 +120,7 @@ pub async fn print_form(
         // Convert the rendered HTML to PDF
         let pdf_path = &print_settings
             .temp_path
-            .join(format!("Prod Form {}.pdf", lot_number));
+            .join(format!("Prod Form {lot_number}.pdf"));
         print_settings
             .pdf_renderer
             .save_pdf(

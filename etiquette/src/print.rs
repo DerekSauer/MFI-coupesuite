@@ -32,9 +32,7 @@ pub async fn print_label(
         // Kanban models don't have labels, just bail
         if sku_info.kanban {
             println!(
-            "INFO: Le numéro de lot, {}, est un Kanban, l'impression de l'étiquette a été ignorée.",
-            lot_number,
-        );
+            "INFO: Le numéro de lot, {lot_number}, est un Kanban, l'impression de l'étiquette a été ignorée.");
             return Ok(());
         }
 
@@ -60,7 +58,7 @@ pub async fn print_label(
         // Temporary location to cache rendered PDFs
         let pdf_temp_path = &print_settings
             .temp_path
-            .join(format!("CSLabel {}.pdf", lot_number));
+            .join(format!("CSLabel {lot_number}.pdf"));
 
         // If the user wants a printed form, save the rendered PDF to a temp
         // directory prior to printing with Ghostscript

@@ -66,7 +66,7 @@ async fn main() -> anyhow::Result<()> {
                 {
                     Ok(_) => continue,
                     Err(err) => {
-                        println!("{}", err);
+                        println!("{err}");
                         continue;
                     }
                 }

@@ -31,7 +31,7 @@ async fn main() -> anyhow::Result<()> {
     // Retrieve a list of lot number from the DB if printing today's lots (-j flag),
     // or print the list given by the user
     let lot_numbers: String = if cmd_line_args.jour {
-        match LotData::today(&print_settings.db_pool).await?.lot_numbers {
+        match LotData::today(print_settings.db_pool).await?.lot_numbers {
             Some(lots) => lots,
             None => anyhow::bail!("Aucun numéro de lot n'a été généré à la date d'aujourd'hui."),
         }

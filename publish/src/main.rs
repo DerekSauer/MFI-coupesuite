@@ -79,8 +79,8 @@ fn main() -> anyhow::Result<()> {
 
     // Copy the `www` directory to the `dist` directory
     fs_extra::dir::copy(
-        &root_directory.join("www"),
-        &root_directory.join("dist"),
+        root_directory.join("www"),
+        root_directory.join("dist"),
         &fs_extra::dir::CopyOptions::new(),
     )?;
 
@@ -92,8 +92,8 @@ fn main() -> anyhow::Result<()> {
 
     // Finally, copy the settings file
     fs_extra::file::copy(
-        &root_directory.join("coupesuite.toml"),
-        &root_directory.join("dist").join("coupesuite.toml"),
+        root_directory.join("coupesuite.toml"),
+        root_directory.join("dist").join("coupesuite.toml"),
         &fs_extra::file::CopyOptions::new(),
     )?;
 
@@ -114,7 +114,7 @@ fn main() -> anyhow::Result<()> {
         content_only: true,
         ..Default::default()
     };
-    fs_extra::dir::copy(&gs_path, &root_directory.join("dist"), &copy_options)?;
+    fs_extra::dir::copy(&gs_path, root_directory.join("dist"), &copy_options)?;
 
     println!(
         "{} -> {}",

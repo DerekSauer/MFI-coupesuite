@@ -47,14 +47,12 @@ pub async fn export_lot(
     // Lot numbers must be integers
     let lot_number = lot_number.parse().with_context(|| {
         format!(
-            "Numéro de lot incorrect: {}.\nAvez-vous entré un numéro de modèle par erreur?",
-            lot_number
-        )
+            "Numéro de lot incorrect: {lot_number}.\nAvez-vous entré un numéro de modèle par erreur?")
     })?;
 
     let (mut cutlist, sku_info) = process_lot(lot_number, db_pool)
         .await
-        .with_context(|| format!("Problème avec le numéro de lot: {}", lot_number))?;
+        .with_context(|| format!("Problème avec le numéro de lot: {lot_number}"))?;
 
     // If the lot number is not a `kanban` production, filter out the `kanban` parts
     if !sku_info.kanban {

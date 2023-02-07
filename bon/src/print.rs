@@ -66,13 +66,13 @@ pub async fn print_bon(
         // Cache the rendered HTML to disk
         let html_path = print_settings
             .temp_path
-            .join(format!("Bon de transfert {}.html", lot_number));
+            .join(format!("Bon de transfert {lot_number}.html"));
         templates::render_to_file("bon/bon.html", print_settings.tera, &context, &html_path)?;
 
         // Temporary location to cache rendered PDFs
         let pdf_temp_path = print_settings
             .temp_path
-            .join(format!("Bon de transfert - {}.pdf", lot_number));
+            .join(format!("Bon de transfert - {lot_number}.pdf"));
 
         // If the user wants a printed form, save the rendered PDF to a temp
         // directory prior to printing with Ghostscript

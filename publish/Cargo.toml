@@ -1,6 +1,6 @@
 [package]
 name = "coupesuite-publish"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2021"
 authors = ["Derek Sauer <dsauer@megalak.ca>"]
 description = "Package the application workspace into a distribution directory."
@@ -14,5 +14,5 @@ path = "src/main.rs"
 anyhow = "1.0.58"
 fs_extra = "1.2.0"
 serde = { version = "1.0.137", features = ["derive"] }
-toml = "0.5"
+toml = "0.7.2"
 coupesuite-shared = { path = "../shared" }

@@ -74,7 +74,7 @@ pub async fn print_dessins(
         // Cache the rendered HTML to disk
         let html_path = print_settings
             .temp_path
-            .join(format!("Dessins {}.html", lot_number));
+            .join(format!("Dessins {lot_number}.html"));
         templates::render_to_file(
             "dessins/dessins.html",
             print_settings.tera,
@@ -85,7 +85,7 @@ pub async fn print_dessins(
         // Temporary location to cache rendered PDFs
         let pdf_temp_path = &print_settings
             .temp_path
-            .join(format!("Dessins {}.pdf", lot_number));
+            .join(format!("Dessins {lot_number}.pdf"));
 
         // If the user wants a printed form, save the rendered PDF to a temp
         // directory prior to printing with Ghostscript

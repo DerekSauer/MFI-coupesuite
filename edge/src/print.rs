@@ -126,9 +126,9 @@ fn generate_datamatrix_svg(
     // with a constant scale factor.
     for part in bitmap.path() {
         match part {
-            PathSegment::Horizontal(n) => write!(svg, "h{}", n),
-            PathSegment::Vertical(n) => write!(svg, "v{}", n),
-            PathSegment::Move(dx, dy) => write!(svg, "m{},{}", dx, dy),
+            PathSegment::Horizontal(n) => write!(svg, "h{n}"),
+            PathSegment::Vertical(n) => write!(svg, "v{n}"),
+            PathSegment::Move(dx, dy) => write!(svg, "m{dx},{dy}"),
             PathSegment::Close => write!(svg, "z"),
         }
         .unwrap();
