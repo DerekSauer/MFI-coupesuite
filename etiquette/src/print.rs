@@ -39,10 +39,7 @@ pub async fn print_label(
         // Load label data into the templating engine
         let mut context = tera::Context::from_serialize(&label_data)?;
         context.insert("working_dir", &std::env::current_dir()?);
-        context.insert(
-            "date_stamp",
-            &chrono::Local::now().date().naive_local().to_string(),
-        );
+        context.insert("date_stamp", &chrono::Local::now().date_naive().to_string());
 
         // Cache the rendered HTML to disk
         let html_path = print_settings
