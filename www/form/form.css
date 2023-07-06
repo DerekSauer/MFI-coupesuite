@@ -57,13 +57,14 @@
 #header_container {
     display: grid;
     grid-area: header;
-    grid-template-columns: 3in auto;
+    grid-template-columns: 5in auto;
     grid-template-rows: auto auto;
 }
 
 #header_SKU {
     font-size: 28pt;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 #header_lot {
@@ -81,6 +82,7 @@
     font-size: 14pt;
     font-weight: bold;
     text-align: right;
+    white-space: nowrap;
 }
 
 /*** MAIN ELEMENTS ***********************************************************/
