@@ -44,10 +44,19 @@ async fn main() -> anyhow::Result<()> {
         }
     };
 
+    // Split the lots numbers by comma and keep a running tally of the number printed.
+    let lot_numbers: Vec<&str> = lot_numbers.split(',').collect();
+    let total_lots = lot_numbers.len();
+    let mut current_lot: usize = 1;
+
     // Print the documentation for each lot retrieved above
-    for lot_number in lot_numbers.split(',') {
+    for lot_number in lot_numbers {
+        println!(
+            "Impression de documentation pour lot #{lot_number} ({current_lot} de {total_lots})."
+        );
+
         print_lot(
-            lot_number,
+            lot_number.trim(),
             cmd_line_args.quantité,
             cmd_line_args.enregistrer,
             &app_settings,
@@ -62,6 +71,8 @@ async fn main() -> anyhow::Result<()> {
             let mut temp = String::new();
             stdin().read_line(&mut temp)?;
         }
+
+        current_lot += 1;
     }
 
     Ok(())
