@@ -2,7 +2,11 @@ use bon::print::print_bon;
 use clap::Parser;
 use cmd_line::Args;
 use coupesuite_shared::{
-    database, htmltopdf::HtmlToPdf, print::PrintSettings, settings::Settings, templates,
+    database::{self, verify_lot},
+    htmltopdf::HtmlToPdf,
+    print::PrintSettings,
+    settings::Settings,
+    templates,
 };
 use dessins::print::print_dessins;
 use etiquette::print::print_label;
@@ -51,9 +55,47 @@ async fn main() -> anyhow::Result<()> {
 
     // Print the documentation for each lot retrieved above
     for lot_number in lot_numbers {
+        // Remove any leading or trailing whitespace after the comma seperators
+        let lot_number = lot_number.trim();
+
+        // Parse the lot number string into an `i32`
+        let integer_lot_number: i32 = match lot_number.parse() {
+            Ok(lot) => lot,
+            Err(err) => {
+                // If there is only one lot number bail immediately, otherwise keep processing lots
+                if total_lots == 1 {
+                    println!("Erreur avec le numéro de lot: {}", lot_number);
+                    anyhow::bail!(err);
+                } else {
+                    println!("Erreur avec le numéro de lot: {}", lot_number);
+                    println!("{}", err);
+                    println!("Continue le traitement des lots suivants.\n");
+                    continue;
+                }
+            }
+        };
+
+        // Get the SKU info for this lot number
+        let sku_info = match verify_lot(integer_lot_number, print_settings.db_pool).await {
+            Ok(sku_info) => sku_info,
+            Err(err) => {
+                // If there is only one lot number bail immediately, otherwise keep processing lots
+                if total_lots == 1 {
+                    anyhow::bail!(err);
+                } else {
+                    println!("{}", err);
+                    println!("Continue le traitement des lots suivants.\n");
+                    continue;
+                }
+            }
+        };
+
         println!(
             "Impression de documentation pour lot #{lot_number} ({current_lot} de {total_lots})."
         );
+        println!("SKU: {}", &sku_info.sku);
+        println!("Description: {}", &sku_info.description);
+        println!("Quantité: {}\n", &sku_info.quantity);
 
         print_lot(
             lot_number.trim(),
