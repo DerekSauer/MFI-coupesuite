@@ -1,14 +1,9 @@
 * {
-   font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 12pt;
     padding: 0;
     margin: 0;
     border-collapse: collapse;
-}
-
-@font-face {
-    font-family: 'LibreBarcode39';
-    src: url('../../www/LibreBarcode39-Regular.ttf') format('truetype')
 }
 
 @media print {
@@ -265,7 +260,7 @@ th {
 .barcode_cell {
     display: grid;
     grid-template-columns: auto;
-    grid-template-rows: auto 8mm auto;
+    grid-template-rows: auto auto auto;
     grid-template-areas:
         "label"
         "code"
@@ -280,12 +275,11 @@ th {
 }
 
 .barcode {
-    font-family: LibreBarcode39;
+    font-family: "Libre Barcode 39";
     font-weight: normal;
-    font-size: 36pt;
-    transform: translateY(-1.25mm) scale(0.8, 1.2);
+    font-size: 32pt;
+    transform: scaleY(1.5) translateY(2mm);
     text-align: center;
-    align-content: center;
 }
 
 .barcode_footer {
