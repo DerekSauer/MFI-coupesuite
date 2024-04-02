@@ -277,8 +277,8 @@ th {
 .barcode {
     font-family: "Libre Barcode 39";
     font-weight: normal;
-    font-size: 32pt;
-    transform: scaleY(1.5) translateY(2mm);
+    font-size: 24pt;
+    transform: scaleY(1.5) translateY(1.8mm);
     text-align: center;
 }
 
