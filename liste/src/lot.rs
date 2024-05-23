@@ -59,6 +59,11 @@ pub async fn export_lot(
         cutlist.retain(|x| !x.kanban);
     }
 
+    // Round cut quantity to next highest integer, we don't cut fractions of parts
+    for row in cutlist.iter_mut() {
+        row.required_quantity = row.required_quantity.ceil();
+    }
+
     // The model number and lot number in parens is the file name
     let mut file_path: PathBuf = app_settings.liste.v12_import_dir.to_string().into();
     file_path.push(format!("{} ({})", &sku_info.sku, lot_number));

@@ -5,9 +5,9 @@ SELECT
     part.prt_stt_ax2::REAL AS part_width,
     CASE
         WHEN (part.prt_idx2_5 <> '' AND part.prt_idx2_5 <> '0')
-        THEN CEIL(project.prj_req_qty / part.prt_idx2_5::INT)
+        THEN (project.prj_req_qty / part.prt_idx2_5::INT)
         ELSE project.prj_req_qty
-    END::INT AS required_quantity,
+    END::REAL AS required_quantity,
     project.prj_no::INT AS no_projet,
     COALESCE(TRIM(edge_top.prt_no), '') AS code_edge_haut,
     COALESCE(TRIM(TO_ASCII(edge_top.prt_desc2, 'LATIN1')), '') AS desc_edge_haut,

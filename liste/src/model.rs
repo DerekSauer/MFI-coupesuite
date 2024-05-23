@@ -54,7 +54,7 @@ pub async fn export_model(
 
     // Add real quantity to each row
     for row in cutlist.iter_mut() {
-        row.required_quantity *= quantity
+        row.required_quantity = (row.required_quantity * quantity as f32).ceil();
     }
 
     // Use the model number as the file name

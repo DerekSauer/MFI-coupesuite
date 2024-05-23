@@ -6,9 +6,9 @@ SELECT
     (bill_of_materials_mat.bma_budg_qty / model.prt_std_bqty)::INT AS required_quantity,
     CASE
         WHEN (part.prt_idx2_5 <> '' AND part.prt_idx2_5 <> '0')
-        THEN CEIL(bill_of_materials_mat.bma_budg_qty / model.prt_std_bqty / part.prt_idx2_5::INT)
+        THEN bill_of_materials_mat.bma_budg_qty / model.prt_std_bqty / part.prt_idx2_5::INT
         ELSE bill_of_materials_mat.bma_budg_qty / model.prt_std_bqty
-    END::INT AS required_quantity,
+    END::REAL AS required_quantity,
     0 AS no_projet,
     COALESCE(TRIM(edge_top.prt_no), '') AS code_edge_haut,
     COALESCE(TRIM(TO_ASCII(edge_top.prt_desc2, 'LATIN1')), '') AS desc_edge_haut,

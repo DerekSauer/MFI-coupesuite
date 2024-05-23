@@ -16,7 +16,7 @@ pub struct CutListRow {
     pub part_width: f32,
 
     /// Quantity of this part to be cut.
-    pub required_quantity: i32,
+    pub required_quantity: f32,
 
     /// Unique lot number assigned to this part in this production batch.
     pub no_projet: i32,
