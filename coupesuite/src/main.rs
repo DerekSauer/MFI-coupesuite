@@ -106,8 +106,8 @@ async fn main() -> anyhow::Result<()> {
         )
         .await?;
 
-        // Pause processing if the user wants a delay between each lot
-        if cmd_line_args.pause {
+        // Pause processing between each lot so the user can change paper and such. Disabled by the `sans_pause` command line flag.
+        if !cmd_line_args.sans_pause {
             use std::io::stdin;
             println!("Lot #{lot_number} terminé, appuyez sur ENTER pour continuer.");
             let mut temp = String::new();

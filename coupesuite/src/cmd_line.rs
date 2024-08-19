@@ -8,9 +8,9 @@ pub struct Args {
     #[clap(value_parser)]
     pub lots: Option<String>,
 
-    /// Pause du traitement entre chaque lot (pour changer de papier)?
+    /// Pause pas entre chaque lot.
     #[clap(short, long, action)]
-    pub pause: bool,
+    pub sans_pause: bool,
 
     /// Traitez tous les projets générés à la date d'aujourd'hui?
     #[clap(short, long, action)]
