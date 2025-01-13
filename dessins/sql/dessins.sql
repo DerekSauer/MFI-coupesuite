@@ -17,7 +17,7 @@ FROM
             ON part.pgr_id = part_group.pgr_id
 
 WHERE
-    part_group.pgr_no IN ('601', '603', '605', '750', '751')
+    part_group.pgr_no IN ('601', '603', '605', '750', '751', '752', '753', '754')
     
 GROUP BY
     material_code
@@ -35,7 +35,7 @@ FROM
             ON part.pgr_id = part_group.pgr_id
     
 WHERE
-    part_group.pgr_no IN ('601', '602', '603', '605', '750', '751')
+    part_group.pgr_no IN ('601', '602', '603', '605', '750', '751', '752', '753', '754')
     
 GROUP BY
     material_code
