@@ -56,7 +56,7 @@ async fn main() -> anyhow::Result<()> {
             } else {
                 // Handle other inputs
                 match print_label(
-                    input.to_lowercase().trim(),
+                    input.trim(),
                     cmd_line_args.quantité,
                     cmd_line_args.enregistrer,
                     &app_settings,
