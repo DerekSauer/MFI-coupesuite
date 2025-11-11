@@ -6,9 +6,6 @@ pub struct LabelData {
     /// Part description.
     pub desc_piece: String,
 
-    /// Number of laminated face.
-    face_laminees: i32,
-
     /// Length of the part.
     longueur: f32,
 
