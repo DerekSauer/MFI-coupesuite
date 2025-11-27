@@ -52,6 +52,7 @@ body {
 .label_field {
     font-size: 12pt;
     font-weight: normal;
+    white-space: nowrap;
 }
 
 .label_email {
