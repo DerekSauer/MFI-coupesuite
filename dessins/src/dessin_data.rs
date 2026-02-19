@@ -62,6 +62,42 @@ pub struct DessinData {
 
     /// Location of the drawing's image file
     pub image_path: String,
+
+    /// Part number of the first edgeband.
+    pub edge1_code: String,
+
+    /// Part description of the first edgeband.
+    pub edge1_description: String,
+
+    /// Thickness of the first edgeband.
+    pub edge1_thickness: f64,
+
+    /// Part number of the second edgeband.
+    pub edge2_code: String,
+
+    /// Part description of the second edgeband.
+    pub edge2_description: String,
+
+    /// Thickness of the second edgeband.
+    pub edge2_thickness: f64,
+
+    /// Part number of the third edgeband.
+    pub edge3_code: String,
+
+    /// Part description of the third edgeband.
+    pub edge3_description: String,
+
+    /// Thickness of the third edgeband.
+    pub edge3_thickness: f64,
+
+    /// Part number of the fourth edgeband.
+    pub edge4_code: String,
+
+    /// Part description of the fourth edgeband.
+    pub edge4_description: String,
+
+    /// Thickness of the fourth edgeband.
+    pub edge4_thickness: f64,
 }
 
 impl DessinData {
